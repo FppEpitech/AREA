@@ -1,11 +1,15 @@
-import React from 'react';
 import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "../Login/login";
 
 function App() {
   return (
-    <div className="App">
-        <h1>Hello World!</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+          <Route path="login" element={<Login />} />
+          {/* <Route path="*" element={<NoPage />} /> TODO: Error 404 */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
