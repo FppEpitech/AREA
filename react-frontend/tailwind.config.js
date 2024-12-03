@@ -10,7 +10,20 @@ module.exports = {
         customYellow: "#FEEAA1",
         customOrange: "#D6955B"
       },
+      fontFamily: {
+        abrilFatface: ['Abril Fatface', 'serif'],
+        instrumentSans: ['Instrument Sans', 'sans-serif'],
+      },
+      textShadow: {
+        custom: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      },
+      boxShadow: {
+        custom: '0px 4px 4px rgba(0, 0, 0, 0.25)', // Buttons
+        customNavbar: '10px 10px 100px rgba(0, 0, 0, 0.5)', // Navbar
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-textshadow")
+  ],
 };
