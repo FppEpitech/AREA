@@ -8,7 +8,7 @@ export default function Navbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
-        <div className="flex justify-center py-2.5 px-3">
+        <div className="fixed top-0 left-0 right-0 flex justify-center py-2.5 px-3 z-50">
             {!dropdownOpen && (
             <div className="flex justify-between items-center bg-customGreen shadow-customNavbar rounded-[30px] overflow-hidden w-[1797px] h-[74px]">
                 <div className='px-4'>
