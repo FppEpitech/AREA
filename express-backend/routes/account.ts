@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import prisma from '../prismaClient'
 import { User } from '@prisma/client';
-import { Router, Request, Response } from 'express'
+import express, { Router, Response, Request } from 'express';
 
 const accountRouter = Router();
 
@@ -28,7 +28,7 @@ const createNewUser = async (username : string, mail : string, password: string)
     return employee
 };
 
-accountRouter.post('/register', async (req: any, res: any) => {
+accountRouter.post('/register', async (req: Request, res: Response): Promise<any> => {
     const { username, mail, password } = req.body;
 
     if (!username || !mail || !password)
@@ -47,7 +47,7 @@ accountRouter.post('/register', async (req: any, res: any) => {
     }
 });
 
-accountRouter.post('/login', async (req: any, res: any) => {
+accountRouter.post('/login', async (req: Request, res: Response) : Promise<any> => {
     const { mail, password } = req.body;
 
     if (!mail || !password)
