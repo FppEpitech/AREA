@@ -1,3 +1,4 @@
+import Navbar from "../../components/Navbar/navbar";
 
 interface IService {
     name: string;
@@ -41,6 +42,7 @@ export default function Explore () {
 
     return (
         <div>
+            <Navbar></Navbar>
             <h1>Explore</h1>
             <button>All</button>
             <button>Plums</button>
