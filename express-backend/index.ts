@@ -1,10 +1,12 @@
 import express, { Response, Request } from 'express';
+import dotenv from 'dotenv';
 
 import accountRouter from './routes/account';
 
+dotenv.config();
+
 const app = express();
-require('dotenv').config();
-app.use(express.json())
+app.use(express.json());
 
 app.get('/', (req : Request, res: Response) => {
   res.send('Hello, World!');
