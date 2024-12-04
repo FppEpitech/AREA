@@ -54,7 +54,7 @@ interface WeatherResponse {
  */
 
 async function CheckWeather(): Promise<void> {
-    const apiKey = 'ef2df174a49ba8f16d744d0f59c9743f';
+    const apiKey = process.env.WEATHER_API_KEY;
     const city = 'Nantes,FR';
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 
