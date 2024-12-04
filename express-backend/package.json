@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.0.1",
-    "axios": "^1.7.8"
+    "axios": "^1.7.8",
+    "cron": "^3.2.1"
   },
   "devDependencies": {
     "@prisma/client": "^6.0.0",
