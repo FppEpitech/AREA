@@ -1,11 +1,14 @@
+import logo from '../../assets/plumpy_logo.png'
+import waterfall from '../../assets/waterfall.png'
+
 export default function Login() {
     return (
         <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
-            <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-2xl overflow-hidden w-[1536px] h-[768px]">
+            <div className="flex flex-col md:flex-row bg-white shadow-custom rounded-2xl overflow-hidden w-[1536px] h-[768px]">
                 {/* Left Section with Image */}
                 <div className="md:w-1/3">
                     <img
-                        src="https://www.shutterstock.com/image-photo/beauty-nature-amazing-waterfall-tropical-600nw-2479929633.jpg"
+                        src={waterfall}
                         alt="Waterfall"
                         className="h-full w-full object-cover"
                     />
@@ -13,68 +16,78 @@ export default function Login() {
 
                 {/* Right Section with Form */}
                 <div className="md:w-2/3 p-8 pl-16 pt-20 bg-customGreen text-white flex flex-col">
-                    {/* Logo */}
-                    <div className="flex items-center justify-left mb-6 pt-10">
+                    {/* Logo and Title */}
+                    <div className="flex items-center justify-start mb-6 pt-10">
                         <img
-                            src="https://static-00.iconduck.com/assets.00/react-icon-512x456-5xl7nmtw.png"
+                            src={logo}
                             alt="Plumpy Logo"
                             className="w-38 h-32 mr-3 pl-4"
                         />
-                        <h1 className="text-5xl font-bold">Plumpy</h1>
+                        <h1 className="text-5xl font-abrilFatface text-shadow-custom">Plumpy</h1>
                     </div>
 
-                    {/* Form */}
-                    <h2 className="text-2xl font-semibold mb-4">Sign in to your account</h2>
-                    <form className="space-y-4">
-                        <input
-                            type="email"
-                            placeholder="Email address"
-                            className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
-                        />
-                        <button
-                            type="submit"
-                            className="w-3/5 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
-                        >
-                            Login
-                        </button>
-                    </form>
+                    <h2 className="text-3xl font-instrumentSans text-shadow-custom mb-4">Sign in to your account</h2>
 
-                    {/* Forgot Password */}
-                    <a
-                        href="/"
-                        className="text-sm text-customOrange mt-2 text-left"
-                    >
-                        Forgot password?
-                    </a>
+                    {/* Content Wrapper */}
+                    <div className="flex flex-wrap md:flex-nowrap justify-between items-start">
+                        {/* Form */}
+                        <div className="md:w-5/6">
+                            <form className="space-y-4">
+                                <input
+                                    type="email"
+                                    placeholder="Email address"
+                                    className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                                />
+                                <button
+                                    type="submit"
+                                    className="w-full text-2xl shadow-custom font-abrilFatface h-12 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
+                                >
+                                    Login
+                                </button>
+                            </form>
+                            {/* Forgot Password */}
+                            <a
+                                href="/"
+                                className="text-sm text-shadow-custom font-instrumentSans text-customOrange mt-2 block"
+                            >
+                                Forgot password?
+                            </a>
 
-                    {/* Register */}
-                    <p className="text-sm mt-4">
-                        Don't have an account?{" "}
-                        <a
-                            href="/signup"
-                            className="text-customYellow hover:underline"
-                        >
-                            Register here
-                        </a>
-                    </p>
+                            {/* Register */}
+                            <p className="text-sm text-shadow-custom font-instrumentSans mt-4">
+                                Don't have an account?{" "}
+                                <a
+                                    href="/signup"
+                                    className="text-customYellow font-instrumentSans hover:underline"
+                                >
+                                    Register here
+                                </a>
+                            </p>
+                        </div>
 
-                    {/* Oauth2 Login */}
-                    <div className="mt-6">
-                        <p className="text-sm text-center mb-4">or continue with</p>
-                        <div className="flex space-x-4 justify-center">
-                            <button
-                                className="flex items-center bg-customDarkGray text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition">
-                                <i className="fab fa-github mr-2"></i> Github
-                            </button>
-                            <button
-                                className="flex items-center bg-white text-customGreen py-2 px-4 rounded-lg shadow hover:bg-gray-100 transition">
-                                <i className="fab fa-google mr-2"></i> Google
-                            </button>
+                        {/* Separator */}
+                        <div className="block w-1 bg-customDarkGreen h-full mx-10"></div>
+
+                        {/* Oauth2 Login */}
+                        <div className="md:w-1/6 mt-6 md:mt-0">
+                            <p className="text-sl mb-4 text-customYellow text-shadow-custom font-instrumentSans text-center">
+                                or<br/>continue with
+                            </p>
+                            <div className="flex flex-col space-y-4">
+                                <button
+                                    className="flex shadow-custom items-center font-instrumentSans bg-customGreen text-customDarkGreen py-2 px-4 rounded-xl hover:bg-customYellow transition border-2 border-customDarkGreen">
+                                    <i className="fab fa-github mr-6"></i> Github
+                                </button>
+                                <button
+                                    className="flex shadow-custom items-center font-instrumentSans bg-customGreen text-customDarkGreen py-2 px-4 rounded-xl shadow hover:bg-customYellow transition border-2 border-customDarkGreen">
+                                    <i className="fab fa-google mr-6"></i> Google
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
