@@ -9,7 +9,7 @@ on:
       - "ga-ignore-*"
 
 jobs:
-  run_tests:
+  run_front_tests:
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker:latest
@@ -18,11 +18,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Execute the tests
-        run: npm test
+        run: cd react-frontend && npm test a
   push_to_mirror:
     if: ${{ github.event_name == 'push' }}
     needs:
-      - run_tests
+      - run_front_tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
