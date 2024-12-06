@@ -1,4 +1,17 @@
+import React, { useState } from 'react';
+import AuthLogin from '../../services/auth/auth';
+import { useNavigate } from 'react-router-dom';
+
 export default function Login() {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const sendLogin = async() => {
+        await AuthLogin({email, password}, navigate);
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
             <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-2xl overflow-hidden w-[1536px] h-[768px]">
@@ -30,15 +43,20 @@ export default function Login() {
                             type="email"
                             placeholder="Email address"
                             className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         <input
                             type="password"
                             placeholder="Password"
                             className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         <button
-                            type="submit"
+                            type="button"
                             className="w-3/5 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
+                            onClick={sendLogin} // TODO change by onSubmit
                         >
                             Login
                         </button>
