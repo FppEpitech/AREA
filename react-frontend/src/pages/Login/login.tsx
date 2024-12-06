@@ -1,4 +1,20 @@
+import React, { useState } from 'react';
+import { AuthLogin } from '../../services/auth/auth';
+import { useNavigate } from 'react-router-dom';
+
 export default function Login() {
+
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const sendLogin = async(e: React.FormEvent) => {
+        e.preventDefault();
+
+        await AuthLogin({email, password}, navigate, setError);
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
             <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-2xl overflow-hidden w-[1536px] h-[768px]">
@@ -30,15 +46,21 @@ export default function Login() {
                             type="email"
                             placeholder="Email address"
                             className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         <input
                             type="password"
                             placeholder="Password"
                             className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
+                        {error && <p className='text-customYellow'>{error}</p>}
                         <button
                             type="submit"
                             className="w-3/5 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
+                            onSubmit={sendLogin}
                         >
                             Login
                         </button>
