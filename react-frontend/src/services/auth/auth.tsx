@@ -5,15 +5,27 @@ interface loginInterface {
     password: string;
 }
 
-async function AuthLogin(login : loginInterface, navigate: (path: string) => void) {
+export async function AuthLogin(login : loginInterface, navigate: (path: string) => void, setError: (error: string) => void) {
     try {
-        const body = {mail : login.email, password : login.password}
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/account/login`, body)
-        localStorage.setItem('access_token', response.data.token)
+        const body = {mail : login.email, password : login.password};
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/account/login`, body);
+        localStorage.setItem('access_token', response.data.token);
         navigate('/explore');
     } catch (error) {
-        console.log(error);
+        setError('Wrong login');
     }
 }
 
-export default AuthLogin;
+export async function AuthSignUp(login : loginInterface, navigate: (path: string) => void, setError: (error: string) => void) {
+    try {
+        const body = {mail : login.email, password : login.password};
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/account/register`, body);
+        localStorage.setItem('access_token', response.data.token);
+        navigate('/explore');
+    } catch (error : any) {
+        if (error.status === 409)
+            setError(error.response.data.msg);
+        else
+            setError('Error retry please.');
+    }
+}

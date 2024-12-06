@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import AuthLogin from '../../services/auth/auth';
+import { AuthLogin } from '../../services/auth/auth';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
     const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const sendLogin = async() => {
-        await AuthLogin({email, password}, navigate);
+    const sendLogin = async(e: React.FormEvent) => {
+        e.preventDefault();
+
+        await AuthLogin({email, password}, navigate, setError);
     };
 
     return (
@@ -53,10 +56,11 @@ export default function Login() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
+                        {error && <p className='text-customYellow'>{error}</p>}
                         <button
-                            type="button"
+                            type="submit"
                             className="w-3/5 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
-                            onClick={sendLogin} // TODO change by onSubmit
+                            onSubmit={sendLogin}
                         >
                             Login
                         </button>
