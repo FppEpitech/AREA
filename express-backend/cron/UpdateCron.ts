@@ -36,7 +36,7 @@ function InitCron() {
  */
 const cronMap = new Map<number, CronClass>();
 
-const triggersMapFunction: Map<string, (value_json: string, action: () => void) => Promise<void>> = new Map([
+const triggersMapFunction: Map<string, (value_json: string) => Promise<boolean>> = new Map([
     ["lessThan", lessThan],
     ["greaterThan", greaterThan],
     ["isEqual", isEqual]
@@ -49,17 +49,17 @@ async function InitCron() {
     try {
         const triggers = await prisma.trigger.findMany();
         for (const trigger of triggers) {
+            if (cronMap.has(trigger.id))
+                continue;
             const triggerTemplate = await prisma.triggerTemplate.findUnique({
                 where: { id: trigger.triggerTemplateId }
             });
-            if (!triggerTemplate?.type || triggerTemplate.type !== 'cron')
+            if (triggerTemplate?.type !== 'cron')
                 continue;
-            if (cronMap.has(trigger.id)) {
-                continue;
-            }
-            const cron = new CronClass(trigger.triggerValue.time, trigger.id);
+            const cron = new CronClass(triggersMapFunction.get(triggerTemplate.trigFunc) as (value_json: string) => Promise<boolean>, JSON.stringify(triggerTemplate.valueTemplate));
             cronMap.set(trigger.id, cron);
         }
+        
     } catch (error) {
         console.error('Error initializing cron jobs:', error);
     }
