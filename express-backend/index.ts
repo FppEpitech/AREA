@@ -1,12 +1,13 @@
 import express, { Response, Request } from 'express';
 import dotenv from 'dotenv';
-import { InitCron } from './cron/CronInit';
+import { UpdateCronJob, CheckCronResultJob } from './cron/UpdateCron';
 
 import accountRouter from './routes/account';
 
 dotenv.config();
 
-InitCron();
+CheckCronResultJob.start();
+UpdateCronJob.start();
 
 const app = express();
 app.use(express.json());
