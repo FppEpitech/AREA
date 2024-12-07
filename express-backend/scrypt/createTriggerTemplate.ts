@@ -79,4 +79,4 @@ async function isEqualTriggerTemplate() {
 
 lessThanTriggerTemplate()
 greaterThanTriggerTemplate()
-isEqualTriggerTemplate()}
+isEqualTriggerTemplate()

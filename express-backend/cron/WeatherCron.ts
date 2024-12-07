@@ -74,8 +74,7 @@ async function checkWeather(city: string, condition: (temp: number) => boolean) 
 
     try {
         const response = await axios.get<WeatherResponse>(apiUrl);
-        const data : any = response.data;
-        const temperature: number = data.main.temp;
+        const temperature: number = response.data.main.temp;
 
         return condition(temperature);
     } catch (error) {

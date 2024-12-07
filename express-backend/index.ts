@@ -1,6 +1,7 @@
 import express, { Response, Request } from 'express';
 import dotenv from 'dotenv';
 import { updateCronJob, checkCronResultJob } from './cron/UpdateCron';
+import plumsRouter from './routes/plums';
 
 import accountRouter from './routes/account';
 
@@ -11,6 +12,11 @@ updateCronJob.start();
 
 const app = express();
 app.use(express.json());
+
+let apiRouter = express.Router();
+
+apiRouter.use(express.json());
+apiRouter.use('/plums', plumsRouter);
 
 app.get('/', (req : Request, res: Response) => {
   res.send('Hello, World!');

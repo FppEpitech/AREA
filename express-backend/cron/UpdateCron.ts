@@ -55,14 +55,10 @@ async function checkCronResult() {
         for (const [id, cron] of cronMap) {
             if (!cron.lastResult)
                 continue;
-            const plumTrigger = await prisma.plum.findUnique({
-                where: { triggerId: id }
-            });
+            const plumTrigger = await prisma.plum.findFirst({where: {triggerId: id}});
             if (!plumTrigger)
                 continue;
-            const action = await prisma.action.findUnique({
-                where: { id: plumTrigger?.actionId }
-            });
+            const action = await prisma.action.findUnique({where: {id: plumTrigger?.actionId}});
             if (!action)
                 continue;
             console.log('Action executed:', action);
