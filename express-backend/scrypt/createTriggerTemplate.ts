@@ -7,12 +7,12 @@ async function lessThanTriggerTemplate() {
     const triggerLessTemplate = await prisma.triggerTemplate.create({
       data: {
         name: 'Less than temperature',
-        provider: 'openweathermap',
+        provider: 'OpenWeatherMap',
         type: 'cron',
         trigFunc: 'lessThan',
         valueTemplate: {
-          time: '0 */24 * * * *',
-          temperature: 30,
+          time: '* * * * * *',
+          temperature: 0,
           city: 'Nantes',
           country: 'FR',
         },
@@ -32,14 +32,14 @@ async function greaterThanTriggerTemplate() {
         const triggerGreaterTemplate = await prisma.triggerTemplate.create({
         data: {
             name: 'Greater than temperature',
-            provider: 'openweathermap',
+            provider: 'OpenWeatherMap',
             type: 'cron',
             trigFunc: 'greaterThan',
             valueTemplate: {
-            time: '0 */24 * * * *',
-            temperature: 30,
-            city: 'Nantes',
-            country: 'FR',
+                time: '* * * * * *',
+                temperature: 0,
+                city: 'Nantes',
+                country: 'FR',
             },
         },
         });
@@ -57,14 +57,14 @@ async function isEqualTriggerTemplate() {
         const triggerEqualTemplate = await prisma.triggerTemplate.create({
         data: {
             name: 'Equal temperature',
-            provider: 'openweathermap',
+            provider: 'OpenWeatherMap',
             type: 'cron',
             trigFunc: 'isEqual',
             valueTemplate: {
-            time: '0 */24 * * * *',
-            temperature: 30,
-            city: 'Nantes',
-            country: 'FR',
+                time: '* * * * * *',
+                temperature: 0,
+                city: 'Nantes',
+                country: 'FR',
             },
         },
         });
@@ -77,4 +77,6 @@ async function isEqualTriggerTemplate() {
     }
 }
 
-export { lessThanTriggerTemplate, greaterThanTriggerTemplate, isEqualTriggerTemplate };
+lessThanTriggerTemplate()
+greaterThanTriggerTemplate()
+isEqualTriggerTemplate()}

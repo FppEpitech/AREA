@@ -3,28 +3,6 @@ import { CronClass } from './CronClass';
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
-const cronJobs = [
-    {
-        name: 'CheckWeather',
-        cronTime: '* * * * *',
-        onTickFunction: CheckWeather
-    }
-];
-
-/**
- * Old init cron function.
-
-new CronClass(job.onTickFunction, job.cronTime);
-function InitCron() {
-    cronJobs.forEach((job) => {
-    });
-}
-
-*/
-
-/**
- * Init cron function.
- */
 
 /**
  * Map of cron jobs.
@@ -42,12 +20,13 @@ const triggersMapFunction: Map<string, (value_json: string) => Promise<boolean>>
     ["isEqual", isEqual]
 ]);
 
-// InitCron is now a cron too, it will be called every 10 minutes. But it will not be added to the map.
-// InitCron time = 0 */10 * * * *
+// UpdateCron is now a cron too, it will be called every 10 minutes. But it will not be added to the map.
+// UpdateCron time = 0 */10 * * * *
 
-async function InitCron() {
+async function updateCron() {
     try {
         const triggers = await prisma.trigger.findMany();
+        console.log("Triggers number: ", triggers.length);
         for (const trigger of triggers) {
             if (cronMap.has(trigger.id))
                 continue;
@@ -56,17 +35,42 @@ async function InitCron() {
             });
             if (triggerTemplate?.type !== 'cron')
                 continue;
-            const cron = new CronClass(triggersMapFunction.get(triggerTemplate.trigFunc) as (value_json: string) => Promise<boolean>, JSON.stringify(triggerTemplate.valueTemplate));
+            const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (value_json: string) => Promise<boolean>, JSON.stringify(triggerTemplate?.valueTemplate));
             cronMap.set(trigger.id, cron);
         }
-        
+        for (const [id, cron] of cronMap) {
+            if (!triggers.some(trigger => trigger.id === id)) {
+                cron.cronJob.stop();
+                cronMap.delete(id);
+            }
+        }
     } catch (error) {
         console.error('Error initializing cron jobs:', error);
     }
 }
 
-export const InitCronJob = new CronJob('0 */10 * * * *', InitCron);
+// for all cron is one === true so find by plum trigger id his action and execute it
+async function checkCronResult() {
+    try {
+        for (const [id, cron] of cronMap) {
+            if (!cron.lastResult)
+                continue;
+            const plumTrigger = await prisma.plum.findUnique({
+                where: { triggerId: id }
+            });
+            if (!plumTrigger)
+                continue;
+            const action = await prisma.action.findUnique({
+                where: { id: plumTrigger?.actionId }
+            });
+            if (!action)
+                continue;
+            console.log('Action executed:', action);
+        }
+    } catch (error) {
+        console.error('Error checking cron results:', error);
+    }
+}
 
-
-
-export {InitCron};
+export const updateCronJob = new CronJob('0 */10 * * * *', updateCron);
+export const checkCronResultJob = new CronJob('0 */10 * * * *', checkCronResult);
