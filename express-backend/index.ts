@@ -27,6 +27,8 @@ app.get('/', (req : Request, res: Response) => {
 
 app.use('/account', accountRouter);
 
+export default app;
+
 app.listen(process.env.PORT, () => {
   console.log(`Server : http://localhost:${process.env.PORT}`);
 });
