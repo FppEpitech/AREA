@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./express-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./build:/app/build
+    command: ["npx", "ts-node", "index.ts"]
+    restart: always
+
+  client_mobile:
+    build:
+      context: ./react-frontend
+    volumes:
+      - ./react-frontend:/app
+      - ./shared:/shared
+    command: |
+      sh -c "npm install &&
+             npm run build &&
+             npx cap copy &&
+             npx cap sync &&
+             cd android &&
+             if [ ! -d /android-sdk/cmdline-tools/latest ]; then
+               mkdir -p /android-sdk/cmdline-tools/latest &&
+               mv /android-sdk/cmdline-tools/* /android-sdk/cmdline-tools/latest/;
+             fi &&
+             yes | /android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses &&
+             /android-sdk/cmdline-tools/latest/bin/sdkmanager 'platforms;android-34' 'build-tools;34.0.0' &&
+             ./gradlew assembleRelease &&
+             ls app/build/outputs/apk/release &&
+             mkdir -p ../shared &&
+             cp app/build/outputs/apk/release/app-release-unsigned.apk ../shared/client.apk"
+    restart: always
+
+  client_web:
+    build:
+      context: ./react-frontend
+    ports:
+      - "8080:8081"
+    volumes:
+      - ./react-frontend:/app
+      - ./shared:/shared
+    command: ["npm", "start"]
+    depends_on:
+      - server
+      - client_mobile
+    restart: always
