@@ -39,7 +39,7 @@ services:
     build:
       context: ./react-frontend
     ports:
-      - "8080:8081"
+      - "8081:8081"
     volumes:
       - ./react-frontend:/app
       - ./shared:/shared
