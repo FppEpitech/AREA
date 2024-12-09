@@ -3,7 +3,7 @@ import express, {Request, Response} from 'express';
 
 const router = express.Router();
 
-router.post('/plums', async (req: Request, res: Response) => {
+router.post('/plums', async (req: Request, res: Response) : Promise<any> => {
   const {   userId,
             actionTemplateId,
             actionValue,

@@ -80,4 +80,5 @@ async function checkWeather(city: string, condition: (temp: number) => boolean) 
     } catch (error) {
         console.error('Error while fetching weather data:', error);
     }
+    return false;
 }
