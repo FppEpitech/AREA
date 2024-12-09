@@ -78,4 +78,20 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
   }
 });
 
+router.delete('/:plumId', async (req: Request, res: Response) : Promise<any> => {
+    const { plumId } = req.params;
+
+    try {
+        const plum = await prisma.plum.findUnique({where: {id: parseInt(plumId)}});
+        if (!plum)
+          return res.status(404).json({error: 'Plum not found'});
+
+        await prisma.plum.delete({where: {id: parseInt(plumId)}});
+        res.status(204).end();
+    } catch (error) {
+        console.error('Error deleting Plum:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 export default router;
