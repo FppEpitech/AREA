@@ -1,10 +1,21 @@
 import prisma from '../prismaClient'
 import express, {Request, Response} from 'express';
+import jwt from 'jsonwebtoken'
 
 const router = express.Router();
 
+const getUserIdFromToken = (token: string): number | null => {
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET as string) as { id: number };
+    return decoded.id;
+  } catch (err) {
+    console.error('Invalid token:', err);
+    return null;
+  }
+};
+
 router.post('/', async (req: Request, res: Response) : Promise<any> => {
-  const {   userId,
+  const {   token,
             actionTemplateId,
             actionValue,
             triggerTemplateId,
@@ -12,7 +23,11 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
         } = req.body;
 
   try {
-    const user = await prisma.user.findUnique({where: {userId: userId}});
+    const userId = getUserIdFromToken(token);
+    if (!userId)
+      return res.status(401).json({error: 'Invalid or expired token'});
+
+    const user = await prisma.user.findUnique({where: {userId}});
     if (!user)
       return res.status(404).json({error: 'User not found'});
 
