@@ -4,7 +4,9 @@
   "description": "Backend of the plumpy project",
   "main": "index.ts",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "dev": "ts-node index.ts",
+    "build": "tsc"
   },
   "author": "FPP/FromNoWare",
   "license": "ISC",
@@ -13,6 +15,7 @@
     "axios": "^1.7.8",
     "cors": "^2.8.5",
     "cron": "^3.2.1",
+    "supertest": "^7.0.0",
     "vitest": "^2.1.8"
   },
   "devDependencies": {
