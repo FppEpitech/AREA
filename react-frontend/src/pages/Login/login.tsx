@@ -12,7 +12,7 @@ export default function Login() {
     const navigate = useNavigate();
 
     const sendLogin = async(e: React.FormEvent) => {
-        e.preventDefault();
+        //e.preventDefault();
 
         await AuthLogin({email, password}, navigate, setError);
     };
@@ -41,33 +41,6 @@ export default function Login() {
                         <h1 className="text-5xl font-abrilFatface text-shadow-custom">Plumpy</h1>
                     </div>
 
-                    {/* Form */}
-                    <h2 className="text-2xl font-semibold mb-4">Sign in to your account</h2>
-                    <form className="space-y-4">
-                        <input
-                            type="email"
-                            placeholder="Email address"
-                            className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        {error && <p className='text-customYellow'>{error}</p>}
-                        <button
-                            type="submit"
-                            className="w-3/5 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
-                            onSubmit={sendLogin}
-                        >
-                            Login
-                        </button>
-                    </form>
-
                     {/* Content Wrapper */}
                     <div className="flex flex-wrap md:flex-nowrap justify-between items-start">
                         {/* Form */}
@@ -77,15 +50,21 @@ export default function Login() {
                                     type="email"
                                     placeholder="Email address"
                                     className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <input
                                     type="password"
                                     placeholder="Password"
                                     className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
+                                {error && <p className='text-customYellow'>{error}</p>}
                                 <button
                                     type="submit"
                                     className="w-full text-2xl shadow-custom font-abrilFatface h-12 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
+                                    onClick={sendLogin}
                                 >
                                     Login
                                 </button>
