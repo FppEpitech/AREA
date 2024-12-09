@@ -1,4 +1,3 @@
-// import React from 'react';
 import axios from 'axios';
 
 export interface Trigger {
@@ -37,8 +36,8 @@ export const getActions = async (): Promise<Action[]> => {
 
 export const createPlum = async (trigger : Trigger, action : Action) => {
     try {
-        const body = {actionTemplateId: action.id, actionValue: action.json, trigerTemplateId: trigger.id, triggerValue: trigger.json};
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/plums`, body);
+        const body = {token: localStorage.getItem('access_token'), actionTemplateId: action.id, actionValue: action.json, triggerTemplateId: trigger.id, triggerValue: trigger.json};
+        await axios.post(`${process.env.REACT_APP_API_URL}/plums`, body);
     } catch(error) {
         console.log(error);
     }
