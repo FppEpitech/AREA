@@ -2,7 +2,7 @@ import express, { Response, Request } from 'express';
 import dotenv from 'dotenv';
 import { updateCronJob, checkCronResultJob } from './cron/UpdateCron';
 import plumsRouter from './routes/plums';
-
+import cors from 'cors';
 import accountRouter from './routes/account';
 
 dotenv.config();
@@ -12,6 +12,7 @@ updateCronJob.start();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 let apiRouter = express.Router();
 
