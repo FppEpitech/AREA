@@ -2,10 +2,12 @@ import { useState } from 'react';
 import logo from '../../assets/logo58.png'
 import user from '../../assets/navbar/user.svg'
 import menu from '../../assets/navbar/menu.svg'
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div className="fixed top-0 left-0 right-0 flex justify-center py-2.5 px-3 z-50">
@@ -28,7 +30,10 @@ export default function Navbar() {
                         </p>
                     </button>
                     <div className="flex space-between space-x-5 px-6">
-                        <button className="hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom" type="button">
+                        <button className="hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom"
+                            type="button"
+                            onClick={() => navigate('/create')}>
+
                             <p
                                 className='text-3xl text-customDarkGreen font-instrumentSans text-shadow-custom px-10 py-2'>
                                 Create
@@ -86,7 +91,8 @@ export default function Navbar() {
                             My Plums
                         </p>
                     </button>
-                    <button className="w-full hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom px-10 py-2">
+                    <button className="w-full hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom px-10 py-2"
+                        onClick={() => navigate('/create')}>
                         <p className="text-3xl text-customDarkGreen font-instrumentSans text-shadow-custom">
                             Create
                         </p>
