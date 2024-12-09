@@ -15,7 +15,7 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
             return res.status(401).json({ msg: "Token is not valid" });
         const userId = decoded.id;
         try {
-            const user = await prisma.employee.findUnique({ where: { id: userId } });
+            const user = await prisma.user.findUnique({ where: { userId: userId } });
             if (!user)
                 return res.status(401).json({ msg: "Token is not valid" });
             (req as any).middlewareId = userId;

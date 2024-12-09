@@ -68,4 +68,5 @@ accountRouter.post('/login', async (req: Request, res: Response) : Promise<any> 
     }
 });
 
+export { generateToken };
 export default accountRouter
