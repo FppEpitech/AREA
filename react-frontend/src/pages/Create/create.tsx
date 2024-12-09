@@ -58,7 +58,7 @@ function CreatePage() {
         </select>
         <input
             type='area'
-            className="bg-customYellow"
+           className="bg-customYellow w-full h-48 p-4 text-lg border border-gray-300 rounded-md resize-none"
             value={selectTrigger?.json || ""}
             onChange={(e) => {if (selectTrigger) setSelectTrigger({id: selectTrigger.id, name: selectTrigger.name, json: e.target.value})}}
             >
@@ -71,7 +71,7 @@ function CreatePage() {
         </select>
         <input
             type='area'
-            className="bg-customYellow"
+            className="bg-customYellow w-full h-48 p-4 text-lg border border-gray-300 rounded-md resize-none"
             value={selectAction?.json || ""}
             onChange={(e) => {if (selectAction) setSelectAction({id: selectAction.id, name: selectAction.name, json: e.target.value})}}
             >

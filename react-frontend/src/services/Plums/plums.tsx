@@ -1,24 +1,45 @@
 // import React from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 
 export interface Trigger {
     name: string;
-    json: string;
     id: number;
+    json: string;
 }
 
 export interface Action extends Trigger {}
 
 export const getTriggers = async (): Promise<Trigger[]> => {
-    return [{ id: 1, name: "Default", json: "default Json" }, { id: 2, name: "Default", json: "Default Json" }]; // TODO: axios get method for triggers
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/triggers/templates`);
+        return response.data.map((item: any) => ({
+            name: item.name,
+            id: item.id,
+            json: JSON.stringify(item.valueTemplate || null),
+        }));
+    } catch (error) {
+        return [];
+    }
 };
 
-
 export const getActions = async (): Promise<Action[]> => {
-    return [{ id: 3, name: "Default", json: "Default Json" }, { id: 4, name: "Default", json: "Default Json" }]; // TODO: axios get method for actions
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/actions/templates`);
+        return response.data.map((item: any) => ({
+            name: item.name,
+            id: item.id,
+            json: JSON.stringify(item.valueTemplate || null),
+        }));
+    } catch (error) {
+        return [];
+    }
 };
 
 export const createPlum = async (trigger : Trigger, action : Action) => {
-    console.log(trigger.json)
-    console.log(action.json)
+    try {
+        const body = {actionTemplateId: action.id, actionValue: action.json, trigerTemplateId: trigger.id, triggerValue: trigger.json};
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/plums`, body);
+    } catch(error) {
+        console.log(error);
+    }
 };
