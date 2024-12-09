@@ -1,7 +1,22 @@
 import logo from '../../assets/plumpy_logo.png'
 import waterfall from '../../assets/waterfall.png'
+import React, { useState } from 'react';
+import { AuthLogin } from '../../services/auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const sendLogin = async(e: React.FormEvent) => {
+        e.preventDefault();
+
+        await AuthLogin({email, password}, navigate, setError);
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
             <div className="flex flex-col md:flex-row bg-white shadow-custom rounded-2xl overflow-hidden w-[1536px] h-[768px]">
@@ -26,7 +41,32 @@ export default function Login() {
                         <h1 className="text-5xl font-abrilFatface text-shadow-custom">Plumpy</h1>
                     </div>
 
-                    <h2 className="text-3xl font-instrumentSans text-shadow-custom mb-4">Sign in to your account</h2>
+                    {/* Form */}
+                    <h2 className="text-2xl font-semibold mb-4">Sign in to your account</h2>
+                    <form className="space-y-4">
+                        <input
+                            type="email"
+                            placeholder="Email address"
+                            className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className="w-3/5 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        {error && <p className='text-customYellow'>{error}</p>}
+                        <button
+                            type="submit"
+                            className="w-3/5 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
+                            onSubmit={sendLogin}
+                        >
+                            Login
+                        </button>
+                    </form>
 
                     {/* Content Wrapper */}
                     <div className="flex flex-wrap md:flex-nowrap justify-between items-start">

@@ -1,7 +1,28 @@
 import logo from '../../assets/plumpy_logo.png'
 import waterfall from '../../assets/waterfall.png'
+import { useState } from "react";
+import { AuthSignUp } from '../../services/auth/auth'
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
+
+    const sendSignUp = async(e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        await AuthSignUp({email, password}, navigate, setError);
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
             <div className="flex flex-col md:flex-row bg-white shadow-custom rounded-2xl overflow-hidden w-[1536px] h-[768px]">
@@ -37,21 +58,31 @@ export default function Signup() {
                                     type="email"
                                     placeholder="Email address"
                                     className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
-                                />
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required>
+                                </input>
                                 <input
                                     type="password"
                                     placeholder="Create Password"
                                     className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
-                                />
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required>
+                                </input>
                                 <input
                                     type="password"
                                     placeholder="Confirm Password"
                                     className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
-                                />
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required>
+                                </input>
+                                {error && <p style={{ color: 'red' }}>{error}</p>}
                                 <button
                                     type="submit"
                                     className="w-full text-2xl shadow-custom font-abrilFatface h-12 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
-                                >
+                                    onSubmit={sendSignUp}>
                                     Sign up
                                 </button>
                             </form>
