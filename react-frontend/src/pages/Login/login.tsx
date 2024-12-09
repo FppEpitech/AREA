@@ -12,7 +12,7 @@ export default function Login() {
     const navigate = useNavigate();
 
     const sendLogin = async(e: React.FormEvent) => {
-        //e.preventDefault();
+        e.preventDefault();
 
         await AuthLogin({email, password}, navigate, setError);
     };
@@ -62,7 +62,7 @@ export default function Login() {
                                 />
                                 {error && <p className='text-customYellow'>{error}</p>}
                                 <button
-                                    type="submit"
+                                    type="button"
                                     className="w-full text-2xl shadow-custom font-abrilFatface h-12 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
                                     onClick={sendLogin}
                                 >

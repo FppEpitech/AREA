@@ -80,9 +80,9 @@ export default function Signup() {
                                 </input>
                                 {error && <p style={{ color: 'red' }}>{error}</p>}
                                 <button
-                                    type="submit"
+                                    type="button"
                                     className="w-full text-2xl shadow-custom font-abrilFatface h-12 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
-                                    onSubmit={sendSignUp}>
+                                    onClick={sendSignUp}>
                                     Sign up
                                 </button>
                             </form>
@@ -124,4 +124,3 @@ export default function Signup() {
         </div>
     );
 }
-
