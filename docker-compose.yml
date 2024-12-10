@@ -32,7 +32,7 @@ services:
              /android-sdk/cmdline-tools/latest/bin/sdkmanager 'platforms;android-34' 'build-tools;34.0.0' &&
              ./gradlew assembleRelease &&
              mv app/build/outputs/apk/release/app-release.apk /shared/client.apk"
-    restart: on-failure
+    restart: always
   client_web:
     build:
       context: ./react-frontend
