@@ -7,6 +7,7 @@ import * as path from 'path';
 import accountRouter from './routes/account';
 import triggerRouter from './routes/trigger';
 import actionRouter from './routes/action';
+import aboutRouter from './routes/about';
 
 dotenv.config();
 
@@ -21,13 +22,10 @@ app.use(express.json());
 app.use('/plums', plumsRouter);
 app.use('/actions', actionRouter);
 app.use('/triggers', triggerRouter);
+app.use('/about.json', aboutRouter);
 
 app.get('/', (req : Request, res: Response) => {
   res.send('Hello, World!');
-});
-
-app.get('/about.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'about.json'));
 });
 
 app.use('/client.apk', express.static(path.join(__dirname, '/shared')));
