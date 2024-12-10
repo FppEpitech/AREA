@@ -8,6 +8,7 @@ services:
       - "8080:8080"
     volumes:
       - ./build:/app/build
+      - ./shared:/shared
     command: ["npx", "ts-node", "index.ts"]
     restart: always
 
@@ -30,11 +31,8 @@ services:
              yes | /android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses &&
              /android-sdk/cmdline-tools/latest/bin/sdkmanager 'platforms;android-34' 'build-tools;34.0.0' &&
              ./gradlew assembleRelease &&
-             ls app/build/outputs/apk/release &&
-             mkdir -p ../shared &&
-             cp app/build/outputs/apk/release/app-release-unsigned.apk ../shared/client.apk"
-    restart: always
-
+             mv app/build/outputs/apk/release/app-release.apk /shared/client.apk"
+    restart: on-failure
   client_web:
     build:
       context: ./react-frontend

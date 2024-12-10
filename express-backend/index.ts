@@ -14,28 +14,33 @@ checkCronResultJob.start();
 updateCronJob.start();
 
 const app = express();
+const PORT = process.env.PORT || 8081;
+
 app.use(express.json());
 app.use(cors());
 
-app.use(express.json());
 app.use('/plums', plumsRouter);
 app.use('/actions', actionRouter);
 app.use('/triggers', triggerRouter);
+app.use('/account', accountRouter);
 
-app.get('/', (req : Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello, World!');
 });
 
-app.get('/about.json', (req, res) => {
+app.get('/about.json', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, 'about.json'));
 });
 
-app.use('/client.apk', express.static(path.join(__dirname, '/shared')));
+app.get('/client.apk', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Content-Disposition', 'attachment; filename="client.apk"');
+  res.sendFile(path.join('/shared/client.apk'));
+});
 
-app.use('/account', accountRouter);
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
+});
 
 export default app;
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server : http://localhost:${process.env.PORT}`);
-});

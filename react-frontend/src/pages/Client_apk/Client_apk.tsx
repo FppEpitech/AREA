@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Client_apk() {
     const handleDownload = () => {
-        window.location.href = "/client.apk"; // Redirect to the API endpoint serving the APK
+        window.location.href = "http://localhost:8080/client.apk";
     };
 
     return (
