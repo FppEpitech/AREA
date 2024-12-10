@@ -3,7 +3,7 @@ import logo from '../../assets/plumpy_logo.png'
 
 export default function Client_apk() {
     const handleDownload = () => {
-        window.location.href = "http://localhost:8080/client.apk";
+        window.location.href = "${process.env.REACT_APP_API_URL}/client.apk";
     };
 
     useEffect(() => {
