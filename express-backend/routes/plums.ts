@@ -5,17 +5,7 @@ import authenticateToken from '../middlewares/isLoggedIn';
 
 const router = express.Router();
 
-const getUserIdFromToken = (token: string): number | null => {
-  try {
-    const decoded = jwt.verify(token, process.env.SECRET as string) as { id: number };
-    return decoded.id;
-  } catch (err) {
-    console.error('Invalid token:', err);
-    return null;
-  }
-};
-
-router.post('/', async (req: Request, res: Response) : Promise<any> => {
+router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
   const {   token,
             actionTemplateId,
             actionValue,
@@ -24,7 +14,7 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
         } = req.body;
 
   try {
-    const userId = getUserIdFromToken(token);
+    const userId = (req as any).middlewareId;
     if (!userId)
       return res.status(401).json({error: 'Invalid or expired token'});
 
@@ -45,6 +35,7 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
       data: {
         actionTemplateId,
         actionValue: actionValue || actionTemplate.valueTemplate,
+        userId,
       },
     });
 
@@ -52,6 +43,7 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
       data: {
         triggerTemplateId,
         triggerValue: triggerValue || triggerTemplate.valueTemplate,
+        userId,
       },
     });
 

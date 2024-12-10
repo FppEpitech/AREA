@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function createActionTemplate() {
+async function sendDiscordMessageTemplate() {
   try {
     const actionTemplate = await prisma.actionTemplate.create({
       data: {
@@ -24,4 +24,4 @@ async function createActionTemplate() {
   }
 }
 
-createActionTemplate();
+sendDiscordMessageTemplate();

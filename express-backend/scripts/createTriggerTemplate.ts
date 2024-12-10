@@ -77,6 +77,29 @@ async function isEqualTriggerTemplate() {
     }
 }
 
+async function isSpotifyNewLikeTriggerTemplate() {
+  try {
+      const triggerEqualTemplate = await prisma.triggerTemplate.create({
+      data: {
+          name: 'Spotify new like',
+          provider: 'Spotify',
+          type: 'cron',
+          trigFunc: 'spotifyNewLike',
+          valueTemplate: {
+              time: '* * * * * *',
+          },
+      },
+      });
+      console.log('TriggerTemplate \'Spotify new like\' created:', triggerEqualTemplate);
+
+  } catch (error) {
+      console.error('Erreur lors de la création du ActionTemplate:', error);
+  } finally {
+      await prisma.$disconnect();
+  }
+}
+
 lessThanTriggerTemplate()
 greaterThanTriggerTemplate()
 isEqualTriggerTemplate()
+isSpotifyNewLikeTriggerTemplate();

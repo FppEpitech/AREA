@@ -1,23 +1,33 @@
 import prisma from '../prismaClient'
 import express, {Request, Response} from 'express';
+import authenticateToken from '../middlewares/isLoggedIn';
 
 const router = express.Router();
 
-const SPOTIFY_REDIRECT_URI = 'http://localhost:${process.env.PORT}/spotify/callback';
+const SPOTIFY_REDIRECT_URI = 'http://localhost:8081/spotify/callback';
 
-router.get('/authentification', (req, res) => {
+router.get('/authentification', authenticateToken, (req, res) => {
+    const userId = (req as any).middlewareId;
+    const state = JSON.stringify({userId});
     const scope = 'playlist-modify-public playlist-modify-private user-library-read user-library-modify user-follow-read user-follow-modify user-top-read';
 
-    const spotifyAuthUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(process.env.SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scope)}`;
+    const spotifyAuthUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state)}`;
 
     res.redirect(spotifyAuthUrl);
 });
 
 router.get('/callback', async (req, res) : Promise<any> => {
-    const { code } = req.query;
+    const { code, state } = req.query;
 
     if (!code)
       return res.status(400).json({error: 'Code is missing'});
+    let userId: number;
+    try {
+      const decodedState = JSON.parse(state as string);
+      userId = decodedState.userId;
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid state parameter' });
+    }
 
     try {
       const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
@@ -42,7 +52,7 @@ router.get('/callback', async (req, res) : Promise<any> => {
 
       const newToken = await prisma.token.create({
         data: {
-          userId: 1,
+          userId: userId,
           provider: 'spotify',
           tokenHashed: access_token,
           scope: 1,

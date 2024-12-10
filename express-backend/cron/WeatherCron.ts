@@ -53,17 +53,17 @@ interface WeatherResponse {
  * The API is provided by OpenWeatherMap.
  */
 
-export async function lessThan(value_json: string) : Promise<boolean> {
+export async function lessThan(userId: number, value_json: string) : Promise<boolean> {
     const { city, country, temperature } = JSON.parse(value_json)
     return await checkWeather(`${city},${country}`, temp => temp < temperature);
 }
 
-export async function greaterThan(value_json: string) : Promise<boolean> {
+export async function greaterThan(userId: number, value_json: string) : Promise<boolean> {
     const { city, country, temperature } = JSON.parse(value_json)
     return await checkWeather(`${city},${country}`, temp => temp > temperature);
 }
 
-export async function isEqual(value_json: string) : Promise<boolean> {
+export async function isEqual(userId: number, value_json: string) : Promise<boolean> {
     const { city, country, temperature } = JSON.parse(value_json)
     return await checkWeather(`${city},${country}`, temp => temp === temperature);
 }
