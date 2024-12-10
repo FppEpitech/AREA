@@ -1,4 +1,5 @@
 import { lessThan, greaterThan, isEqual } from "./WeatherCron";
+import sendDiscordMessage from "../action/sendDiscordMessage";
 import { CronClass } from './CronClass';
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
@@ -20,13 +21,13 @@ const triggersMapFunction: Map<string, (value_json: string) => Promise<boolean>>
     ["isEqual", isEqual]
 ]);
 
-// UpdateCron is now a cron too, it will be called every 10 minutes. But it will not be added to the map.
-// UpdateCron time = 0 */10 * * * *
+const actionsMapFunction: Map<string, (value_json: string) => Promise<void>> = new Map([
+    ["sendDiscordMessage", sendDiscordMessage]
+]);
 
 async function updateCron() {
     try {
         const triggers = await prisma.trigger.findMany();
-        console.log("Triggers number: ", triggers.length);
         for (const trigger of triggers) {
             if (cronMap.has(trigger.id))
                 continue;
@@ -61,12 +62,17 @@ async function checkCronResult() {
             const action = await prisma.action.findUnique({where: {id: plumTrigger?.actionId}});
             if (!action)
                 continue;
-            console.log('Action executed:', action);
+            const actionTemplate = await prisma.actionTemplate.findUnique({where: {id: action?.actionTemplateId}});
+            if (!actionTemplate)
+                continue;
+            const actionFunc = actionsMapFunction.get(actionTemplate?.actFunc);
+            if (actionFunc && action.actionValue)
+                await actionFunc(action?.actionValue.toString());
         }
     } catch (error) {
         console.error('Error checking cron results:', error);
     }
 }
 
-export const updateCronJob = new CronJob('0 */10 * * * *', updateCron);
-export const checkCronResultJob = new CronJob('0 */10 * * * *', checkCronResult);
+export const updateCronJob = new CronJob('* * * * *', updateCron);
+export const checkCronResultJob = new CronJob('* * * * *', checkCronResult);
