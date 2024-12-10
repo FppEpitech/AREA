@@ -11,14 +11,13 @@ const generateToken = (userId: number) => {
     return jwt.sign({ id: userId }, process.env.SECRET as string, { expiresIn });
 };
 
-const createNewUser = async (username : string, mail : string, password: string) => {
+const createNewUser = async (mail : string, password: string) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     if (!hashedPassword) {
         throw new Error("Failed hashing your password");
     }
     const employee = await prisma.user.create({
         data: {
-            username: username,
             mail: mail,
             hashedPassword: hashedPassword,
         },
@@ -29,9 +28,9 @@ const createNewUser = async (username : string, mail : string, password: string)
 };
 
 accountRouter.post('/register', async (req: Request, res: Response): Promise<any> => {
-    const { username, mail, password } = req.body;
+    const { mail, password } = req.body;
 
-    if (!username || !mail || !password)
+    if (!mail || !password)
         return res.status(400).json({ msg: "Bad parameters" });
     try {
         let user : User | null = await prisma.user.findUnique({
@@ -39,7 +38,7 @@ accountRouter.post('/register', async (req: Request, res: Response): Promise<any
         });
         if (user)
             return res.status(409).json({ msg: "User exists." });
-        user = await createNewUser(username, mail, password);
+        user = await createNewUser(mail, password);
         const token = generateToken(user.userId);
         return res.status(201).json({ token: token });
     } catch (error) {
@@ -69,4 +68,5 @@ accountRouter.post('/login', async (req: Request, res: Response) : Promise<any> 
     }
 });
 
+export { generateToken };
 export default accountRouter

@@ -4,30 +4,35 @@
   "description": "Backend of the plumpy project",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "dev": "ts-node index.ts",
+    "build": "tsc"
   },
   "author": "FPP/FromNoWare",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.0.1",
     "axios": "^1.7.8",
-    "cron": "^3.2.1"
+    "cors": "^2.8.5",
+    "cron": "^3.2.1",
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.8"
   },
   "devDependencies": {
     "@prisma/client": "^6.0.0",
     "@types/axios": "^0.9.36",
     "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
     "@types/cron": "^2.0.1",
-    "@types/express": "^5.0.0",
+    "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.6",
     "express": "^4.21.1",
-    "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^6.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.5.4"
   }
 }

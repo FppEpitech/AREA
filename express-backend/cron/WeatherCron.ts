@@ -53,21 +53,32 @@ interface WeatherResponse {
  * The API is provided by OpenWeatherMap.
  */
 
-async function CheckWeather(): Promise<void> {
+export async function lessThan(value_json: string) : Promise<boolean> {
+    const { city, country, temperature } = JSON.parse(value_json)
+    return await checkWeather(`${city},${country}`, temp => temp < temperature);
+}
+
+export async function greaterThan(value_json: string) : Promise<boolean> {
+    const { city, country, temperature } = JSON.parse(value_json)
+    return await checkWeather(`${city},${country}`, temp => temp > temperature);
+}
+
+export async function isEqual(value_json: string) : Promise<boolean> {
+    const { city, country, temperature } = JSON.parse(value_json)
+    return await checkWeather(`${city},${country}`, temp => temp === temperature);
+}
+
+async function checkWeather(city: string, condition: (temp: number) => boolean) : Promise<boolean> {
     const apiKey = process.env.WEATHER_API_KEY;
-    const city = 'Nantes,FR';
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 
     try {
         const response = await axios.get<WeatherResponse>(apiUrl);
-        const data = response.data;
-        const temperature: number = data.main.temp;
+        const temperature: number = response.data.main.temp;
 
-        if (temperature <= 7)
-            console.log(`Current temperature in Nantes: ${temperature}°C`);
+        return condition(temperature);
     } catch (error) {
         console.error('Error while fetching weather data:', error);
     }
+    return false;
 }
-
-export { CheckWeather };

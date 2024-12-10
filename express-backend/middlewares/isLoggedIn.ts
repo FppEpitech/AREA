@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../prismaClient'
 
-const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
+const authenticateToken = async (req: Request, res: Response, next: NextFunction) : Promise<any> => {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader)
+    if (!authHeader) {
         return res.status(401).json({ msg: "No token." });
+    }
     const token = authHeader.split(' ')[1];
     if (!token)
         return res.status(401).json({ msg: "Token is not valid" });
@@ -15,7 +16,7 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
             return res.status(401).json({ msg: "Token is not valid" });
         const userId = decoded.id;
         try {
-            const user = await prisma.employee.findUnique({ where: { id: userId } });
+            const user = await prisma.user.findUnique({ where: { userId: userId } });
             if (!user)
                 return res.status(401).json({ msg: "Token is not valid" });
             (req as any).middlewareId = userId;

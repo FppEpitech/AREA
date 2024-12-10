@@ -3,13 +3,14 @@ import { CronJob } from 'cron';
 class CronClass {
 
     cronJob: CronJob;
+    lastResult: boolean = false;
 
-    constructor(fct: () => void, time: string) {
-        if (!time)
-            time = '0 */24 * * * *';
+    // The function here is to call the trigger function.
+    constructor(fct: (value_json: string) => Promise<boolean>, value_json: string) {
+        const { time } = JSON.parse(value_json)
         this.cronJob = new CronJob(time, async () => {
             try {
-                await fct();
+                this.lastResult = await fct(value_json);
             } catch (e) {
                 console.error(e);
             }

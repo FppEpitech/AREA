@@ -1,0 +1,19 @@
+name: Tests
+on: [check_run, pull_request]
+jobs:
+  run_front_tests:
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          cd react-frontend
+          npm install
+      - name: Execute the tests
+        run: |
+          cd react-frontend
+          npm test a
