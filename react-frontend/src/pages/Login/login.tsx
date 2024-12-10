@@ -3,6 +3,8 @@ import waterfall from '../../assets/waterfall.png'
 import React, { useState } from 'react';
 import { AuthLogin } from '../../services/auth/auth';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '../../components/IsMobile/isMobile';
+import { MobileLogin } from './mobileLogin';
 
 export default function Login() {
 
@@ -17,7 +19,18 @@ export default function Login() {
         await AuthLogin({email, password}, navigate, setError);
     };
 
-    return (
+    const isMobile = useIsMobile();
+
+    return isMobile ? (
+        <MobileLogin
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          error={error}
+          sendLogin={sendLogin}
+        />
+      ) : (
         <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
             <div className="flex flex-col md:flex-row bg-white shadow-custom rounded-2xl overflow-hidden w-[1536px] h-[768px]">
                 {/* Left Section with Image */}
