@@ -15,6 +15,39 @@ const getUserIdFromToken = (token: string): number | null => {
   }
 };
 
+/**
+ * @swagger
+ * /plums:
+ *   post:
+ *     summary: Create a new plum
+ *     tags: [Plums]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *               actionTemplateId:
+ *                 type: number
+ *               actionValue:
+ *                 type: string
+ *               triggerTemplateId:
+ *                 type: number
+ *               triggerValue:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Plum created successfully
+ *       401:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: User, ActionTemplate, or TriggerTemplate not found
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/', async (req: Request, res: Response) : Promise<any> => {
   const {   token,
             actionTemplateId,
@@ -79,7 +112,24 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
   }
 });
 
-
+/**
+ * @swagger
+ * /plums:
+ *   get:
+ *     summary: Get all plums for the authenticated user
+ *     tags: [Plums]
+ *     responses:
+ *       200:
+ *         description: A list of plums
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/', authenticateToken,  async (req : Request, res : Response) : Promise<any> => {
     const userId = (req as any).middlewareId;
     const plums = await prisma.plum.findMany({
@@ -101,6 +151,27 @@ router.get('/', authenticateToken,  async (req : Request, res : Response) : Prom
       res.status(200).json(plums);
 })
 
+/**
+ * @swagger
+ * /plums/{plumId}:
+ *   delete:
+ *     summary: Delete a plum by ID
+ *     tags: [Plums]
+ *     parameters:
+ *       - in: path
+ *         name: plumId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the plum to delete
+ *     responses:
+ *       204:
+ *         description: Plum deleted successfully
+ *       404:
+ *         description: Plum not found
+ *       500:
+ *         description: Internal server error
+ */
 router.delete('/:plumId', async (req: Request, res: Response) : Promise<any> => {
     const { plumId } = req.params;
 
