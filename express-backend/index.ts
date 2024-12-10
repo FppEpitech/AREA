@@ -8,6 +8,9 @@ import accountRouter from './routes/account';
 import triggerRouter from './routes/trigger';
 import actionRouter from './routes/action';
 import aboutRouter from './routes/about';
+import swaggerDocs from './docs/swagger';
+
+const swaggerUi = require("swagger-ui-express");
 
 dotenv.config();
 
@@ -26,7 +29,9 @@ app.use('/triggers', triggerRouter);
 app.use('/account', accountRouter);
 app.use('/about.json', aboutRouter);
 
-app.get('/', (req: Request, res: Response) => {
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.get('/', (req : Request, res: Response) => {
   res.send('Hello, World!');
 });
 
@@ -36,9 +41,9 @@ app.get('/client.apk', (req, res) => {
   res.sendFile(path.join('/shared/client.apk'));
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`API Docs available at http://localhost:${PORT}/api-docs`);
 });
 
 export default app;
