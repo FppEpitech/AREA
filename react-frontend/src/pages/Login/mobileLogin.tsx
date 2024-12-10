@@ -55,5 +55,22 @@ export const MobileLogin = ({ email, setEmail, password, setPassword, error, sen
             <a href="/signup" className="underline text-customYellow">Register here</a>
             </p>
         </div>
+
+        {/* Separator */}
+        <hr className="border-t-2 border-customDarkGreen w-52 my-4" />
+
+        <p className="text-sl mb-4 text-customYellow text-shadow-custom font-instrumentSans text-center">
+            or continue with
+        </p>
+        <div className="flex flex-row space-x-4">
+            <button
+                className="flex items-center font-instrumentSans bg-customGreen py-2 px-4 rounded-xl hover:bg-customDarkGreen transition">
+                <i className="fab fa-github"></i> Github
+            </button>
+            <button
+                className="flex items-center font-instrumentSans bg-customGreen py-2 px-4 rounded-xl hover:bg-customDarkGreen transition">
+                <i className="fab fa-google"></i> Google
+            </button>
+        </div>
     </div>
   );
