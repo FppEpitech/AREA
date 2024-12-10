@@ -23,7 +23,8 @@ export default function Navbar() {
                             Explore
                         </p>
                     </button>
-                    <button type="button">
+                    <button type="button"
+                        onClick={() => navigate('/myPlums')}>
                         <p
                             className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
                             My Plums
@@ -86,7 +87,8 @@ export default function Navbar() {
                             Explore
                         </p>
                     </button>
-                    <button type="button" className="w-full">
+                    <button type="button" className="w-full"
+                        onClick={() => navigate('/myPlums')}>
                         <p className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
                             My Plums
                         </p>
