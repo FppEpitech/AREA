@@ -3,6 +3,8 @@ import waterfall from '../../assets/waterfall.png'
 import { useState } from "react";
 import { AuthSignUp } from '../../services/auth/auth'
 import { useNavigate } from "react-router-dom";
+import { MobileSignup } from './mobileSignup';
+import { useIsMobile } from '../../components/IsMobile/isMobile';
 
 export default function Signup() {
 
@@ -12,7 +14,7 @@ export default function Signup() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
 
-    const sendSignUp = async(e: React.FormEvent) => {
+    const sendSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
@@ -20,10 +22,23 @@ export default function Signup() {
             return;
         }
 
-        await AuthSignUp({email, password}, navigate, setError);
+        await AuthSignUp({ email, password }, navigate, setError);
     };
 
-    return (
+    const isMobile = useIsMobile();
+
+    return isMobile ? (
+        <MobileSignup
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
+            error={error}
+            sendSignUp={sendSignUp}
+        />
+    ) : (
         <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
             <div className="flex flex-col md:flex-row bg-white shadow-custom rounded-2xl overflow-hidden w-[1536px] h-[768px]">
                 {/* Left Section with Image */}
@@ -105,7 +120,7 @@ export default function Signup() {
                         {/* Oauth2 Login */}
                         <div className="md:w-1/6 mt-6 md:mt-0">
                             <p className="text-sl mb-4 text-customYellow text-shadow-custom font-instrumentSans text-center">
-                                or<br/>continue with
+                                or<br />continue with
                             </p>
                             <div className="flex flex-col space-y-4">
                                 <button
