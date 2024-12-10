@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../prismaClient'
 
-const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
+const authenticateToken = async (req: Request, res: Response, next: NextFunction) : Promise<any> => {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader)
+    if (!authHeader) {
         return res.status(401).json({ msg: "No token." });
+    }
     const token = authHeader.split(' ')[1];
     if (!token)
         return res.status(401).json({ msg: "Token is not valid" });
