@@ -28,10 +28,6 @@ app.get('/', (req : Request, res: Response) => {
   res.send('Hello, World!');
 });
 
-app.get('/about.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'about.json'));
-});
-
 app.use('/client.apk', express.static(path.join(__dirname, '/shared')));
 
 app.use('/account', accountRouter);
