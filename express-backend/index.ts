@@ -8,9 +8,9 @@ import accountRouter from './routes/account';
 import triggerRouter from './routes/trigger';
 import actionRouter from './routes/action';
 import aboutRouter from './routes/about';
+import swaggerDocs from './docs/swagger';
 
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocs = require("./docs/swagger");
 
 dotenv.config();
 
