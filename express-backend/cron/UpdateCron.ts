@@ -1,7 +1,7 @@
 import { lessThan, greaterThan, isEqual } from "./WeatherCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import { CronClass } from './CronClass';
-import sendMailBasic from "../action/sendMailBasic";
+import sendMailBasic from "../action/sendMail";
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
