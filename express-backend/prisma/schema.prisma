@@ -48,6 +48,7 @@ model ActionTemplate {
   name           String
   actFunc        String
   valueTemplate  Json
+  provider       String
   actions        Action[]
 }
 
