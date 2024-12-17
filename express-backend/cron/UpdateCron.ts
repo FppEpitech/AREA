@@ -1,6 +1,7 @@
 import { lessThan, greaterThan, isEqual } from "./WeatherCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import { CronClass } from './CronClass';
+import sendMailBasic from "../action/sendMailBasic";
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
@@ -22,7 +23,8 @@ const triggersMapFunction: Map<string, (value_json: string) => Promise<boolean>>
 ]);
 
 const actionsMapFunction: Map<string, (value_json: string) => Promise<void>> = new Map([
-    ["sendDiscordMessage", sendDiscordMessage]
+    ["sendDiscordMessage", sendDiscordMessage],
+    ["sendMailBasic", sendMailBasic]
 ]);
 
 async function updateCron() {

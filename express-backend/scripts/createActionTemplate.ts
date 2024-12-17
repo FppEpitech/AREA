@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function createActionTemplate() {
+async function createActionTemplate_SendDiscordMessage() {
   try {
     const actionTemplate = await prisma.actionTemplate.create({
       data: {
@@ -25,4 +25,38 @@ async function createActionTemplate() {
   }
 }
 
-createActionTemplate();
+async function createActionTemplate_sendMailBasic() {
+    try {
+      const actionTemplate = await prisma.actionTemplate.create({
+        data: {
+          name: 'Send Basic Mail',
+          actFunc: 'sendMailBasic',
+          provider: 'mail',
+          valueTemplate: {
+            destination : {
+                type : 'mail',
+                template : 'theophilejeromerocher44@gmail.com'
+            },
+            object : {
+                type : 'string',
+                template : 'Hello world !'
+            },
+            message : {
+                type : 'string',
+                template : 'Hello everybody, this is a test message from PlumpyDev !'
+            }
+          },
+        },
+      });
+      console.log('ActionTemplate \'Send Mail Basic\' created:', actionTemplate);
+
+    } catch (error) {
+      console.error('Erreur lors de la création du ActionTemplate:', error);
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+
+createActionTemplate_SendDiscordMessage();
+createActionTemplate_sendMailBasic();
