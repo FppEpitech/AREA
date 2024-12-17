@@ -17,7 +17,8 @@ export default function Navbar() {
                     <img className='shadow-custom rounded-full' src={logo} alt="Plumpy logo"></img>
                 </div>
                 <div className="hidden md:flex items-center space-x-16">
-                    <button type="button">
+                    <button type="button"
+                        onClick={() => navigate('/explore')}>
                         <p
                             className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
                             Explore

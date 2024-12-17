@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function Client_apk() {
+export default function ClientApk() {
     const handleDownload = () => {
         window.location.href = `${process.env.REACT_APP_API_URL}/client.apk`;
     };
