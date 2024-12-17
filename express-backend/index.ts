@@ -14,6 +14,9 @@ const swaggerUi = require("swagger-ui-express");
 
 dotenv.config();
 
+//TODO: run the scrips to create the trigger and action templates
+
+
 checkCronResultJob.start();
 updateCronJob.start();
 

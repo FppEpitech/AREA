@@ -44,7 +44,7 @@ model Plum {
 model ActionTemplate {
   id             Int    @id @default(autoincrement())
   name           String
-  actFunc        String
+  actFunc        String @unique
   valueTemplate  Json
   provider       String
   actions        Action[]
@@ -63,7 +63,7 @@ model TriggerTemplate {
   name           String
   provider       String
   type           String
-  trigFunc       String
+  trigFunc       String @unique
   valueTemplate  Json
   triggers       Trigger[]
 }
