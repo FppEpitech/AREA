@@ -11,10 +11,24 @@ async function lessThanTriggerTemplate() {
         type: 'cron',
         trigFunc: 'lessThan',
         valueTemplate: {
-          time: '* * * * *',
-          temperature: 0,
-          city: 'Nantes',
-          country: 'FR',
+          time: {
+            template: '* * * * *',
+            type: "cron",
+          },
+          temperature: {
+            template: 0,
+            type: "number",
+          },
+          city: {
+            template: 'Nantes',
+            type: "string",
+            check: "city",
+          },
+          country: {
+            template: 'FR',
+            type: "string",
+            check: "country",
+          },
         },
       },
     });

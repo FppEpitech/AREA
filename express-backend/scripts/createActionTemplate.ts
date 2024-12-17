@@ -10,9 +10,25 @@ async function createActionTemplate() {
         actFunc: 'sendDiscordMessage',
         provider: 'Discord',
         valueTemplate: {
-          webhookUrl: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
-          content: 'Test message',
-          username: 'BotTest',
+          webhookUrl: {
+            type: "string",
+            min_len: "5",
+            max_len: "200",
+            check: "url",
+            template: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL'
+        },
+          content: {
+            type: "string",
+            min_len: "1",
+            max_len: "2000",
+            template: 'Hello, world!'
+          },
+          username: {
+            type: "string",
+            min_len: "1",
+            max_len: "80",
+            template: 'BotTest'
+          },
         },
       },
     });
