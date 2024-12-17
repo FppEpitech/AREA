@@ -2,33 +2,48 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken'
 import prisma from '../prismaClient'
 
+export async function spotifyNewLike(userId: number, value_json: string, data: any): Promise<boolean>
+{
+    console.log("BEGINNING FUNC");
+    const tokenSpotify = await prisma.token.findFirst({ where: { userId: userId } });
 
-export async function spotifyNewLike(userId: number, value_json: string) : Promise<boolean> {
+    if (!tokenSpotify)
+        throw new Error("Token not found for the user.");
 
-    const tokenSpotify = await prisma.token.findFirst({where: {userId: userId}});
-    const response = await fetch('https://api.spotify.com/v1/me/tracks', {
+    console.log("BEFORE RESPONSE");
+    const response = await fetch('https://api.spotify.com/v1/me/tracks?limit=1', {
+        method: 'GET',
         headers: {
-        Authorization: `Bearer ${tokenSpotify?.tokenHashed}`,
+            'Authorization': `Bearer ${tokenSpotify?.tokenHashed}`,
         },
     });
-    if (!response.ok)
-        throw new Error('Failed to fetch liked tracks');
+
+    console.log("BEFORE RESULT");
+    const result = await response.json();
+
+    console.log("CHECK ITEM");
+    if (!result.items || result.items.length === 0)
+        throw new Error("No liked tracks found.");
+
+    const track = result.items[0].track;
+    const title = track.name;
+    const artist = track.artists[0].name;
+    console.log(`Titre: ${title}`);
+    console.log(`Artiste: ${artist}`);
 
 
-    const data = await response.json();
-    const likedSongs = data.items.map((item: any) => ({
-        title: item.track.name,
-        artist: item.track.artists.map((artist: any) => artist.name).join(', '),
-    }));
+    if (!data || !data.title || !data.artist) {
+        console.log("DATA IS EMPTY");
+        data = { title, artist };
+        return false;
+    }
 
-    const isNewLike = !likedSongs.some((song: { title: string; artist: string }) =>
-        song.title.toLowerCase() === songLiked.title.toLowerCase() &&
-        song.artist.toLowerCase() === songLiked.artist.toLowerCase()
-    );
-
-    if (isNewLike) {
-        console.log(`New liked song: ${songLiked.title} by ${songLiked.artist}`);
+    if (data.title !== title || data.artist !== artist) {
+        console.log("NEW LIKE");
+        data = { title, artist };
         return true;
     }
+
+    console.log("NO NEW LIKE");
     return false;
 }

@@ -6,7 +6,17 @@ const router = express.Router();
 
 const SPOTIFY_REDIRECT_URI = 'http://localhost:8081/spotify/callback';
 
-router.get('/authentification', authenticateToken, (req, res) => {
+/**
+ * @swagger
+ * /spotify/authentification:
+ *   get:
+ *     summary: Redirect to Spotify authentication
+ *     tags: [Spotify]
+ *     responses:
+ *       302:
+ *         description: Redirect to Spotify authentication URL
+ */
+ router.get('/authentification', authenticateToken, (req, res) => {
     const userId = (req as any).middlewareId;
     const state = JSON.stringify({userId});
     const scope = 'playlist-modify-public playlist-modify-private user-library-read user-library-modify user-follow-read user-follow-modify user-top-read';
@@ -16,6 +26,27 @@ router.get('/authentification', authenticateToken, (req, res) => {
     res.redirect(spotifyAuthUrl);
 });
 
+/**
+ * @swagger
+ * /spotify/callback:
+ *   get:
+ *     summary: Spotify authentication callback
+ *     tags: [Spotify]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Authorization code from Spotify
+ *     responses:
+ *       200:
+ *         description: Spotify authenticated successfully
+ *       400:
+ *         description: Code is missing or invalid
+ *       500:
+ *         description: Failed to authenticate with Spotify
+ */
 router.get('/callback', async (req, res) : Promise<any> => {
     const { code, state } = req.query;
 

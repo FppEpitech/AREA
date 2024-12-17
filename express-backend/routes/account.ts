@@ -27,6 +27,33 @@ const createNewUser = async (mail : string, password: string) => {
     return employee
 };
 
+/**
+ * @swagger
+ * /account/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Account]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               mail:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       400:
+ *         description: Bad parameters
+ *       409:
+ *         description: User exists
+ *       500:
+ *         description: Internal Server Error
+ */
 accountRouter.post('/register', async (req: Request, res: Response): Promise<any> => {
     const { mail, password } = req.body;
 
@@ -46,6 +73,33 @@ accountRouter.post('/register', async (req: Request, res: Response): Promise<any
     }
 });
 
+/**
+ * @swagger
+ * /account/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Account]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               mail:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *       400:
+ *         description: Bad parameters
+ *       409:
+ *         description: Invalid Credentials
+ *       500:
+ *         description: Internal Server Error
+ */
 accountRouter.post('/login', async (req: Request, res: Response) : Promise<any> => {
     const { mail, password } = req.body;
 

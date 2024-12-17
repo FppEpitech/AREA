@@ -16,7 +16,7 @@ import {CronJob} from "cron";
  */
 const cronMap = new Map<number, CronClass>();
 
-const triggersMapFunction: Map<string, (userId: number, value_json: string) => Promise<boolean>> = new Map([
+const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
     ["lessThan", lessThan],
     ["greaterThan", greaterThan],
     ["isEqual", isEqual],
@@ -38,7 +38,7 @@ async function updateCron() {
             });
             if (triggerTemplate?.type !== 'cron')
                 continue;
-            const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string) => Promise<boolean>, trigger.userId, JSON.stringify(triggerTemplate?.valueTemplate));
+            const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(triggerTemplate?.valueTemplate));
             cronMap.set(trigger.id, cron);
         }
         for (const [id, cron] of cronMap) {

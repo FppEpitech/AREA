@@ -6,12 +6,11 @@ class CronClass {
     lastResult: boolean = false;
     data: any;
 
-    // The function here is to call the trigger function.
-    constructor(fct: (userId : number, value_json: string) => Promise<boolean>, userId : number, value_json: string) {
+    constructor(fct: (userId : number, value_json: string, data: any) => Promise<boolean>, userId : number, value_json: string) {
         const { time } = JSON.parse(value_json)
         this.cronJob = new CronJob(time, async () => {
             try {
-                this.lastResult = await fct(userId, value_json);
+                this.lastResult = await fct(userId, value_json, this.data);
             } catch (e) {
                 console.error(e);
             }

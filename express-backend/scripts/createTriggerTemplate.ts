@@ -11,7 +11,7 @@ async function lessThanTriggerTemplate() {
         type: 'cron',
         trigFunc: 'lessThan',
         valueTemplate: {
-          time: '* * * * * *',
+          time: '* * * * *',
           temperature: 0,
           city: 'Nantes',
           country: 'FR',
@@ -36,7 +36,7 @@ async function greaterThanTriggerTemplate() {
             type: 'cron',
             trigFunc: 'greaterThan',
             valueTemplate: {
-                time: '* * * * * *',
+                time: '* * * * *',
                 temperature: 0,
                 city: 'Nantes',
                 country: 'FR',
@@ -61,7 +61,7 @@ async function isEqualTriggerTemplate() {
             type: 'cron',
             trigFunc: 'isEqual',
             valueTemplate: {
-                time: '* * * * * *',
+                time: '* * * * *',
                 temperature: 0,
                 city: 'Nantes',
                 country: 'FR',

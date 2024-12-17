@@ -4,6 +4,8 @@ import Login from "../Login/login";
 import Signup from '../Signup/signup';
 import Explore from '../Explore/explore';
 import CreatePage from '../Create/create';
+import MyPlums from '../MyPlums/myPlums';
+import Client_apk from "../Client_apk/Client_apk";
 
 function App() {
   return (
@@ -13,7 +15,9 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="explore" element={<Explore />} />
+          <Route path="myPlums" element={<MyPlums />} />
           <Route path="create" element={<CreatePage />} />
+          <Route path="client.apk" element={<Client_apk />} />
           {/* <Route path="*" element={<NoPage />} /> TODO: Error 404 */}
       </Routes>
     </BrowserRouter>
