@@ -30,4 +30,22 @@ router.get('/templates', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/templates/:provider', async (req: Request, res: Response) : Promise<any> => {
+    const { provider } = req.params;
+    if (!provider) {
+        res.status(400).json({ error: 'Provider is required.' });
+        return;
+    }
+    try {
+        const templates = await prisma.triggerTemplate.findMany({
+            where: {
+                provider: provider
+            }
+        });
+        res.status(200).json(templates);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch trigger templates.' });
+    }
+});
+
 export default router;
