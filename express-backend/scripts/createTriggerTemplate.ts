@@ -86,7 +86,7 @@ async function isSpotifyNewLikeTriggerTemplate() {
           type: 'cron',
           trigFunc: 'spotifyNewLike',
           valueTemplate: {
-              time: '* * * * * *',
+            time: '* * * * *',
           },
       },
       });

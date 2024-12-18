@@ -5,16 +5,6 @@ import authenticateToken from '../middlewares/isLoggedIn';
 
 const router = express.Router();
 
-const getUserIdFromToken = (token: string): number | null => {
-  try {
-    const decoded = jwt.verify(token, process.env.SECRET as string) as { id: number };
-    return decoded.id;
-  } catch (err) {
-    console.error('Invalid token:', err);
-    return null;
-  }
-};
-
 /**
  * @swagger
  * /plums:
@@ -48,9 +38,8 @@ const getUserIdFromToken = (token: string): number | null => {
  *       500:
  *         description: Internal server error
  */
-router.post('/', async (req: Request, res: Response) : Promise<any> => {
-  const {   token,
-            actionTemplateId,
+router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
+  const {   actionTemplateId,
             actionValue,
             triggerTemplateId,
             triggerValue
@@ -58,8 +47,6 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
 
   try {
     const userId = (req as any).middlewareId;
-    if (!userId)
-      return res.status(401).json({error: 'Invalid or expired token'});
 
     const user = await prisma.user.findUnique({where: {userId}});
     if (!user)
