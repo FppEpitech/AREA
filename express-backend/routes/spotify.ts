@@ -1,6 +1,7 @@
 import prisma from '../prismaClient'
 import express, {Request, Response} from 'express';
 import authenticateToken from '../middlewares/isLoggedIn';
+import CryptoJS from 'crypto-js';
 
 const router = express.Router();
 
@@ -25,6 +26,15 @@ const SPOTIFY_REDIRECT_URI = 'http://localhost:8081/spotify/callback';
 
     res.redirect(spotifyAuthUrl);
 });
+
+
+function encryptToken(token: string): string {
+  const secret = process.env.SECRET
+
+  if (!secret)
+    throw new Error('SECRET environment variable is not defined');
+  return CryptoJS.AES.encrypt(token, secret).toString();
+}
 
 /**
  * @swagger
@@ -81,11 +91,13 @@ router.get('/callback', async (req, res) : Promise<any> => {
 
       const { access_token, refresh_token } = tokenData;
 
+      const encryptedAccessToken = encryptToken(access_token);
+
       const newToken = await prisma.token.create({
         data: {
           userId: userId,
           provider: 'spotify',
-          tokenHashed: access_token,
+          tokenHashed: encryptedAccessToken,
           scope: 1,
           creationDate: new Date().toISOString(),
         },
