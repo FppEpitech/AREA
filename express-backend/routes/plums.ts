@@ -39,7 +39,8 @@ const router = express.Router();
  *         description: Internal server error
  */
 router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
-  const {   actionTemplateId,
+  const {   name,
+            actionTemplateId,
             actionValue,
             triggerTemplateId,
             triggerValue
@@ -79,6 +80,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
 
     const plum = await prisma.plum.create({
       data: {
+        name: name,
         userId,
         actionId: action.id,
         triggerId: trigger.id,
