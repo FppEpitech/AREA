@@ -93,7 +93,7 @@ function CreatePage() {
             <Navbar />
 
             {/* Centered Workflow */}
-            <div className="flex flex-1 mt-36 justify-center">
+            <div className="flex flex-1 mt-36 pb-3 justify-center">
                 <div className="max-w-md w-full">
                     {workflows.map((workflow, index) => (
                         <div key={index} className="pl-6 pr-6 last:mb-0">

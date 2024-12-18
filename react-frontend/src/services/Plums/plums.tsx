@@ -1,11 +1,18 @@
 import axios from 'axios';
 
+interface ValueTemplate {
+    [key: string]: {
+        type: 'cron' | 'number' | 'string';
+        template: string | number;
+    };
+}
+
 export interface Trigger {
     id: number;
     name: string;
     provider: string;
     type: string;
-    valueTemplate: string;
+    valueTemplate: ValueTemplate;
 }
 
 export interface Action extends Trigger {}
