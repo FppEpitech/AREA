@@ -19,6 +19,8 @@ model User {
   mail           String   @unique
   tokens         Token[]
   plums          Plum[]
+  actions          Action[]
+  tiggers          Trigger[]
 }
 
 model Token {
@@ -56,6 +58,8 @@ model Action {
   actionTemplate    ActionTemplate @relation(fields: [actionTemplateId], references: [id])
   actionTemplateId  Int
   plums             Plum[]
+  user       User     @relation(fields: [userId], references: [userId])
+  userId     Int
 }
 
 model TriggerTemplate {
@@ -74,4 +78,6 @@ model Trigger {
   triggerTemplate   TriggerTemplate @relation(fields: [triggerTemplateId], references: [id])
   triggerTemplateId Int
   plums             Plum[]
+  user       User     @relation(fields: [userId], references: [userId])
+  userId     Int
 }
