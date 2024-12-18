@@ -1,134 +1,13 @@
-// import { useEffect, useState } from "react";
-// // import Navbar from "../../components/Navbar/navbar";
-// import { getTriggers, Trigger, getActions, Action, createPlum } from "../../services/Plums/plums";
-
-// function CreatePage() {
-
-//     const [triggers, setTriggers] = useState<Trigger[]>([]);
-//     const [selectTrigger, setSelectTrigger] = useState<Trigger | undefined>(undefined);
-//     const [actions, setActions] = useState<Action[]>([]);
-//     const [selectAction, setSelectAction] = useState<Action | undefined>(undefined);
-
-//     useEffect(() => {
-//         const fetchTriggers = async () => {
-//             try {
-//                 const triggerData = await getTriggers();
-//                 if (triggerData) setTriggers(triggerData);
-//             } catch (error) {
-//                 console.error("Error fetching triggers:", error);
-//             }
-//         };
-
-//         fetchTriggers();
-//     }, []);
-
-//     useEffect(() => {
-//         const fetchActions = async () => {
-//             try {
-//                 const actionData = await getActions();
-//                 if (actionData) setActions(actionData);
-//             } catch (error) {
-//                 console.error("Error fetching actions:", error);
-//             }
-//         };
-
-//         fetchActions();
-//     }, []);
-
-//     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, value : any[], setter: React.Dispatch<React.SetStateAction<any | undefined>>) => {
-//         const selectedName = event.target.value;
-//         const selected = value.find(trigger => trigger.name === selectedName);
-//         setter(selected);
-//     };
-
-//     const handleCreateButton = () => {
-//         if (selectTrigger && selectAction)
-//             createPlum(selectTrigger, selectAction);
-//     }
-
-//     return (
-//     <div>
-//         {/* <Navbar></Navbar> TODO: Decomment this when CSS of the page done*/}
-//         <h1>Create a plum</h1>
-//         <select name="triggers" id="triggers-select" onChange={(e) => handleSelectChange(e, triggers, setSelectTrigger)}>
-//             <option value="">--Triggers--</option>
-//             {triggers && triggers.map((trigger) => (
-//                 <option value={trigger.name} key={trigger.id}>{trigger.name}</option>
-//             ))}
-//         </select>
-//         <input
-//             type='area'
-//            className="bg-customYellow w-full h-48 p-4 text-lg border border-gray-300 rounded-md resize-none"
-//             value={selectTrigger?.json || ""}
-//             onChange={(e) => {if (selectTrigger) setSelectTrigger({id: selectTrigger.id, name: selectTrigger.name, json: e.target.value})}}
-//             >
-//             </input>
-//         <select name="actions" id="actions-select"  onChange={(e) => handleSelectChange(e, actions, setSelectAction)}>
-//             <option value="">--Actions--</option>
-//             {actions && actions.map((action) => (
-//                 <option value={action.name} key={action.id}>{action.name}</option>
-//             ))}
-//         </select>
-//         <input
-//             type='area'
-//             className="bg-customYellow w-full h-48 p-4 text-lg border border-gray-300 rounded-md resize-none"
-//             value={selectAction?.json || ""}
-//             onChange={(e) => {if (selectAction) setSelectAction({id: selectAction.id, name: selectAction.name, json: e.target.value})}}
-//             >
-//             </input>
-
-//         <button
-//             type="button"
-//             className="bg-customGreen"
-//             onClick={handleCreateButton}
-//             >
-//             Create
-//         </button>
-
-//     </div>
-//     );
-// }
-
-// export default CreatePage;
-
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Action, getActions, getTriggers, Trigger } from "../../services/Plums/plums";
 import Navbar from "../../components/Navbar/navbar";
-
-interface WorkflowStepProps {
-    stepNumber: number;
-    title: string;
-    description: string;
-    providers?: string[];
-}
+import WorkflowSetup from "../../components/Create/workflowSetup";
+import WorkflowStep from "../../components/Create/workflowStep";
 
 interface Workflow {
-title: string;
-description: string;
+    title: string;
+    description: string;
 }
-
-const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers }) => {
-    return (
-        <div className="block p-6 bg-white border border-gray-200 rounded-lg shadow-custom hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-            <div className="columns-2">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>
-                <select
-                    name="workflow-options"
-                    id="workflow-options"
-                    className="block w-full p-2 mt-2 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:text-white dark:border-gray-600"
-                >
-                    <option value="">{title}</option>
-                    {providers && providers.map((provider) => (
-                        <option value={provider} key={provider}>{provider}</option>
-                    ))}
-                </select>
-            </div>
-
-            <p className="font-normal text-gray-700 font-instrumentSans dark:text-gray-400">{stepNumber}. {description}</p>
-        </div>
-    );
-};
 
 function CreatePage() {
 
@@ -137,6 +16,8 @@ function CreatePage() {
 
     const [actions, setActions] = useState<Action[]>([]);
     const [actionsProviders, setActionsProviders] = useState<string[]>([]);
+
+    const [selectType, setSelectType] = useState<Trigger[] | Action[] | undefined>(undefined);
 
     useEffect(() => {
         const fetchTriggers = async () => {
@@ -221,6 +102,9 @@ function CreatePage() {
                                 title={workflow.title}
                                 description={workflow.description}
                                 {...index === 0 ? { providers: triggersProviders } : { providers: actionsProviders }}
+                                triggers={triggers}
+                                actions={actions}
+                                setSelectType={setSelectType}
                             />
                             {index < workflows.length - 1 && (
                                 <div className="flex flex-col items-center">
@@ -239,6 +123,18 @@ function CreatePage() {
                     ))}
                 </div>
             </div>
+
+            {/* Workflow Setup */}
+
+            {
+                selectType && selectType.length > 0 && (
+                    <WorkflowSetup
+                        stepNumber={1}
+                        selectType={selectType}
+                        setSelectType={setSelectType}
+                    />
+                )
+            }
         </div>
     );
 };

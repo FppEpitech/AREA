@@ -36,3 +36,21 @@ export const createPlum = async (trigger : Trigger, action : Action) => {
         console.log(error);
     }
 };
+
+export const getProvidersTriggers = async (provider : string): Promise<Trigger[]> => {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/triggers/templates/${provider}`);
+        return response.data;
+    } catch (error) {
+        return [];
+    }
+};
+
+export const getProvidersActions = async (provider : string): Promise<Action[]> => {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/actions/templates/${provider}`);
+        return response.data;
+    } catch (error) {
+        return [];
+    }
+};
