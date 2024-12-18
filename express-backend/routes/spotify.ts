@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js';
 
 const router = express.Router();
 
-const SPOTIFY_REDIRECT_URI = 'http://localhost:8081/spotify/callback';
+const SPOTIFY_REDIRECT_URI = `http://localhost:${process.env.PORT}/spotify/callback`;
 
 /**
  * @swagger
