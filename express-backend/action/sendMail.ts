@@ -2,7 +2,16 @@ const nodemailer = require('nodemailer');
 
 // --- complex mail to do later, need to hash the password -> good handling
 
-async function sendMailComplex(value_json: string) {
+function decryptTokenMail(encryptedToken: string): string {
+    const secret = process.env.PLUMS_HASHING_SECRET
+
+    if (!secret)
+        throw new Error('SECRET environment variable is not defined');
+    const bytes = CryptoJS.AES.decrypt(encryptedToken, secret);
+    return bytes.toString(CryptoJS.enc.Utf8);
+}
+
+async function sendMailComplex(userId: number, value_json: string) {
     try {
         const fixedActionValue = value_json.replace(/(\w+): /g, '"$1":').replace(/'/g, '"');
 
@@ -13,7 +22,7 @@ async function sendMailComplex(value_json: string) {
             secure: false,
             auth: {
               user: sendingMail,
-              pass: sendingPwd
+              pass: decryptTokenMail(sendingPwd)
             }
           });
           const mailOptions = {
@@ -34,7 +43,7 @@ async function sendMailComplex(value_json: string) {
     }
 }
 
-async function sendMailBasic(value_json: string) {
+async function sendMailBasic(userId: number, value_json: string) {
     try {
         const fixedActionValue = value_json.replace(/(\w+): /g, '"$1":').replace(/'/g, '"');
         const { destination, object, message } = JSON.parse(fixedActionValue);
@@ -65,4 +74,7 @@ async function sendMailBasic(value_json: string) {
     }
 }
 
-export default sendMailBasic;
+export {
+    sendMailComplex,
+    sendMailBasic
+};

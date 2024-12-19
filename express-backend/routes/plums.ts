@@ -5,15 +5,14 @@ import authenticateToken from '../middlewares/isLoggedIn';
 
 const router = express.Router();
 
-const getUserIdFromToken = (token: string): number | null => {
-  try {
-    const decoded = jwt.verify(token, process.env.SECRET as string) as { id: number };
-    return decoded.id;
-  } catch (err) {
-    console.error('Invalid token:', err);
-    return null;
+function encryptTokenPlums(token: string): string {
+    const secret = process.env.PLUMS_HASHING_SECRET
+
+    if (!secret)
+      throw new Error('SECRET environment variable is not defined');
+    return CryptoJS.AES.encrypt(token, secret).toString();
   }
-};
+
 
 /**
  * @swagger
@@ -48,8 +47,8 @@ const getUserIdFromToken = (token: string): number | null => {
  *       500:
  *         description: Internal server error
  */
-router.post('/', async (req: Request, res: Response) : Promise<any> => {
-  const {   token,
+router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
+  const {   name,
             actionTemplateId,
             actionValue,
             triggerTemplateId,
@@ -57,9 +56,7 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
         } = req.body;
 
   try {
-    const userId = getUserIdFromToken(token);
-    if (!userId)
-      return res.status(401).json({error: 'Invalid or expired token'});
+    const userId = (req as any).middlewareId;
 
     const user = await prisma.user.findUnique({where: {userId}});
     if (!user)
@@ -73,11 +70,22 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
     if (!triggerTemplate)
       return res.status(404).json({error: 'TriggerTemplate not found'});
 
+    await JSON.parse(actionValue).forEach((element: any) => {
+        if (element.hash){
+            element.value = encryptTokenPlums(element.value);
+        }
+    });
+    await JSON.parse(triggerValue).forEach((element: any) => {
+        if (element.hash){
+            element.value = encryptTokenPlums(element.value);
+        }
+    });
 
     const action = await prisma.action.create({
       data: {
         actionTemplateId,
         actionValue: actionValue || actionTemplate.valueTemplate,
+        userId,
       },
     });
 
@@ -85,11 +93,13 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
       data: {
         triggerTemplateId,
         triggerValue: triggerValue || triggerTemplate.valueTemplate,
+        userId,
       },
     });
 
     const plum = await prisma.plum.create({
       data: {
+        name: name,
         userId,
         actionId: action.id,
         triggerId: trigger.id,

@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-async function sendDiscordMessage(value_json: string) {
+async function sendDiscordMessage(userId: number, value_json: string) {
     try {
+        console.log('Enter in sendDiscordMessage');
         const fixedActionValue = value_json.replace(/(\w+): /g, '"$1":').replace(/'/g, '"');
         const { webhookUrl, content } = JSON.parse(fixedActionValue);
         await axios.post(webhookUrl, {

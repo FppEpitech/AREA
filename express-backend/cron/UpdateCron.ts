@@ -1,7 +1,8 @@
 import { lessThan, greaterThan, isEqual } from "./WeatherCron";
+import { spotifyNewLike } from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import { CronClass } from './CronClass';
-import sendMailBasic from "../action/sendMail";
+import { sendMailBasic, sendMailComplex } from "../action/sendMail";
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
@@ -16,15 +17,17 @@ import {CronJob} from "cron";
  */
 const cronMap = new Map<number, CronClass>();
 
-const triggersMapFunction: Map<string, (value_json: string) => Promise<boolean>> = new Map([
+const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
     ["lessThan", lessThan],
     ["greaterThan", greaterThan],
-    ["isEqual", isEqual]
+    ["isEqual", isEqual],
+    ["spotifyNewLike", spotifyNewLike]
 ]);
 
-const actionsMapFunction: Map<string, (value_json: string) => Promise<void>> = new Map([
+const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
     ["sendDiscordMessage", sendDiscordMessage],
-    ["sendMailBasic", sendMailBasic]
+    ["sendMailBasic", sendMailBasic],
+    ["sendMailBasic", sendMailComplex],
 ]);
 
 async function updateCron() {
@@ -38,7 +41,7 @@ async function updateCron() {
             });
             if (triggerTemplate?.type !== 'cron')
                 continue;
-            const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (value_json: string) => Promise<boolean>, JSON.stringify(triggerTemplate?.valueTemplate));
+            const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(triggerTemplate?.valueTemplate));
             cronMap.set(trigger.id, cron);
         }
         for (const [id, cron] of cronMap) {
@@ -69,7 +72,7 @@ async function checkCronResult() {
                 continue;
             const actionFunc = actionsMapFunction.get(actionTemplate?.actFunc);
             if (actionFunc && action.actionValue)
-                await actionFunc(action?.actionValue.toString());
+                await actionFunc(plumTrigger.userId, action?.actionValue.toString());
         }
     } catch (error) {
         console.error('Error checking cron results:', error);

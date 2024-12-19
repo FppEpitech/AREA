@@ -82,6 +82,7 @@ async function createActionTemplate_sendMailBasic() {
                 template : 'anyone@gmail.com'
             },
             sendingPwd : {
+                back_hash: true,
                 type : 'password',
                 template : 'kikivalgrind42'
             },
