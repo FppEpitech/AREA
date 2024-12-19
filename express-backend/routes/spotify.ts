@@ -29,7 +29,7 @@ const SPOTIFY_REDIRECT_URI = `http://localhost:${process.env.PORT}/spotify/callb
 
 
 function encryptToken(token: string): string {
-  const secret = process.env.SECRET
+  const secret = process.env.SPOTIFY_SECRET
 
   if (!secret)
     throw new Error('SECRET environment variable is not defined');
