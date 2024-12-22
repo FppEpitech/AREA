@@ -4,7 +4,13 @@ import feather from '../../assets/myPlums/feather.svg';
 
 export default function MyPlums() {
 
-    const [myPlums, setMyPlums] = useState([]);
+    const [myPlums, setMyPlums] = useState([
+        {
+            name: 'Plum 1',
+            services: 'Service 1, Service 2',
+            isActivated: true
+        }
+    ]);
 
     const sendLogin = async() => {
         // TODO : await setMyPlums(getMyPlums());
@@ -61,15 +67,23 @@ export default function MyPlums() {
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div className="flex justify-start">
                                                 <img className='w-5 mx-3' src={feather} alt="Feather"></img>
-                                                {/* {plum.name} */}
+                                                {plum.name}
                                             </div>
                                         </th>
-                                        {/* <td className="px-6 py-4">
+                                        <td className="px-6 py-4">
                                             {plum.services}
-                                        </td> */}
-                                        {/* <td className="px-6 py-4">
-                                            {plum.isActivated}
-                                        </td> */}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <button
+                                                className={`relative w-14 h-8 flex items-center rounded-full p-1
+                                                ${plum.isActivated ? 'bg-customGreen' : 'bg-gray-300'} transition-colors duration-300`}
+                                            >
+                                                <div
+                                                    className={`w-6 h-6 bg-white rounded-full shadow-md transform
+                                                    ${plum.isActivated ? 'translate-x-6' : 'translate-x-0'} transition-transform duration-300`}
+                                                ></div>
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
