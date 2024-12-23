@@ -71,12 +71,12 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
       return res.status(404).json({error: 'TriggerTemplate not found'});
 
     await JSON.parse(actionValue).forEach((element: any) => {
-        if (element.hash){
+        if (element.back_hash){
             element.value = encryptTokenPlums(element.value);
         }
     });
     await JSON.parse(triggerValue).forEach((element: any) => {
-        if (element.hash){
+        if (element.back_hash){
             element.value = encryptTokenPlums(element.value);
         }
     });

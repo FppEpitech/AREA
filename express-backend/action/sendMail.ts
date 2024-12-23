@@ -1,7 +1,5 @@
 const nodemailer = require('nodemailer');
 
-// --- complex mail to do later, need to hash the password -> good handling
-
 function decryptTokenMail(encryptedToken: string): string {
     const secret = process.env.PLUMS_HASHING_SECRET
 

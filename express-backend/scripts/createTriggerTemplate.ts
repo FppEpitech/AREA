@@ -99,7 +99,46 @@ async function isSpotifyNewLikeTriggerTemplate() {
   }
 }
 
+async function isMailReceivedTriggerTemplate() {
+  try {
+      const triggerEqualTemplate = await prisma.triggerTemplate.create({
+      data: {
+          name: 'Mail received',
+          provider: 'mail',
+          type: 'cron',
+          trigFunc: 'mailReceived',
+          valueTemplate: {
+            time: {
+                template: '* * * * *',
+                type: 'cron',
+            },
+            port: {
+                type: 'number',
+                template: 993,
+            },
+            host: {
+                type: 'string',
+                template: 'imap.gmail.com',
+            },
+            user : {
+                type : 'string',
+                template : 'user',
+            },
+            password : {
+                type : 'string',
+                back_hash: true,
+                template : 'password',
+            },
+        }
+      }});
+        console.log('TriggerTemplate \'Mail received\' created:', triggerEqualTemplate);
+  } catch (error) {
+        console.error('Erreur lors de la création du ActionTemplate:', error);
+  }
+}
+
 lessThanTriggerTemplate()
 greaterThanTriggerTemplate()
 isEqualTriggerTemplate()
 isSpotifyNewLikeTriggerTemplate();
+isMailReceivedTriggerTemplate();

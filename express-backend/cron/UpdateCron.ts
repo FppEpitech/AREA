@@ -3,6 +3,7 @@ import { spotifyNewLike } from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import { CronClass } from './CronClass';
 import { sendMailBasic, sendMailComplex } from "../action/sendMail";
+import { isMailReceived } from "./MailCron";
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
@@ -21,7 +22,8 @@ const triggersMapFunction: Map<string, (userId: number, value_json: string, data
     ["lessThan", lessThan],
     ["greaterThan", greaterThan],
     ["isEqual", isEqual],
-    ["spotifyNewLike", spotifyNewLike]
+    ["spotifyNewLike", spotifyNewLike],
+    ["mailReceived", isMailReceived],
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
