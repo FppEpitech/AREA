@@ -1,16 +1,58 @@
 import { useState } from "react";
 import Navbar from "../../components/Navbar/navbar";
 import feather from '../../assets/myPlums/feather.svg';
+import { useNavigate } from "react-router-dom";
 
 export default function MyPlums() {
+
+    const navigate = useNavigate();
 
     const [myPlums, setMyPlums] = useState([
         {
             name: 'Plum 1',
             services: 'Service 1, Service 2',
             isActivated: true
+        },
+        {
+            name: 'Plum 2',
+            services: 'Service 1, Service 2',
+            isActivated: true
+        },
+        {
+            name: 'Plum 3',
+            services: 'Service 1, Service 2',
+            isActivated: true
+        },
+        {
+            name: 'Plum 4',
+            services: 'Service 1, Service 2',
+            isActivated: true
+        },
+        {
+            name: 'Plum 5',
+            services: 'Service 1, Service 2',
+            isActivated: true
         }
     ]);
+    const [originalPlums, setOriginalPlums] = useState(myPlums);
+    const [searchInput, setSearchInput] = useState("");
+
+
+    const handleChange = (e : any) => {
+        e.preventDefault();
+        const input = e.target.value;
+        setSearchInput(input);
+
+        if (input.length > 0) {
+            const filteredPlums = originalPlums.filter((plum) =>
+                plum.name.toLowerCase().includes(input.toLowerCase())
+            );
+            setMyPlums(filteredPlums);
+        } else {
+            setMyPlums(originalPlums);
+        }
+    };
+
 
     const sendLogin = async() => {
         // TODO : await setMyPlums(getMyPlums());
@@ -33,6 +75,8 @@ export default function MyPlums() {
                             type="search"
                             id="search"
                             placeholder="Search"
+                            onChange={handleChange}
+                            value={searchInput}
                             className="block w-full p-4 ps-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-customGreen focus:border-transparent"
                         />
                     </div>
@@ -41,7 +85,8 @@ export default function MyPlums() {
                         Filter
                     </button>
                     <button
-                        className="bg-customGreen hover:bg-customDarkGreen text-white font-bold m-2 py-2 px-4 rounded-lg">
+                        className="bg-customGreen hover:bg-customDarkGreen text-white font-bold m-2 py-2 px-4 rounded-lg"
+                        onClick={() => navigate('/create')}>
                         Create
                     </button>
                 </div>
