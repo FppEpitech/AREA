@@ -101,7 +101,7 @@ export default function MyPlums() {
                         />
                     </div>
                     <button
-                        className="bg-customGreen hover:bg-customDarkGreen text-white font-bold m-2 py-2 px-4 rounded-lg"
+                        className="bg-customGreen hover:bg-customDarkGreen text-white font-bold m-2 py-2 px-4 rounded-lg flex justify-center"
                         onClick={() => setFilterOpen(!filterOpen)}
                     >
                         <img className="w-5 mx-3" src={filter} alt="Filter" />
