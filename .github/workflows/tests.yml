@@ -23,27 +23,33 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Install PostgreSQL
+        uses: tj-actions/install-postgresql@v3.2.0
+        with:
+          postgresql-version: 16
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.18.0' # Ensure compatibility with Prisma
+          node-version: '18.18.0'
+      - name: Start PostgreSQL service
+        run: sudo service postgresql start
+      - name: Create test database and user
+        run: |
+          sudo -u postgres psql -c "CREATE USER test_user WITH PASSWORD 'test_password';"
+          sudo -u postgres psql -c "CREATE DATABASE test_db OWNER test_user;"
       - name: Install dependencies
         run: |
           cd express-backend
           npm install
           npx prisma generate
-      - name: Set up PostgreSQL
-        uses: Harmon758/postgresql-action@v2.2.0
-        with:
-          postgresql version: '16'
-          postgresql db: 'test_db'
-          postgresql user: 'test_user'
-          postgresql password: 'test_password'
-      - name: Create test database and env
+      - name: Create .env file
         run: |
-          echo "PORT=8181" >> express-backend/.env
+          echo "PORT=8181" > express-backend/.env
           echo "DATABASE_URL=postgresql://test_user:test_password@localhost:5432/test_db" >> express-backend/.env
           echo "SECRET=dev_secret" >> express-backend/.env
+      - name: Run migrations
+        run: |
+          cd express-backend
           npx prisma migrate dev
       - name: Execute the tests
         run: |
