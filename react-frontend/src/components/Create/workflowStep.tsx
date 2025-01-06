@@ -1,4 +1,5 @@
 import { Action, getProvidersActions, getProvidersTriggers, Trigger } from "../../services/Plums/plums";
+import WorkflowSetup from "./workflowSetup";
 
 interface WorkflowStepProps {
     stepNumber: number;
@@ -7,10 +8,11 @@ interface WorkflowStepProps {
     providers?: string[];
     triggers: Trigger[];
     actions: Action[];
+    selectType: Trigger[] | Action[] | undefined;
     setSelectType: React.Dispatch<React.SetStateAction<Trigger[] | Action[] | undefined>>;
 }
 
-const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, triggers, setSelectType }) => {
+const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, selectType, triggers, setSelectType }) => {
 
     const handleSelectChange = async (event: React.ChangeEvent<HTMLSelectElement>, value : any[], setter: React.Dispatch<React.SetStateAction<any | undefined>>) => {
         const selectedName = event.target.value;
@@ -21,6 +23,7 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
 
         if (stepNumber === 1) {
             const selected = await getProvidersTriggers(selectedName);
+            console.log(selected);
             setSelectType(selected);
         } else {
             const selected = await getProvidersActions(selectedName);
@@ -29,7 +32,7 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
     };
 
     return (
-        <div className="block p-6 bg-white font-instrumentSans border border-gray-200 rounded-lg shadow-custom hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div className="block p-6 bg-white font-instrumentSans border border-gray-200 rounded-lg shadow-custom dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <div className="columns-2">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>
                 <select
@@ -46,6 +49,16 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
             </div>
 
             <p className="font-normal text-gray-700 dark:text-gray-400">{stepNumber}. {description}</p>
+
+            {
+            selectType && selectType.length > 0 && (
+                <WorkflowSetup
+                    stepNumber={1}
+                    selectType={selectType}
+                    setSelectType={setSelectType}
+                />
+            )
+        }
         </div>
     );
 };

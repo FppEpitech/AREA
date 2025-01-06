@@ -126,8 +126,8 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     };
 
     return (
-        <div className="absolute mt-36 top-0 right-0 w-96 bg-white border-l border-gray-200 shadow-custom flex flex-col">
-            <div className="flex items-center justify-between px-4 py-3 border-b">
+        <div className="bg-white flex flex-col">
+            <div className="flex items-center justify-between px-4 py-3">
                 <h3 className="text-lg font-semibold">{stepNumber}. {selectedTemplate?.name}</h3>
                 <button
                     className="text-gray-400 hover:text-gray-600"

@@ -104,6 +104,7 @@ function CreatePage() {
                                 {...index === 0 ? { providers: triggersProviders } : { providers: actionsProviders }}
                                 triggers={triggers}
                                 actions={actions}
+                                selectType={selectType}
                                 setSelectType={setSelectType}
                             />
                             {index < workflows.length - 1 && (
@@ -123,18 +124,6 @@ function CreatePage() {
                     ))}
                 </div>
             </div>
-
-            {/* Workflow Setup */}
-
-            {
-                selectType && selectType.length > 0 && (
-                    <WorkflowSetup
-                        stepNumber={1}
-                        selectType={selectType}
-                        setSelectType={setSelectType}
-                    />
-                )
-            }
         </div>
     );
 };
