@@ -31,6 +31,7 @@ jobs:
         run: |
           cd express-backend
           npm install
+          npx prisma generate
       - name: Execute the tests
         run: |
           cd express-backend
