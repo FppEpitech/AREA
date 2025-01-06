@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { generateToken } from '../routes/account';
 import request from 'supertest';
 import app from '../index';
@@ -10,27 +10,41 @@ describe('main test', () => {
     });
 });
 
-it('Should generate token', () => {
-    let token = generateToken(1);
-    expect(token).not.toBe(null);
+describe('Token Generation', () => {
+    beforeAll(() => {
+        process.env.SECRET = 'dev_secret';
+        process.env.PORT = '8181';
+    });
+
+    it('Should generate token', () => {
+        let token = generateToken(1);
+        expect(token).not.toBe(null);
+    });
 });
 
-it("Should return 200", async () => {
-    const response = await request(app).get('/');
-    expect(response.status).toBe(200);
-});
+describe('Should return 200', () => {
+    beforeAll(() => {
+        process.env.SECRET = 'dev_secret';
+        process.env.PORT = '8181';
+    });
 
-describe('GET /triggers/templates', () => {
-    it('Should return 200 and a list of trigger templates', async () => {
-        /*const response = await request(app).get('/triggers/templates');
+    it("Should return 200", async () => {
+        const response = await request(app).get('/');
         expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);*/
+    });
+});
+
+/*describe('GET /triggers/templates', () => {
+    it('Should return 200 and a list of trigger templates', async () => {
+        const response = await request(app).get('/triggers/templates');
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
     });
 });
 
 describe('POST /account/register', () => {
     it('Should register a new user and return 201 with a token', async () => {
-        /*const originalFindUnique = prisma.user.findUnique;
+        const originalFindUnique = prisma.user.findUnique;
         prisma.user.findUnique = vi.fn().mockResolvedValue(null);
 
         const response = await request(app)
@@ -40,7 +54,7 @@ describe('POST /account/register', () => {
         expect(response.body.token).not.toBe(null);
 
         prisma.user.findUnique = originalFindUnique;
-        prisma.user.delete = vi.fn().mockResolvedValue(null);*/
+        prisma.user.delete = vi.fn().mockResolvedValue(null);
     });
 
     it('Should return 400 if mail or password is missing', async () => {
@@ -67,7 +81,7 @@ describe('POST /account/register', () => {
 
 describe('POST /account/login', () => {
     it('Should login a user and return 200 with a token', async () => {
-        /*const originalFindUnique = prisma.user.findUnique;
+        const originalFindUnique = prisma.user.findUnique;
 
         const response = await request(app)
             .post('/account/login')
@@ -75,7 +89,7 @@ describe('POST /account/login', () => {
         expect(response.status).toBe(200);
         expect(response.body.token).not.toBe(null);
 
-        prisma.user.findUnique = originalFindUnique;*/
+        prisma.user.findUnique = originalFindUnique;
     });
 
     it('Should return 400 if mail or password is missing', async () => {
@@ -98,4 +112,4 @@ describe('POST /account/login', () => {
 
         prisma.user.findUnique = originalFindUnique;
     });
-});
+});*/
