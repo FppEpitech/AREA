@@ -1,3 +1,5 @@
+import ExploreContent from "../../components/Explore/ExploreContent";
+import ExploreNavbar from "../../components/Explore/ExploreNavbar";
 import Navbar from "../../components/Navbar/navbar";
 
 interface IService {
@@ -43,11 +45,8 @@ export default function Explore () {
     return (
         <div>
             <Navbar></Navbar>
-            <h1>Explore</h1>
-            <button>All</button>
-            <button>Plums</button>
-            <button>Services</button>
-            <input type="search" placeholder="Search Plums or services"></input>
+            <ExploreNavbar />
+            <ExploreContent />
             {
                 ServiceCards.map((card, index) => (
                     <ServiceCard key={index} {...card} />
