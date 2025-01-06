@@ -35,7 +35,7 @@ jobs:
         run: sudo service postgresql start
       - name: Create test database and user
         run: |
-          sudo -u postgres psql -c "CREATE USER test_user WITH PASSWORD 'test_password';"
+          sudo -u postgres psql -c "CREATE USER test_user WITH PASSWORD 'test_password' CREATEDB;"
           sudo -u postgres psql -c "CREATE DATABASE test_db OWNER test_user;"
       - name: Install dependencies
         run: |
