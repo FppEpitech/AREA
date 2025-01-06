@@ -22,7 +22,7 @@ it("Should return 200", async () => {
 
 /*describe('GET /triggers/templates', () => {
     it('Should return 200 and a list of trigger templates', async () => {
-        const response = await request(app).get('/triggers/templates');
+        const response = await request(app).get('/trigger/templates');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
     });
