@@ -17,3 +17,19 @@ jobs:
         run: |
           cd react-frontend
           npm test a
+  run_back_tests:
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          cd express-backend
+          npm install
+      - name: Execute the tests
+        run: |
+          cd react-frontend
+          npm test
