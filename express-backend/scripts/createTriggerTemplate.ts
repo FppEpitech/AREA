@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../prismaClient';
 
 async function lessThanTriggerTemplate() {
   try {
@@ -99,7 +97,4 @@ async function isSpotifyNewLikeTriggerTemplate() {
   }
 }
 
-lessThanTriggerTemplate()
-greaterThanTriggerTemplate()
-isEqualTriggerTemplate()
-isSpotifyNewLikeTriggerTemplate();
+export { lessThanTriggerTemplate, greaterThanTriggerTemplate, isEqualTriggerTemplate, isSpotifyNewLikeTriggerTemplate };
