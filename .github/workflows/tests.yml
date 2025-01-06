@@ -46,6 +46,7 @@ jobs:
         run: |
           echo "PORT=8181" > express-backend/.env
           echo "DATABASE_URL=postgresql://test_user:test_password@localhost:5432/test_db" >> express-backend/.env
+          echo "SECRET=dev_secret" >> express-backend/.env
       - name: Run migrations
         run: |
           cd express-backend
