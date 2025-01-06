@@ -32,6 +32,19 @@ jobs:
           cd express-backend
           npm install
           npx prisma generate
+      - name: Set up PostgreSQL
+        uses: Harmon758/postgresql-action@v2.2.0
+        with:
+          postgresql version: '16'
+          postgresql db: 'test_db'
+          postgresql user: 'test_user'
+          postgresql password: 'test_password'
+      - name: Create test database and env
+        run: |
+          echo "PORT=8181" >> express-backend/.env
+          echo "DATABASE_URL=postgresql://test_user:test_password@localhost:5432/test_db" >> express-backend/.env
+          echo "SECRET=dev_secret" >> express-backend/.env
+          npx prisma migrate dev
       - name: Execute the tests
         run: |
           cd express-backend

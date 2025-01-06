@@ -10,28 +10,14 @@ describe('main test', () => {
     });
 });
 
-describe('Token Generation', () => {
-    beforeAll(() => {
-        process.env.SECRET = 'dev_secret';
-        process.env.PORT = '8181';
-    });
-
-    it('Should generate token', () => {
-        let token = generateToken(1);
-        expect(token).not.toBe(null);
-    });
+it('Should generate token', () => {
+    let token = generateToken(1);
+    expect(token).not.toBe(null);
 });
 
-describe('Should return 200', () => {
-    beforeAll(() => {
-        process.env.SECRET = 'dev_secret';
-        process.env.PORT = '8181';
-    });
-
-    it("Should return 200", async () => {
-        const response = await request(app).get('/');
-        expect(response.status).toBe(200);
-    });
+it("Should return 200", async () => {
+    const response = await request(app).get('/');
+    expect(response.status).toBe(200);
 });
 
 /*describe('GET /triggers/templates', () => {
