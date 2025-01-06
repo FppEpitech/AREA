@@ -7,6 +7,7 @@ import * as path from 'path';
 import accountRouter from './routes/account';
 import triggerRouter from './routes/trigger';
 import actionRouter from './routes/action';
+import spotifyRouter from './routes/spotify';
 import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
 
@@ -29,6 +30,7 @@ app.use(cors());
 app.use('/plums', plumsRouter);
 app.use('/actions', actionRouter);
 app.use('/triggers', triggerRouter);
+app.use('/spotify', spotifyRouter);
 app.use('/account', accountRouter);
 app.use('/about.json', aboutRouter);
 
