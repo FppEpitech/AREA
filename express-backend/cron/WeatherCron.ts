@@ -55,16 +55,19 @@ interface WeatherResponse {
 
 export async function lessThan(userId: number, value_json: string, data: any) : Promise<boolean> {
     const { city, country, temperature } = JSON.parse(value_json)
+    console.log("temperature to compare:" + temperature)
     return await checkWeather(`${city},${country}`, temp => temp < temperature);
 }
 
 export async function greaterThan(userId: number, value_json: string, data: any) : Promise<boolean> {
     const { city, country, temperature } = JSON.parse(value_json)
+    console.log("temperature to compare:" + temperature)
     return await checkWeather(`${city},${country}`, temp => temp > temperature);
 }
 
 export async function isEqual(userId: number, value_json: string, data: any) : Promise<boolean> {
     const { city, country, temperature } = JSON.parse(value_json)
+    console.log("temperature to compare:" + temperature)
     return await checkWeather(`${city},${country}`, temp => temp === temperature);
 }
 
@@ -76,6 +79,7 @@ async function checkWeather(city: string, condition: (temp: number) => boolean) 
         const response = await axios.get<WeatherResponse>(apiUrl);
         const temperature: number = response.data.main.temp;
 
+        console.log("temperature Actual:" + temperature)
         return condition(temperature);
     } catch (error) {
         console.error('Error while fetching weather data:', error);

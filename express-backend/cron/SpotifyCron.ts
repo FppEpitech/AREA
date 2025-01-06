@@ -53,3 +53,5 @@ export async function spotifyNewLike(userId: number, value_json: string, data: a
     console.log("NO NEW LIKE");
     return false;
 }
+
+export default decryptToken;
