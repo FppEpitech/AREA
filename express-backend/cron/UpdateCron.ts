@@ -29,6 +29,11 @@ const actionsMapFunction: Map<string, (userId: number, value_json: string) => Pr
 
 async function updateCron() {
     try {
+        const tableExists : any = await prisma.$queryRaw`SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'Trigger')`;
+        if (!tableExists[0].exists) {
+            console.log('Trigger table does not exist.');
+            return;
+        }
         const triggers = await prisma.trigger.findMany();
         for (const trigger of triggers) {
             if (cronMap.has(trigger.id))
