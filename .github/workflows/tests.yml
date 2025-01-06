@@ -19,17 +19,19 @@ jobs:
           npm test a
   run_back_tests:
     runs-on: ubuntu-latest
-    container:
-      image: epitechcontent/epitest-docker:latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.18.0' # Ensure compatibility with Prisma
       - name: Install dependencies
         run: |
           cd express-backend
           npm install
       - name: Execute the tests
         run: |
-          cd react-frontend
+          cd express-backend
           npm test
