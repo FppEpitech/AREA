@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Action, getProvidersActions, getProvidersTriggers, Trigger } from "../../services/Plums/plums";
 import WorkflowSetup from "./workflowSetup";
 
@@ -8,11 +9,11 @@ interface WorkflowStepProps {
     providers?: string[];
     triggers: Trigger[];
     actions: Action[];
-    selectType: Trigger[] | Action[] | undefined;
-    setSelectType: React.Dispatch<React.SetStateAction<Trigger[] | Action[] | undefined>>;
 }
 
-const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, selectType, triggers, setSelectType }) => {
+const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, triggers }) => {
+
+    const [selectType, setSelectType] = useState<Trigger[] | Action[] | undefined>(undefined);
 
     const handleSelectChange = async (event: React.ChangeEvent<HTMLSelectElement>, value : any[], setter: React.Dispatch<React.SetStateAction<any | undefined>>) => {
         const selectedName = event.target.value;
@@ -23,7 +24,6 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
 
         if (stepNumber === 1) {
             const selected = await getProvidersTriggers(selectedName);
-            console.log(selected);
             setSelectType(selected);
         } else {
             const selected = await getProvidersActions(selectedName);
@@ -53,7 +53,7 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
             {
             selectType && selectType.length > 0 && (
                 <WorkflowSetup
-                    stepNumber={1}
+                    stepNumber={stepNumber}
                     selectType={selectType}
                     setSelectType={setSelectType}
                 />

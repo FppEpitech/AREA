@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Action, getActions, getTriggers, Trigger } from "../../services/Plums/plums";
 import Navbar from "../../components/Navbar/navbar";
-import WorkflowSetup from "../../components/Create/workflowSetup";
 import WorkflowStep from "../../components/Create/workflowStep";
 
 interface Workflow {
@@ -16,8 +15,6 @@ function CreatePage() {
 
     const [actions, setActions] = useState<Action[]>([]);
     const [actionsProviders, setActionsProviders] = useState<string[]>([]);
-
-    const [selectType, setSelectType] = useState<Trigger[] | Action[] | undefined>(undefined);
 
     useEffect(() => {
         const fetchTriggers = async () => {
@@ -104,8 +101,6 @@ function CreatePage() {
                                 {...index === 0 ? { providers: triggersProviders } : { providers: actionsProviders }}
                                 triggers={triggers}
                                 actions={actions}
-                                selectType={selectType}
-                                setSelectType={setSelectType}
                             />
                             {index < workflows.length - 1 && (
                                 <div className="flex flex-col items-center">
