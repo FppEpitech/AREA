@@ -54,4 +54,41 @@ export async function spotifyNewLike(userId: number, value_json: string, data: a
     return false;
 }
 
+export async function isSpotifyMusicPlaying(userId: number): Promise<boolean> {
+    try {
+        console.log('Checking if music is currently playing');
+
+        const tokenSpotify = await prisma.token.findFirst({ where: { userId: userId } });
+
+        if (!tokenSpotify) {
+            throw new Error("Token not found for the user.");
+        }
+
+        const decryptedToken = decryptToken(tokenSpotify.tokenHashed);
+
+        const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${decryptedToken}`,
+            },
+        });
+
+        const result = await response.json();
+
+        console.log('response.status:' + response.status);
+        console.log('response.data:' + result);
+        console.log('response.data.is_playing:' + result.is_playing);
+        if (response.status === 200 && result && result.is_playing) {
+            console.log('Music is currently playing');
+            return true;
+        }
+
+        console.log('No music is currently playing');
+        return false;
+    } catch (error: any) {
+        console.error('Error checking music playback status:', error.message || error);
+        return false;
+    }
+}
+
 export default decryptToken;

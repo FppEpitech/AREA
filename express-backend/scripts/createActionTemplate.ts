@@ -109,4 +109,4 @@ skipPreviousSpotifyMusicTemplate();
 skipNextSpotifyMusicTemplate();
 resumePlayingSpotifyMusicTemplate();
 stopPlayingSpotifyMusicTemplate();
-sendDiscordMessageTemplate();
+// sendDiscordMessageTemplate();

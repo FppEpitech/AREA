@@ -27,7 +27,6 @@ const SPOTIFY_REDIRECT_URI = `http://localhost:${process.env.PORT}/spotify/callb
     res.redirect(spotifyAuthUrl);
 });
 
-
 function encryptToken(token: string): string {
   const secret = process.env.SPOTIFY_SECRET
 

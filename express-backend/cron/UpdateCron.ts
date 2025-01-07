@@ -1,5 +1,5 @@
 import { lessThan, greaterThan, isEqual } from "./WeatherCron";
-import { spotifyNewLike } from "./SpotifyCron";
+import { spotifyNewLike, isSpotifyMusicPlaying} from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
 import { CronClass } from './CronClass';
@@ -21,7 +21,8 @@ const triggersMapFunction: Map<string, (userId: number, value_json: string, data
     ["lessThan", lessThan],
     ["greaterThan", greaterThan],
     ["isEqual", isEqual],
-    ["spotifyNewLike", spotifyNewLike]
+    ["spotifyNewLike", spotifyNewLike],
+    ["isSpotifyMusicPlaying", isSpotifyMusicPlaying]
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
