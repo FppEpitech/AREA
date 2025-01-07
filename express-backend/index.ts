@@ -10,13 +10,13 @@ import actionRouter from './routes/action';
 import spotifyRouter from './routes/spotify';
 import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
+import initAllTemplates from './scripts/initTemplates';
 
 const swaggerUi = require("swagger-ui-express");
 
 dotenv.config();
 
-//TODO: run the scrips to create the trigger and action templates
-
+initAllTemplates();
 
 checkCronResultJob.start();
 updateCronJob.start();

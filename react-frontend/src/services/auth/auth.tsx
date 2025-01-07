@@ -29,3 +29,7 @@ export async function AuthSignUp(login : loginInterface, navigate: (path: string
             setError('Error retry please.');
     }
 }
+
+export function isLogged() {
+    return localStorage.getItem('access_token') !== null;
+}

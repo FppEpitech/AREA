@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../prismaClient';
 
-const prisma = new PrismaClient();
-
-async function createActionTemplate_SendDiscordMessage() {
+async function sendDiscordMessageTemplate() {
   try {
     const actionTemplate = await prisma.actionTemplate.create({
       data: {
@@ -10,9 +8,14 @@ async function createActionTemplate_SendDiscordMessage() {
         actFunc: 'sendDiscordMessage',
         provider: 'Discord',
         valueTemplate: {
-          webhookUrl: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
-          content: 'Test message',
-          username: 'BotTest',
+          webhookUrl: {
+            value: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
+            type: 'string',
+          },
+          content: {
+            value: 'Hello, World!',
+            type: 'string',
+          }
         },
       },
     });
@@ -25,7 +28,7 @@ async function createActionTemplate_SendDiscordMessage() {
   }
 }
 
-async function createActionTemplate_sendMailBasic() {
+async function sendMailBasicTemplate() {
     try {
       const actionTemplate = await prisma.actionTemplate.create({
         data: {
@@ -57,7 +60,7 @@ async function createActionTemplate_sendMailBasic() {
     }
   }
 
-  async function createActionTemplate_sendMailComplex() {
+  async function sendMailComplexTemplate() {
     try {
       const actionTemplate = await prisma.actionTemplate.create({
         data: {
@@ -106,6 +109,4 @@ async function createActionTemplate_sendMailBasic() {
     }
   }
 
-createActionTemplate_SendDiscordMessage();
-createActionTemplate_sendMailBasic();
-createActionTemplate_sendMailComplex();
+export { sendDiscordMessageTemplate, sendMailBasicTemplate, sendMailComplexTemplate };

@@ -1,4 +1,3 @@
-import prisma from '../prismaClient'
 import CryptoJS from 'crypto-js';
 var Imap = require('imap');
 var inspect = require('util').inspect;

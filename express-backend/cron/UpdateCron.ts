@@ -1,4 +1,4 @@
-import { lessThan, greaterThan, isEqual } from "./WeatherCron";
+import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
 import { spotifyNewLike } from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import { CronClass } from './CronClass';
@@ -19,11 +19,14 @@ import {CronJob} from "cron";
 const cronMap = new Map<number, CronClass>();
 
 const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
-    ["lessThan", lessThan],
-    ["greaterThan", greaterThan],
-    ["isEqual", isEqual],
     ["spotifyNewLike", spotifyNewLike],
     ["mailReceived", isMailReceived],
+    ["pressure", pressure],
+    ["temperature", temperature],
+    ["cloudiness", cloudiness],
+    ["windSpeed", windSpeed],
+    ["humidity", humidity],
+    ["weather", weather],
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
@@ -34,6 +37,11 @@ const actionsMapFunction: Map<string, (userId: number, value_json: string) => Pr
 
 async function updateCron() {
     try {
+        const tableExists : any = await prisma.$queryRaw`SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'Trigger')`;
+        if (!tableExists[0].exists) {
+            console.log('Trigger table does not exist.');
+            return;
+        }
         const triggers = await prisma.trigger.findMany();
         for (const trigger of triggers) {
             if (cronMap.has(trigger.id))
