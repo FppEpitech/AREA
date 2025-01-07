@@ -43,19 +43,18 @@ async function sendMailComplex(userId: number, value_json: string) {
 
 async function sendMailBasic(userId: number, value_json: string) {
     try {
-        const fixedActionValue = value_json.replace(/(\w+): /g, '"$1":').replace(/'/g, '"');
-        const { destination, object, message } = JSON.parse(fixedActionValue);
+        const { destination, object, message } = JSON.parse(value_json);
         const plumpyDev = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
+            host: process.env.EMAIL_HOST,
+            port: process.env.EMAIL_PORT,
             secure: false,
             auth: {
-              user: process.env.MAIL_USER,
-              pass: process.env.MAIL_PWD
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS
             }
           });
           const mailOptions = {
-            from: 'plumpydev@gmail.com',
+            from: process.env.EMAIL_ADRESS,
             to: destination,
             subject: object,
             text: message

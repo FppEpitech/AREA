@@ -11,6 +11,7 @@ import spotifyRouter from './routes/spotify';
 import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
 import initAllTemplates from './scripts/initTemplates';
+import { sendMailBasic } from './action/sendMail';
 
 const swaggerUi = require("swagger-ui-express");
 
@@ -49,6 +50,7 @@ app.get('/client.apk', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
   console.log(`API Docs available at http://localhost:${PORT}/api-docs`);
+  sendMailBasic(12, '{"destination": "theophilejeromerocher44@gmail.com", "object":"test", "message":"hey"}');
 });
 
 export default app;
