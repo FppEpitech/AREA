@@ -143,12 +143,23 @@ function CreatePage() {
                         </div>
                     ))}
                     <div className="flex justify-center mt-5">
+                        {(plumName === "" || !triggerCreate || !actionCreate) && (
+                            <button
+                                className="p-6 bg-gray-400 text-customLightBlue py-2 rounded-md"
+                                disabled={true}
+                            >
+                                Create
+                            </button>
+                        )}
+                        {(plumName !== "" && triggerCreate && actionCreate) && (
                         <button
                             className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
                             onClick={() => createThePlum()}
+                            disabled={plumName === "" || !triggerCreate || !actionCreate}
                         >
                             Create
                         </button>
+                        )}
                     </div>
                 </div>
             </div>
