@@ -1,4 +1,4 @@
-import { lessThan, greaterThan, isEqual } from "./WeatherCron";
+import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
 import { spotifyNewLike } from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import { CronClass } from './CronClass';
@@ -17,9 +17,12 @@ import {CronJob} from "cron";
 const cronMap = new Map<number, CronClass>();
 
 const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
-    ["lessThan", lessThan],
-    ["greaterThan", greaterThan],
-    ["isEqual", isEqual],
+    ["pressure", pressure],
+    ["temperature", temperature],
+    ["cloudiness", cloudiness],
+    ["windSpeed", windSpeed],
+    ["humidity", humidity],
+    ["weather", weather],
     ["spotifyNewLike", spotifyNewLike]
 ]);
 
