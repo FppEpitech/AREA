@@ -208,7 +208,7 @@ async function humidityTriggerTemplate() {
                         value: '* * * * *',
                         type: 'CRON expression',
                     },
-                    pressure: {
+                    humidity: {
                         value: 0,
                         type: 'number',
                         check: '%'
