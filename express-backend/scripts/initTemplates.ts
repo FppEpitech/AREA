@@ -1,12 +1,15 @@
 import prisma from '../prismaClient';
 
-import { lessThanTriggerTemplate, isEqualTriggerTemplate, isSpotifyNewLikeTriggerTemplate, greaterThanTriggerTemplate } from "./createTriggerTemplate";
+import { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate } from "./createTriggerTemplate";
 import { sendDiscordMessageTemplate } from "./createActionTemplate";
 
 const triggerTemplates : Map<string, () => Promise<void>> = new Map([
-    ["Less than temperature", lessThanTriggerTemplate],
-    ["Greater than temperature", greaterThanTriggerTemplate],
-    ["Equal temperature", isEqualTriggerTemplate],
+    ["Pressure", PressureTriggerTemplate],
+    ["Temperature", temperatureTriggerTemplate],
+    ["Cloudiness", cloudinessTriggerTemplate],
+    ["Wind Speed", windSpeedTriggerTemplate],
+    ["Humidity", humidityTriggerTemplate],
+    ["Weather", weatherTriggerTemplate],
     ["Spotify new like", isSpotifyNewLikeTriggerTemplate]
 ]);
 
