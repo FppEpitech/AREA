@@ -35,9 +35,9 @@ export const getActions = async (): Promise<Action[]> => {
     }
 };
 
-export const createPlum = async (trigger : Trigger, action : Action) => {
+export const createPlum = async (name : string, trigger : Trigger, action : Action) => {
     try {
-        const body = {token: localStorage.getItem('access_token'), actionTemplateId: action.id, actionValue: action.valueTemplate, triggerTemplateId: trigger.id, triggerValue: trigger.valueTemplate};
+        const body = {name: name, actionTemplateId: action.id, actionValue: action.valueTemplate, triggerTemplateId: trigger.id, triggerValue: trigger.valueTemplate};
         await axios.post(`${process.env.REACT_APP_API_URL}/plums`, body);
     } catch(error) {
         console.log(error);

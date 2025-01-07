@@ -1,16 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface TemplateProps {
     value: string | number | { [key: number]: { value: string } };
+    onChange: (newValue: any) => void;
+    result?: number;
 }
+
+const handleInputChange =
+(
+    setInputValue : React.Dispatch<React.SetStateAction<any>>,
+    stringProps : TemplateProps,
+    value: string | number | { [key: number]: { value: string } },
+) => {
+    const newValue = value;
+    stringProps.onChange(newValue);
+    setInputValue(newValue);
+};
 
 // String template
 export function TemplateString( stringProps : TemplateProps) {
+
+    const [inputValue, setInputValue] = useState(stringProps.value.toString());
+
     return (
         <div>
         <input
                 type='text'
-                defaultValue={stringProps.value.toString()}
+                defaultValue={inputValue}
+                onChange={(e) => {handleInputChange(setInputValue, stringProps, e.target.value);}}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                 placeholder={`Enter a string`}
             />
@@ -20,11 +37,15 @@ export function TemplateString( stringProps : TemplateProps) {
 
 // Number template
 export function TemplateNumber(numberProps: TemplateProps) {
+
+    const [inputValue, setInputValue] = useState(numberProps.value.toString());
+
     return (
         <div>
             <input
                 type="number"
-                defaultValue={numberProps.value.toString()}
+                defaultValue={inputValue}
+                onChange={(e) => {handleInputChange(setInputValue, numberProps, Number(e.target.value));}}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                 placeholder="Enter a number"
                 step="any"
@@ -40,7 +61,7 @@ export function TemplateRadio(radioProps: TemplateProps) {
         value: obj,
     }));
 
-    const [selectedValue, setSelectedValue] = useState(0);
+    const [selectedValue, setSelectedValue] = useState(radioProps.result);
 
     return (
         <div className="space-y-2">
@@ -50,7 +71,7 @@ export function TemplateRadio(radioProps: TemplateProps) {
                         type="radio"
                         name="template-radio"
                         checked={option.key === selectedValue}
-                        onChange={() => setSelectedValue(option.key)}
+                        onChange={(e) => {setSelectedValue(option.key); handleInputChange(setSelectedValue, radioProps, option.key);}}
                         className="form-radio h-4 w-4 text-blue-600"
                     />
                     <span className="text-sm text-gray-700">{option.value}</span>
@@ -77,6 +98,8 @@ export function TemplateCron(cronProps: TemplateProps) {
     const [hour, setHour] = useState<string | number>("every hours");
     const [minute, setMinute] = useState<string | number>("every");
 
+    const [cronValue, setCronValue] = useState(cronProps.value);
+
     const clearCron = () => {
         setMonth("every month");
         setDayOfMonth("every days of the month");
@@ -84,6 +107,40 @@ export function TemplateCron(cronProps: TemplateProps) {
         setHour("every hours");
         setMinute("every");
     };
+
+    useEffect(() => {
+        let cron = "";
+        const monthValue = month === "every month" ? "*" : MONTH.indexOf(month);
+        const dayOfMonthValue = dayOfMonth === "every days of the month" ? "*" : dayOfMonth;
+        const dayOfWeekValue = dayOfWeek === "every days of the week" ? "*" : DAYS_OF_WEEK.indexOf(dayOfWeek) - 1;
+        const hourValue = hour === "every hours" ? "*" : hour;
+        const minuteValue = minute === "every" ? "*" : minute;
+
+        switch (frequency) {
+            case "year":
+                cron = `${minuteValue} ${hourValue} ${dayOfMonthValue} ${monthValue} ${dayOfWeekValue}`;
+                break;
+            case "month":
+                cron = `${minuteValue} ${hourValue} ${dayOfMonthValue} * ${dayOfWeekValue}`;
+                break;
+            case "week":
+                cron = `${minuteValue} ${hourValue} * * ${dayOfWeekValue}`;
+                break;
+            case "day":
+                cron = `${minuteValue} ${hourValue} * * *`;
+                break;
+            case "hour":
+                cron = `${minuteValue} * * * *`;
+                break;
+            case "minute(s)":
+                cron = `* * * * *`;
+                break;
+            default:
+                cron = "* * * * *";
+        }
+        handleInputChange(setCronValue, cronProps, cron);
+
+    }, [minute, hour, dayOfWeek, dayOfMonth, month, frequency]);
 
     return (
         <div className="space-x-2 space-y-2">
@@ -123,7 +180,7 @@ export function TemplateCron(cronProps: TemplateProps) {
                     <span>on</span>
                     <select
                         value={dayOfMonth}
-                        onChange={(e) => setDayOfMonth(Number(e.target.value))}
+                        onChange={(e) => setDayOfMonth(e.target.value)}
                         className="border rounded-md px-2 py-1"
                     >
                         {DAYS_OF_MONTH.map((day) => (
@@ -164,7 +221,7 @@ export function TemplateCron(cronProps: TemplateProps) {
                     <span>at</span>
                     <select
                         value={hour}
-                        onChange={(e) => setHour(Number(e.target.value))}
+                        onChange={(e) => setHour(e.target.value)}
                         className="border rounded-md px-2 py-1"
                     >
                         {HOURS.map((h) => (
@@ -188,7 +245,7 @@ export function TemplateCron(cronProps: TemplateProps) {
                 <>
                     <select
                         value={minute}
-                        onChange={(e) => setMinute(Number(e.target.value))}
+                        onChange={(e) => setMinute(e.target.value)}
                         className="border rounded-md px-2 py-1"
                     >
                         {MINUTES.map((m) => (

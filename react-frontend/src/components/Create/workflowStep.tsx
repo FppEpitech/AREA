@@ -9,9 +9,11 @@ interface WorkflowStepProps {
     providers?: string[];
     triggers: Trigger[];
     actions: Action[];
+    setTriggerCreate: React.Dispatch<React.SetStateAction<Trigger | null>>;
+    setActionCreate: React.Dispatch<React.SetStateAction<Action | null>>;
 }
 
-const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, triggers }) => {
+const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, triggers, setTriggerCreate, setActionCreate }) => {
 
     const [selectType, setSelectType] = useState<Trigger[] | Action[] | undefined>(undefined);
 
@@ -56,6 +58,8 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
                     stepNumber={stepNumber}
                     selectType={selectType}
                     setSelectType={setSelectType}
+                    setTriggerCreate={setTriggerCreate}
+                    setActionCreate={setActionCreate}
                 />
             )
         }
