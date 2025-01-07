@@ -8,9 +8,14 @@ async function sendDiscordMessageTemplate() {
         actFunc: 'sendDiscordMessage',
         provider: 'Discord',
         valueTemplate: {
-          webhookUrl: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
-          content: 'Test message',
-          username: 'BotTest',
+          webhookUrl: {
+            value: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
+            type: 'string',
+          },
+          content: {
+            value: 'Hello, World!',
+            type: 'string',
+          }
         },
       },
     });
