@@ -2,8 +2,8 @@ import axios from 'axios';
 
 interface ValueTemplate {
     [key: string]: {
-        type: 'cron' | 'number' | 'string';
-        template: string | number;
+        type: string;
+        value: string;
     };
 }
 

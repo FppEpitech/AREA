@@ -117,6 +117,13 @@ function CreatePage() {
                             )}
                         </div>
                     ))}
+                    <div className="flex justify-center mt-5">
+                        <button
+                            className="w-96 bg-customGreen text-customLightBlue px-4 py-2 rounded-md hover:bg-customDarkGreen"
+                        >
+                            Create
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

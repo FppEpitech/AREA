@@ -3,11 +3,12 @@ import { Action, Trigger } from "../../services/Plums/plums";
 import logo from '../../assets/logo58.png';
 import dropDownSvg from '../../assets/create/dropDown.svg';
 import dropDownUpSvg from '../../assets/create/dropDownUp.svg';
+import { TemplateCron, TemplateNumber, TemplateRadio, TemplateString } from "./templatesTypes";
 
 interface ValueTemplate {
     [key: string]: {
-        type: 'cron' | 'number' | 'string';
-        template: string | number;
+        type: string;
+        value: string | number | { [key: number]: { value: string } };
     };
 }
 
@@ -41,13 +42,6 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
         const selectedName = event.target.value;
         const selected = selectType?.find(template => template.name === selectedName);
         setSelectedTemplate(selected);
-    };
-
-    const handleInputChange = (key: string, value: string | number) => {
-        setTemplateValues((prev) => ({
-            ...prev,
-            [key]: { ...prev![key], template: value },
-        }));
     };
 
     const renderTabContent = () => {
@@ -100,15 +94,11 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                 {Object.entries(templateValues).map(([key, config]) => (
                                     <div key={key} className="space-y-1">
                                         <label className="block text-sm font-semibold">{key}</label>
-                                        <input
-                                            type={config.type === 'number' ? 'number' : 'text'}
-                                            defaultValue={config.template}
-                                            onChange={(e) =>
-                                                handleInputChange(key, config.type === 'number' ? Number(e.target.value) : e.target.value)
-                                            }
-                                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-                                            placeholder={`Enter ${key}`}
-                                        />
+
+                                        {config.type === 'CRON expression' && <TemplateCron value={config.value}/>}
+                                        {config.type === 'string' && <TemplateString value={config.value}/>}
+                                        {config.type === 'radiobutton' && <TemplateRadio value={config.value}/>}
+                                        {config.type === 'number' && <TemplateNumber value={config.value}/>}
                                     </div>
                                 ))}
                             </div>
