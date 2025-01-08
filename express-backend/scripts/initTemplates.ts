@@ -2,7 +2,7 @@ import prisma from '../prismaClient';
 
 import { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate } from "./createTriggerTemplate";
 import { sendDiscordMessageTemplate } from "./createActionTemplate";
-
+import { createServices } from "./createServices";
 const triggerTemplates : Map<string, () => Promise<void>> = new Map([
     ["Pressure", PressureTriggerTemplate],
     ["Temperature", temperatureTriggerTemplate],
@@ -23,6 +23,7 @@ const types : Map<string, Map<string, () => Promise<void>>> = new Map([
 ]);
 
 async function initAllTemplates() {
+    createServices();
     for (const [type, templates] of types) {
         console.log(`Table ${type} already exists. Check if templates are present...`);
         let dbTemplates : any;
