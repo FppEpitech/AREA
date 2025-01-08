@@ -14,10 +14,13 @@ export default function Navbar() {
             {!dropdownOpen && (
             <div className="flex justify-between items-center bg-customGreen shadow-customNavbar rounded-[30px] overflow-hidden w-[1797px] h-[74px]">
                 <div className='px-4'>
-                    <img className='shadow-custom rounded-full' src={logo} alt="Plumpy logo"></img>
+                    <img className='shadow-custom rounded-full' src={logo} alt="Plumpy logo"
+                    onClick={() => navigate('/explore')}
+                    ></img>
                 </div>
                 <div className="hidden md:flex items-center space-x-16">
-                    <button type="button">
+                    <button type="button"
+                        onClick={() => navigate('/explore')}>
                         <p
                             className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
                             Explore
