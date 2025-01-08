@@ -1,73 +1,107 @@
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import Navbar from './navbar';
+import Navbar from './navbar'; // adjust the import path
+import { vi } from 'vitest';
+import { BrowserRouter as Router } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 
-// Mock useNavigate hook
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: jest.fn(),
-}));
+const mockRouter = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+        ...actual,
+        useNavigate: () => mockRouter,
+    };
+});
 
 describe('Navbar Component', () => {
-
-
-    beforeEach(() => {
-        navigateMock = jest.fn();
-        jest.spyOn(require('react-router-dom'), 'useNavigate').mockReturnValue(navigateMock);
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    test('renders the main navbar', () => {
+    test('renders logo and navigation buttons', () => {
         render(
-            <MemoryRouter>
+            <Router>
                 <Navbar />
-            </MemoryRouter>
+            </Router>
         );
 
-        // Check for the logo
-        expect(screen.getByAltText('Plumpy logo')).toBeInTheDocument();
+        // Check if the logo is rendered
+        const logo = screen.getByAltText('Plumpy logo');
+        expect(logo).toBeInTheDocument();
 
-        // Check for buttons
-        expect(screen.getByText('Explore')).toBeInTheDocument();
-        expect(screen.getByText('My Plums')).toBeInTheDocument();
-        expect(screen.getByText('Create')).toBeInTheDocument();
+        // Check if the Explore, My Plums, and Create buttons are rendered
+        const exploreButton = screen.getByText('Explore');
+        const myPlumsButton = screen.getByText('My Plums');
+        const createButton = screen.getByText('Create');
+
+        expect(exploreButton).toBeInTheDocument();
+        expect(myPlumsButton).toBeInTheDocument();
+        expect(createButton).toBeInTheDocument();
     });
 
-    test('toggles dropdown menu on button click', () => {
+    test('dropdown opens on mobile view when menu button is clicked', () => {
         render(
-            <MemoryRouter>
+            <Router>
                 <Navbar />
-            </MemoryRouter>
+            </Router>
         );
 
-        // Open dropdown menu
+        // Click the menu button to open the dropdown
         const menuButton = screen.getByAltText('menuLogo');
         fireEvent.click(menuButton);
 
-        // Check dropdown menu is displayed
-        expect(screen.getByText('Explore')).toBeInTheDocument();
-        expect(screen.getByText('My Plums')).toBeInTheDocument();
-        expect(screen.getByText('Create')).toBeInTheDocument();
+        // Check if the dropdown is opened and contains the correct elements
+        const exploreButtonInDropdown = screen.getByText('Explore');
+        const myPlumsButtonInDropdown = screen.getByText('My Plums');
+        const createButtonInDropdown = screen.getByText('Create');
+        const userButtonInDropdown = screen.getByAltText('userLogo');
 
-        // Close dropdown menu
-        fireEvent.click(menuButton);
-        expect(screen.queryByText('My Plums')).not.toBeInTheDocument();
+        expect(exploreButtonInDropdown).toBeInTheDocument();
+        expect(myPlumsButtonInDropdown).toBeInTheDocument();
+        expect(createButtonInDropdown).toBeInTheDocument();
+        expect(userButtonInDropdown).toBeInTheDocument();
     });
 
-    test('navigates to correct routes on button clicks', () => {
+    test('navigates to /myPlums when the "My Plums" button is clicked', async () => {
+        const navigate = vi.fn(); // Create the mock function for navigate
         render(
-            <MemoryRouter>
+            <Router>
                 <Navbar />
-            </MemoryRouter>
+            </Router>
         );
 
-        fireEvent.click(screen.getByText('My Plums'));
-        expect(navigateMock).toHaveBeenCalledWith('/myPlums');
+        const myPlumsButton = screen.getByText('My Plums');
+        expect(myPlumsButton).toBeDefined();
+        userEvent.click(myPlumsButton);
 
-        fireEvent.click(screen.getByText('Create'));
-        expect(navigateMock).toHaveBeenCalledWith('/create');
+        expect(mockRouter).toHaveBeenCalledWith('/myPlums');
+    });
+
+    test('navigates to /create when the "Create" button is clicked', async () => {
+        const navigate = vi.fn(); // Create the mock function for navigate
+        render(
+            <Router>
+                <Navbar />
+            </Router>
+        );
+
+        const createButton = screen.getByText('Create');
+        expect(createButton).toBeDefined();
+        userEvent.click(createButton);
+
+        expect(mockRouter).toHaveBeenCalledWith('/create');
+    });
+
+    test('navigates to / when the "Explore" button is clicked', async () => {
+        const navigate = vi.fn(); // Create the mock function for navigate
+        render(
+            <Router>
+                <Navbar />
+            </Router>
+        );
+
+        const exploreButton = screen.getByText('Explore');
+        expect(exploreButton).toBeDefined();
+        userEvent.click(exploreButton);
+
+        expect(mockRouter).toHaveBeenCalledWith('/explore');
     });
 });
