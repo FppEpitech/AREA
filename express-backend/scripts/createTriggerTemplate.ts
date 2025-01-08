@@ -319,4 +319,54 @@ async function isSpotifyNewLikeTriggerTemplate() {
   }
 }
 
-export { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate };
+async function isSpotifyMusicPlayingTriggerTemplate() {
+  try {
+      const triggerEqualTemplate = await prisma.triggerTemplate.create({
+      data: {
+          name: 'Spotify music playing',
+          provider: 'Spotify',
+          type: 'cron',
+          trigFunc: 'isSpotifyMusicPlaying',
+          valueTemplate: {
+              time: {
+                  value: '* * * * *',
+                  type: 'CRON expression',
+              }
+          },
+      },
+      });
+      console.log('TriggerTemplate \'Spotify music playing\' created:', triggerEqualTemplate);
+
+  } catch (error) {
+      console.error('Erreur lors de la création du ActionTemplate:', error);
+  } finally {
+      await prisma.$disconnect();
+  }
+}
+
+async function isSpotifyMusicPausingTriggerTemplate() {
+    try {
+        const triggerEqualTemplate = await prisma.triggerTemplate.create({
+        data: {
+            name: 'Spotify music pausing',
+            provider: 'Spotify',
+            type: 'cron',
+            trigFunc: 'isSpotifyMusicPausing',
+            valueTemplate: {
+                time: {
+                    value: '* * * * *',
+                    type: 'CRON expression',
+                }
+            },
+        },
+        });
+        console.log('TriggerTemplate \'Spotify music pausing\' created:', triggerEqualTemplate);
+  
+    } catch (error) {
+        console.error('Erreur lors de la création du ActionTemplate:', error);
+    } finally {
+        await prisma.$disconnect();
+    }
+  }
+
+export { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate};
