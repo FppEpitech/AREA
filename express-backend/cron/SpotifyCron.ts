@@ -75,9 +75,6 @@ export async function isSpotifyMusicPlaying(userId: number): Promise<boolean> {
 
         const result = await response.json();
 
-        console.log('response.status:' + response.status);
-        console.log('response.data:' + result);
-        console.log('response.data.is_playing:' + result.is_playing);
         if (response.status === 200 && result && result.is_playing) {
             console.log('Music is currently playing');
             return true;
