@@ -40,9 +40,11 @@ const router = express.Router();
  */
 router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
   const {   name,
-            actionTemplateId,
+            actionTemplateName,
+            actionTemplateProvider,
             actionValue,
-            triggerTemplateId,
+            triggerTemplateName,
+            triggerTemplateProvider,
             triggerValue
         } = req.body;
 
@@ -53,18 +55,26 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
     if (!user)
       return res.status(404).json({error: 'User not found'});
 
-    const actionTemplate = await prisma.actionTemplate.findUnique({where: {id: actionTemplateId}});
+    const actionTemplate = await prisma.actionTemplate.findUnique({
+        where: {
+            name_provider: { name: actionTemplateName, provider: actionTemplateProvider },
+        }
+    });
     if (!actionTemplate)
       return res.status(404).json({error: 'ActionTemplate not found'});
 
-    const triggerTemplate = await prisma.triggerTemplate.findUnique({where: {id: triggerTemplateId}});
+    const triggerTemplate = await prisma.triggerTemplate.findUnique({
+        where: {
+            name_provider: { name: triggerTemplateName, provider: triggerTemplateProvider },
+        }
+    });
     if (!triggerTemplate)
       return res.status(404).json({error: 'TriggerTemplate not found'});
 
 
     const action = await prisma.action.create({
       data: {
-        actionTemplateId,
+        actionTemplateId: actionTemplate.id,
         actionValue: actionValue || actionTemplate.valueTemplate,
         userId,
       },
@@ -72,7 +82,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
 
     const trigger = await prisma.trigger.create({
       data: {
-        triggerTemplateId,
+        triggerTemplateId: triggerTemplate.id,
         triggerValue: triggerValue || triggerTemplate.valueTemplate,
         userId,
       },

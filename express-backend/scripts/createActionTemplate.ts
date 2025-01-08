@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../prismaClient';
 
 async function sendDiscordMessageTemplate() {
   try {
@@ -10,9 +8,14 @@ async function sendDiscordMessageTemplate() {
         actFunc: 'sendDiscordMessage',
         provider: 'Discord',
         valueTemplate: {
-          webhookUrl: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
-          content: 'Test message',
-          username: 'BotTest',
+          webhookUrl: {
+            value: 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL',
+            type: 'string',
+          },
+          content: {
+            value: 'Hello, World!',
+            type: 'string',
+          }
         },
       },
     });
@@ -49,7 +52,7 @@ async function resumePlayingSpotifyMusicTemplate() {
   try {
     const actionTemplate = await prisma.actionTemplate.create({
       data: {
-        name: 'Play a Spotify playing music',
+        name: 'Resume the music',
         actFunc: 'resumePlayingSpotifyMusic',
         provider: 'Spotify',
         valueTemplate: {
@@ -69,7 +72,7 @@ async function skipNextSpotifyMusicTemplate() {
   try {
     const actionTemplate = await prisma.actionTemplate.create({
       data: {
-        name: 'Skip to next Spotify playing music',
+        name: 'Skip to next music',
         actFunc: 'skipToNextTrackSpotify',
         provider: 'Spotify',
         valueTemplate: {
@@ -89,7 +92,7 @@ async function skipPreviousSpotifyMusicTemplate() {
   try {
     const actionTemplate = await prisma.actionTemplate.create({
       data: {
-        name: 'Skip to previous Spotify playing music',
+        name: 'Skip to previous music',
         actFunc: 'previousPlayingSpotifyMusic',
         provider: 'Spotify',
         valueTemplate: {
@@ -105,8 +108,4 @@ async function skipPreviousSpotifyMusicTemplate() {
   }
 }
 
-skipPreviousSpotifyMusicTemplate();
-skipNextSpotifyMusicTemplate();
-resumePlayingSpotifyMusicTemplate();
-stopPlayingSpotifyMusicTemplate();
-// sendDiscordMessageTemplate();
+export { sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate};
