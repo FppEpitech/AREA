@@ -49,7 +49,7 @@ function encryptTokenPlums(token: string): string {
  *         description: Internal server error
  */
 router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
-  const {   name,
+  let {   name,
             actionTemplateName,
             actionTemplateProvider,
             actionValue,
@@ -81,16 +81,23 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
     if (!triggerTemplate)
       return res.status(404).json({error: 'TriggerTemplate not found'});
 
-    await JSON.parse(actionValue).forEach((element: any) => {
-        if (element.back_hash){
-            element.value = encryptTokenPlums(element.value);
+
+    let tmp = JSON.parse(triggerValue);
+    for (let key in tmp) {
+        if (tmp[key].back_hash) {
+            tmp[key].value = encryptTokenPlums(tmp[key].value);
         }
-    });
-    await JSON.parse(triggerValue).forEach((element: any) => {
-        if (element.back_hash){
-            element.value = encryptTokenPlums(element.value);
+     }
+    triggerValue = JSON.stringify(tmp);
+
+    tmp = JSON.parse(actionValue);
+    for (let key in tmp) {
+        if (tmp[key].back_hash) {
+            tmp[key].value = encryptTokenPlums(tmp[key].value);
         }
-    });
+     }
+    actionValue = JSON.stringify(tmp);
+
 
     const action = await prisma.action.create({
       data: {
@@ -125,6 +132,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
         },
       },
     });
+    console.log(plum);
 
     res.status(201).json(plum);
   } catch (error) {

@@ -11,28 +11,29 @@ function decryptTokenMail(encryptedToken: string): string {
 }
 
 async function sendMailComplex(userId: number, value_json: string) {
+    console.log('sendMailComplex');
     try {
         const { destination, object, message, sendingMail, sendingPwd, sendingPort, sendingHost } = JSON.parse(value_json);
         const plumpyDev = nodemailer.createTransport({
-            host: sendingHost,
-            port: sendingPort,
+            host: sendingHost.value,
+            port: sendingPort.value,
             secure: false,
             auth: {
-              user: sendingMail,
-              pass: decryptTokenMail(sendingPwd)
+              user: sendingMail.value,
+              pass: decryptTokenMail(sendingPwd.value)
             }
           });
           const mailOptions = {
-            from: sendingMail,
-            to: destination,
-            subject: object,
-            text: message
+            from: sendingMail.value,
+            to: destination.value,
+            subject: object.value,
+            text: message.value
           };
           plumpyDev.sendMail(mailOptions, function(error : any, info : any) {
                 if (error) {
                     console.log('Error:', error);
                 } else {
-                    console.log("Complex Email sent  to " + destination + " : " + info.response);
+                    console.log("Complex Email sent  to " + destination.value + " : " + info.response);
                 }
             });
     } catch (error) {
@@ -54,15 +55,15 @@ async function sendMailBasic(userId: number, value_json: string) {
           });
           const mailOptions = {
             from: process.env.EMAIL_ADRESS,
-            to: destination,
-            subject: object,
-            text: message
+            to: destination.value,
+            subject: object.value,
+            text: message.value
           };
           plumpyDev.sendMail(mailOptions, function(error : any, info : any) {
                 if (error) {
                     console.log('Error:', error);
                 } else {
-                    console.log("Email sent  to " + destination + " : " + info.response);
+                    console.log("Email sent  to " + destination.value + " : " + info.response);
                 }
             });
     } catch (error) {

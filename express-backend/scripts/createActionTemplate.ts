@@ -22,7 +22,7 @@ async function sendDiscordMessageTemplate() {
     console.log('ActionTemplate \'Send Discord Message\' created:', actionTemplate);
 
   } catch (error) {
-    console.error('Erreur lors de la création du ActionTemplate:', error);
+    console.error('Error during creation of ActionTemplate:', error);
   } finally {
     await prisma.$disconnect();
   }
@@ -37,16 +37,17 @@ async function sendMailBasicTemplate() {
           provider: 'mail',
           valueTemplate: {
             destination : {
-                type : 'mail',
-                template : 'theophilejeromerocher44@gmail.com'
+                type : 'string',
+                check: 'mail',
+                value : 'theophilejeromerocher44@gmail.com'
             },
             object : {
                 type : 'string',
-                template : 'Hello world !'
+                value : 'Hello world !'
             },
             message : {
                 type : 'string',
-                template : 'Hello everybody, this is a test message from PlumpyDev !'
+                value : 'Hello everybody, this is a test message from PlumpyDev !'
             }
           },
         },
@@ -54,7 +55,7 @@ async function sendMailBasicTemplate() {
       console.log('ActionTemplate \'Send Mail Basic\' created:', actionTemplate);
 
     } catch (error) {
-      console.error('Erreur lors de la création du ActionTemplate:', error);
+      console.error('Erreur lors de la création du ActionTemplate');
     } finally {
       await prisma.$disconnect();
     }
@@ -69,33 +70,36 @@ async function sendMailBasicTemplate() {
           provider: 'mail',
           valueTemplate: {
             destination : {
-                type : 'mail',
-                template : 'theophilejeromerocher44@gmail.com'
+                type : 'string',
+                check: 'mail',
+                value : 'theophilejeromerocher44@gmail.com'
             },
             object : {
                 type : 'string',
-                template : 'Hello world !'
+                value : 'Hello world !'
             },
             message : {
                 type : 'string',
-                template : 'Hello everybody, this is a test message from PlumpyDev !'
+                value : 'Hello everybody, this is a test message from PlumpyDev !'
             },
             sendingMail : {
-                type : 'mail',
-                template : 'anyone@gmail.com'
+                type : 'string',
+                check: 'mail',
+                value : 'anyone@gmail.com'
             },
             sendingPwd : {
                 back_hash: true,
-                type : 'password',
-                template : 'kikivalgrind42'
+                type : 'string',
+                check: 'password',
+                value : 'kikivalgrind42'
             },
             sendingPort : {
                 type : 'number',
-                template : 587
+                value : 587
             },
             sendingHost : {
                 type : 'string',
-                template : 'smtp.gmail.com'
+                value : 'smtp.gmail.com'
             }
         },
       }
@@ -103,10 +107,90 @@ async function sendMailBasicTemplate() {
       console.log('ActionTemplate \'Send Mail Complex\' created:', actionTemplate);
 
     } catch (error) {
-      console.error('Erreur lors de la création du ActionTemplate:', error);
+      console.error('Erreur lors de la création du ActionTemplate');
     } finally {
       await prisma.$disconnect();
     }
   }
 
-export { sendDiscordMessageTemplate, sendMailBasicTemplate, sendMailComplexTemplate };
+async function stopPlayingSpotifyMusicTemplate() {
+  try {
+    const actionTemplate = await prisma.actionTemplate.create({
+      data: {
+        name: 'Stop a Spotify playing music',
+        actFunc: 'stopPlayingSpotifyMusic',
+        provider: 'Spotify',
+        valueTemplate: {
+        },
+      },
+    });
+    console.log('ActionTemplate \'Stop a Spotify playing music\' created:', actionTemplate);
+
+  } catch (error) {
+    console.error('Error during creation of ActionTemplate:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+async function resumePlayingSpotifyMusicTemplate() {
+  try {
+    const actionTemplate = await prisma.actionTemplate.create({
+      data: {
+        name: 'Resume the music',
+        actFunc: 'resumePlayingSpotifyMusic',
+        provider: 'Spotify',
+        valueTemplate: {
+        },
+      },
+    });
+    console.log('ActionTemplate \'Play a Spotify playing music\' created:', actionTemplate);
+
+  } catch (error) {
+    console.error('Error during creation of ActionTemplate:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+async function skipNextSpotifyMusicTemplate() {
+  try {
+    const actionTemplate = await prisma.actionTemplate.create({
+      data: {
+        name: 'Skip to next music',
+        actFunc: 'skipToNextTrackSpotify',
+        provider: 'Spotify',
+        valueTemplate: {
+        },
+      },
+    });
+    console.log('ActionTemplate \'Skip Spotify playing music\' created:', actionTemplate);
+
+  } catch (error) {
+    console.error('Error during creation of ActionTemplate:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+async function skipPreviousSpotifyMusicTemplate() {
+  try {
+    const actionTemplate = await prisma.actionTemplate.create({
+      data: {
+        name: 'Skip to previous music',
+        actFunc: 'previousPlayingSpotifyMusic',
+        provider: 'Spotify',
+        valueTemplate: {
+        },
+      },
+    });
+    console.log('ActionTemplate \'Skip Previous Spotify playing music\' created:', actionTemplate);
+
+  } catch (error) {
+    console.error('Error during creation of ActionTemplate:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export { sendMailBasicTemplate, sendMailComplexTemplate, sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate};

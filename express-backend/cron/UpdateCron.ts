@@ -1,6 +1,7 @@
 import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
-import { spotifyNewLike } from "./SpotifyCron";
+import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
+import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
 import { CronClass } from './CronClass';
 import { sendMailBasic, sendMailComplex } from "../action/sendMail";
 import { isMailReceived } from "./MailCron";
@@ -27,12 +28,19 @@ const triggersMapFunction: Map<string, (userId: number, value_json: string, data
     ["windSpeed", windSpeed],
     ["humidity", humidity],
     ["weather", weather],
+    ["spotifyNewLike", spotifyNewLike],
+    ["isSpotifyMusicPlaying", isSpotifyMusicPlaying],
+    ["isSpotifyMusicPausing", isSpotifyMusicPausing]
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
     ["sendDiscordMessage", sendDiscordMessage],
     ["sendMailBasic", sendMailBasic],
-    ["sendMailBasic", sendMailComplex],
+    ["sendMailComplex", sendMailComplex],
+    ["stopPlayingSpotifyMusic", stopPlayingSpotifyMusic],
+    ["resumePlayingSpotifyMusic", resumePlayingSpotifyMusic],
+    ["skipToNextTrackSpotify", skipToNextTrackSpotify],
+    ["previousPlayingSpotifyMusic", previousPlayingSpotifyMusic]
 ]);
 
 async function updateCron() {

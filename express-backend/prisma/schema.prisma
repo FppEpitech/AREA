@@ -86,3 +86,11 @@ model Trigger {
   user              User            @relation(fields: [userId], references: [userId])
   userId            Int
 }
+
+model Service {
+    name      String
+    description String
+    provider  String @unique
+    logo     String
+    color   String
+}

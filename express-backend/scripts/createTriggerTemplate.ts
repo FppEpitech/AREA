@@ -329,32 +329,82 @@ async function isMailReceivedTriggerTemplate() {
           trigFunc: 'mailReceived',
           valueTemplate: {
             time: {
-                template: '* * * * *',
-                type: 'cron',
+                value: '* * * * *',
+                type: 'CRON expression',
             },
             port: {
                 type: 'number',
-                template: 993,
+                value: 993,
             },
             host: {
                 type: 'string',
-                template: 'imap.gmail.com',
+                value: 'imap.gmail.com',
             },
             user : {
                 type : 'string',
-                template : 'user',
+                value : 'user',
             },
             password : {
                 type : 'string',
                 back_hash: true,
-                template : 'password',
+                value : 'password',
             },
         }
       }});
         console.log('TriggerTemplate \'Mail received\' created:', triggerEqualTemplate);
   } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Erreur lors de la création du ActionTemplate');
   }
 }
 
-export { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isMailReceivedTriggerTemplate };
+async function isSpotifyMusicPlayingTriggerTemplate() {
+  try {
+      const triggerEqualTemplate = await prisma.triggerTemplate.create({
+      data: {
+          name: 'Spotify music playing',
+          provider: 'Spotify',
+          type: 'cron',
+          trigFunc: 'isSpotifyMusicPlaying',
+          valueTemplate: {
+              time: {
+                  value: '* * * * *',
+                  type: 'CRON expression',
+              }
+          },
+      },
+      });
+      console.log('TriggerTemplate \'Spotify music playing\' created:', triggerEqualTemplate);
+
+  } catch (error) {
+      console.error('Erreur lors de la création du ActionTemplate:', error);
+  } finally {
+      await prisma.$disconnect();
+  }
+}
+
+async function isSpotifyMusicPausingTriggerTemplate() {
+    try {
+        const triggerEqualTemplate = await prisma.triggerTemplate.create({
+        data: {
+            name: 'Spotify music pausing',
+            provider: 'Spotify',
+            type: 'cron',
+            trigFunc: 'isSpotifyMusicPausing',
+            valueTemplate: {
+                time: {
+                    value: '* * * * *',
+                    type: 'CRON expression',
+                }
+            },
+        },
+        });
+        console.log('TriggerTemplate \'Spotify music pausing\' created:', triggerEqualTemplate);
+
+    } catch (error) {
+        console.error('Erreur lors de la création du ActionTemplate:', error);
+    } finally {
+        await prisma.$disconnect();
+    }
+  }
+
+export { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate, isMailReceivedTriggerTemplate };

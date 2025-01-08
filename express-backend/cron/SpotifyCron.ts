@@ -53,3 +53,84 @@ export async function spotifyNewLike(userId: number, value_json: string, data: a
     console.log("NO NEW LIKE");
     return false;
 }
+
+export async function isSpotifyMusicPlaying(userId: number): Promise<boolean> {
+    try {
+        console.log('Checking if music is currently playing');
+
+        const tokenSpotify = await prisma.token.findFirst({ where: { userId: userId } });
+
+        if (!tokenSpotify) {
+            throw new Error("Token not found for the user.");
+        }
+
+        const decryptedToken = decryptToken(tokenSpotify.tokenHashed);
+
+        const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${decryptedToken}`,
+            },
+        });
+
+        const result = await response.json();
+
+        if (response.status === 200 && result && result.is_playing) {
+            console.log('Music is currently playing');
+            return true;
+        }
+
+        console.log('No music is currently playing');
+        return false;
+    } catch (error: any) {
+        console.error('Error checking music playback status:', error.message || error);
+        return false;
+    }
+}
+
+export async function isSpotifyMusicPausing(userId: number): Promise<boolean> {
+    try {
+        console.log('Checking if Spotify music is paused');
+
+        const tokenSpotify = await prisma.token.findFirst({ where: { userId: userId } });
+
+        if (!tokenSpotify) {
+            throw new Error("Token not found for the user.");
+        }
+
+        const decryptedToken = decryptToken(tokenSpotify.tokenHashed);
+
+        const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${decryptedToken}`,
+            },
+        });
+
+        if (response.status === 204) {
+            console.log('No music is currently playing');
+            return true;
+        }
+
+        if (!response.ok) {
+            console.error(`API returned an error: ${response.status}`);
+            return true;
+        }
+
+        const result = await response.json();
+
+        if (result && result.is_playing === false) {
+            console.log('Music is paused');
+            return true;
+        }
+
+        console.log('Music is playing');
+        return false;
+    } catch (error: any) {
+        console.error('Error checking Spotify playback status:', error.message || error);
+        return false;
+    }
+}
+
+
+export default decryptToken;

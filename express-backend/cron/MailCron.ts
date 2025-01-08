@@ -15,14 +15,14 @@ function decryptPlumHashedContent(encryptedToken: string): string {
 export async function isMailReceived(userId: number, value_json: string, data: any): Promise<boolean>
 {
     const { port, host, password, user } = JSON.parse(value_json);
-    const decryptedPassword = decryptPlumHashedContent(password);
+    const decryptedPassword = decryptPlumHashedContent(password.value);
 
     return new Promise((resolve, reject) => {
         var imap = new Imap({
-            user: user,
+            user: user.value,
             password: decryptedPassword,
-            host: host,
-            port: port,
+            host: host.value,
+            port: port.value,
             secure: true,
             tls: true,
             tlsOptions: { rejectUnauthorized: false },
