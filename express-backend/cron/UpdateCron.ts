@@ -1,6 +1,7 @@
-import { lessThan, greaterThan, isEqual } from "./WeatherCron";
-import { spotifyNewLike } from "./SpotifyCron";
+import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
+import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
+import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
 import { CronClass } from './CronClass';
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
@@ -17,14 +18,23 @@ import {CronJob} from "cron";
 const cronMap = new Map<number, CronClass>();
 
 const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
-    ["lessThan", lessThan],
-    ["greaterThan", greaterThan],
-    ["isEqual", isEqual],
-    ["spotifyNewLike", spotifyNewLike]
+    ["pressure", pressure],
+    ["temperature", temperature],
+    ["cloudiness", cloudiness],
+    ["windSpeed", windSpeed],
+    ["humidity", humidity],
+    ["weather", weather],
+    ["spotifyNewLike", spotifyNewLike],
+    ["isSpotifyMusicPlaying", isSpotifyMusicPlaying],
+    ["isSpotifyMusicPausing", isSpotifyMusicPausing]
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
-    ["sendDiscordMessage", sendDiscordMessage]
+    ["sendDiscordMessage", sendDiscordMessage],
+    ["stopPlayingSpotifyMusic", stopPlayingSpotifyMusic],
+    ["resumePlayingSpotifyMusic", resumePlayingSpotifyMusic],
+    ["skipToNextTrackSpotify", skipToNextTrackSpotify],
+    ["previousPlayingSpotifyMusic", previousPlayingSpotifyMusic]
 ]);
 
 async function updateCron() {

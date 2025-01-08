@@ -14,18 +14,18 @@ datasource db {
 }
 
 model User {
-  userId         Int      @id @default(autoincrement())
+  userId         Int       @id @default(autoincrement())
   hashedPassword String
-  mail           String   @unique
+  mail           String    @unique
   tokens         Token[]
   plums          Plum[]
-  actions          Action[]
-  tiggers          Trigger[]
+  actions        Action[]
+  tiggers        Trigger[]
 }
 
 model Token {
-  id           Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [userId])
+  id           Int    @id @default(autoincrement())
+  user         User   @relation(fields: [userId], references: [userId])
   userId       Int
   provider     String
   tokenHashed  String
@@ -34,51 +34,63 @@ model Token {
 }
 
 model Plum {
-  id         Int      @id @default(autoincrement())
-  name       String
-  user       User     @relation(fields: [userId], references: [userId])
-  userId     Int
-  action     Action   @relation(fields: [actionId], references: [id])
-  actionId   Int
-  trigger    Trigger  @relation(fields: [triggerId], references: [id])
-  triggerId  Int
+  id        Int     @id @default(autoincrement())
+  name      String
+  user      User    @relation(fields: [userId], references: [userId])
+  userId    Int
+  action    Action  @relation(fields: [actionId], references: [id])
+  actionId  Int
+  trigger   Trigger @relation(fields: [triggerId], references: [id])
+  triggerId Int
 }
 
 model ActionTemplate {
-  id             Int    @id @default(autoincrement())
-  name           String
-  actFunc        String @unique
-  valueTemplate  Json
-  provider       String
-  actions        Action[]
+  id            Int      @id @default(autoincrement())
+  name          String
+  actFunc       String   @unique
+  valueTemplate Json
+  provider      String
+  actions       Action[]
+
+  @@unique([name, provider])
 }
 
 model Action {
-  id                Int    @id @default(autoincrement())
-  actionValue       Json
-  actionTemplate    ActionTemplate @relation(fields: [actionTemplateId], references: [id])
-  actionTemplateId  Int
-  plums             Plum[]
-  user       User     @relation(fields: [userId], references: [userId])
-  userId     Int
+  id               Int            @id @default(autoincrement())
+  actionValue      Json
+  actionTemplate   ActionTemplate @relation(fields: [actionTemplateId], references: [id])
+  actionTemplateId Int
+  plums            Plum[]
+  user             User           @relation(fields: [userId], references: [userId])
+  userId           Int
 }
 
 model TriggerTemplate {
-  id             Int    @id @default(autoincrement())
-  name           String
-  provider       String
-  type           String
-  trigFunc       String @unique
-  valueTemplate  Json
-  triggers       Trigger[]
+  id            Int       @id @default(autoincrement())
+  name          String
+  provider      String
+  type          String
+  trigFunc      String    @unique
+  valueTemplate Json
+  triggers      Trigger[]
+
+  @@unique([name, provider])
 }
 
 model Trigger {
-  id                Int    @id @default(autoincrement())
+  id                Int             @id @default(autoincrement())
   triggerValue      Json
   triggerTemplate   TriggerTemplate @relation(fields: [triggerTemplateId], references: [id])
   triggerTemplateId Int
   plums             Plum[]
-  user       User     @relation(fields: [userId], references: [userId])
-  userId     Int
+  user              User            @relation(fields: [userId], references: [userId])
+  userId            Int
+}
+
+model Service {
+    name      String
+    description String
+    provider  String @unique
+    logo     String
+    color   String
 }
