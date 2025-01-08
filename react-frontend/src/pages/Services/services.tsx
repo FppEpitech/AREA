@@ -23,7 +23,7 @@ function ServiceDetail(service: IService) {
     return (
         <div
             style={{ backgroundColor: service.color }}
-            className="h-[40rem] w-full"
+            className="h-[45rem] w-full fixed top-0 left-0 z-[-1]"
         >
             <div className="relative h-full flex flex-col items-center justify-center text-white text-center px-4">
                 <img
@@ -127,15 +127,15 @@ export default function Services() {
                 : [...triggerCards, ...actionsCards];
 
     return (
-        <div className="relative min-h-screen bg-gray-100">
-            <Navbar />
+        <div className="relative min-h-screen bg-white">
+            <Navbar/>
             <ServiceDetail
                 name={defaultService.name}
                 logo={defaultService.logo}
                 description={defaultService.description}
                 color={defaultService.color}
             />
-            <div className="relative z-10 container mx-auto p-4">
+            <div className="relative z-10 container mx-auto p-4 mt-[45rem]">
                 {/* Filter Section */}
                 <div className="flex flex-col items-center py-8">
                     <div className="flex space-x-4 mb-4">
