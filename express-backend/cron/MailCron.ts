@@ -14,19 +14,19 @@ function decryptPlumHashedContent(encryptedToken: string): string {
 
 export async function isMailReceived(userId: number, value_json: string, data: any): Promise<boolean>
 {
-    const { port, host, password, user } = JSON.parse(value_json);
-    const decryptedPassword = decryptPlumHashedContent(password.value);
-
+    const parsedJson = JSON.parse(value_json);
+    const decryptedPassword = decryptPlumHashedContent(parsedJson.password?.value);
+    console.log(parsedJson)
     return new Promise((resolve, reject) => {
         var imap = new Imap({
-            user: user.value,
+            user: parsedJson.user?.value,
             password: decryptedPassword,
-            host: host.value,
-            port: port.value,
+            host: parsedJson.host?.value,
+            port: parsedJson.port?.value,
             secure: true,
             tls: true,
             tlsOptions: { rejectUnauthorized: false },
-        })
+        });
 
         imap.once('ready', () => {
             imap.openBox('INBOX', false, (err : any, box : any) => {

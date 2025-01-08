@@ -11,7 +11,6 @@ function decryptTokenMail(encryptedToken: string): string {
 }
 
 async function sendMailComplex(userId: number, value_json: string) {
-    console.log('sendMailComplex');
     try {
         const { destination, object, message, sendingMail, sendingPwd, sendingPort, sendingHost } = JSON.parse(value_json);
         const plumpyDev = nodemailer.createTransport({
