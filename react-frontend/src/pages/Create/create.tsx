@@ -93,7 +93,7 @@ function CreatePage() {
         if (plumName === "" || !triggerCreate || !actionCreate) {
             return;
         }
-        // createPlum(plumName, triggerCreate[0], actionCreate[0]);
+        createPlum(plumName, triggerCreate, actionCreate);
     }
 
     // Render the workflow steps
