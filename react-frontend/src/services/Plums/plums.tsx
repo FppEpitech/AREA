@@ -56,6 +56,19 @@ export const createPlum = async (name : string, trigger : Trigger, action : Acti
     }
 };
 
+export const getPlums = async () => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/plums`, { headers: headers });
+        return response.data;
+    } catch (error) {
+        return [];
+    }
+};
+
 export const getProvidersTriggers = async (provider : string): Promise<Trigger[]> => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/triggers/templates/${provider}`);
