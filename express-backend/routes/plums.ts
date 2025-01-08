@@ -2,6 +2,7 @@ import prisma from '../prismaClient'
 import express, {Request, Response} from 'express';
 import jwt from 'jsonwebtoken'
 import authenticateToken from '../middlewares/isLoggedIn';
+import CryptoJS from 'crypto-js';
 
 const router = express.Router();
 

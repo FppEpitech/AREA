@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+import CryptoJS from 'crypto-js';
 
 function decryptTokenMail(encryptedToken: string): string {
     const secret = process.env.PLUMS_HASHING_SECRET
@@ -11,9 +12,7 @@ function decryptTokenMail(encryptedToken: string): string {
 
 async function sendMailComplex(userId: number, value_json: string) {
     try {
-        const fixedActionValue = value_json.replace(/(\w+): /g, '"$1":').replace(/'/g, '"');
-
-        const { destination, object, message, sendingMail, sendingPwd, sendingPort, sendingHost } = JSON.parse(fixedActionValue);
+        const { destination, object, message, sendingMail, sendingPwd, sendingPort, sendingHost } = JSON.parse(value_json);
         const plumpyDev = nodemailer.createTransport({
             host: sendingHost,
             port: sendingPort,
