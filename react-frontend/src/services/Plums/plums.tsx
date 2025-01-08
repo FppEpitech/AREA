@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-interface ValueTemplate {
+export interface ValueTemplate {
     [key: string]: {
         type: string;
         value: string;

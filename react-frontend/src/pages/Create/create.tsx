@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Action, createPlum, getActions, getTriggers, Trigger } from "../../services/Plums/plums";
 import Navbar from "../../components/Navbar/navbar";
 import WorkflowStep from "../../components/Create/workflowStep";
+import { useLocation } from "react-router-dom";
 
 interface Workflow {
     title: string;
@@ -9,6 +10,9 @@ interface Workflow {
 }
 
 function CreatePage() {
+
+    const location = useLocation();
+    const { plum } = location.state || {};
 
     const [triggers, setTriggers] = useState<Trigger[]>([]);
     const [triggersProviders, setTriggersProviders] = useState<string[]>([]);
@@ -19,7 +23,15 @@ function CreatePage() {
     const [triggerCreate, setTriggerCreate] = useState<Trigger | null>(null);
     const [actionCreate, setActionCreate] = useState<Action | null>(null);
 
-    const [plumName, setPlumName] = useState<string>("");
+    const [plumName, setPlumName] =  useState<string>("");
+
+    useEffect(() => {
+        if (plum) {
+            setPlumName(plum.name);
+            setTriggerCreate(plum.trigger);
+            setActionCreate(plum.action);
+        }
+    }, [plum]);
 
     useEffect(() => {
         const fetchTriggers = async () => {
@@ -110,6 +122,7 @@ function CreatePage() {
                         type="text"
                         className="w-full mb-7 text-xl px-6"
                         placeholder="Name of your Plum"
+                        defaultValue={plumName}
                         onChange={(e) => setPlumName(e.target.value)}
                     >
                     </input>
@@ -125,6 +138,9 @@ function CreatePage() {
                                 actions={actions}
                                 setTriggerCreate={setTriggerCreate}
                                 setActionCreate={setActionCreate}
+                                triggerCreate={triggerCreate}
+                                actionCreate={actionCreate}
+                                plum={plum}
                             />
                             {index < workflows.length - 1 && (
                                 <div className="flex flex-col items-center">
@@ -151,14 +167,23 @@ function CreatePage() {
                                 Create
                             </button>
                         )}
-                        {(plumName !== "" && triggerCreate && actionCreate) && (
-                        <button
-                            className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
-                            onClick={() => createThePlum()}
-                            disabled={plumName === "" || !triggerCreate || !actionCreate}
-                        >
-                            Create
-                        </button>
+                        {(plumName !== "" && triggerCreate && actionCreate && !plum) && (
+                            <button
+                                className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
+                                onClick={() => createThePlum()}
+                                disabled={plumName === "" || !triggerCreate || !actionCreate}
+                            >
+                                Create
+                            </button>
+                        )}
+                        {(plumName !== "" && triggerCreate && actionCreate && plum) && (
+                            <button
+                                className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
+                                onClick={() => createThePlum()}
+                                disabled={plumName === "" || !triggerCreate || !actionCreate}
+                            >
+                                Update
+                            </button>
                         )}
                     </div>
                 </div>
