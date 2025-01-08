@@ -92,4 +92,5 @@ model Service {
     description String
     provider  String @unique
     logo     String
+    color   String
 }
