@@ -189,4 +189,50 @@ router.delete('/:plumId', async (req: Request, res: Response) : Promise<any> => 
     }
 });
 
+router.put('/:plumId', async (req: Request, res: Response) : Promise<any> => {
+    let id = req.params.plumId;
+    const {
+        name,
+        actionTemplateName,
+        actionTemplateProvider,
+        actionValue,
+        triggerTemplateName,
+        triggerTemplateProvider,
+        triggerValue,
+    } = req.body;
+
+    try {
+        let query = prisma.plum.update({
+            where: { id: parseInt(id) },
+            data: {
+                name: name,
+                action: {
+                    update: {
+                        actionValue : actionValue,
+                        actionTemplate: {
+                            update :  {
+                                provider : actionTemplateProvider,
+                                name: actionTemplateName
+                            }
+                        }
+                    }
+                },
+                trigger: {
+                    update: {
+                        triggerValue : triggerValue,
+                        triggerTemplate: {
+                            update :  {
+                                provider : triggerTemplateProvider,
+                                name: triggerTemplateName
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    } catch (e) {
+        console.log("Error while updating plum");
+    }
+});
+
 export default router;
