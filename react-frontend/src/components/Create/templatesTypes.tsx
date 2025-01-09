@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface TemplateProps {
     value: string | number | { [key: number]: { value: string } };
-    onChange: (newValue: any) => void;
-    result?: number;
+    onChange: (newValue: any, isError: boolean) => void;
+    result?: number | string;
 }
 
 const handleInputChange =
@@ -11,9 +11,10 @@ const handleInputChange =
     setInputValue : React.Dispatch<React.SetStateAction<any>>,
     stringProps : TemplateProps,
     value: string | number | { [key: number]: { value: string } },
+    isError: boolean = false
 ) => {
     const newValue = value;
-    stringProps.onChange(newValue);
+    stringProps.onChange(newValue, isError);
     setInputValue(newValue);
 };
 
@@ -80,6 +81,97 @@ export function TemplateRadio(radioProps: TemplateProps) {
         </div>
     );
 }
+
+// Search dropdown template
+export function TemplateSearchDropdown(searchDropdownProps: TemplateProps) {
+    const [selectedValue, setSelectedValue] = useState(searchDropdownProps.result);
+    const [isPanelVisible, setIsPanelVisible] = useState(false);
+    const [isCorrect, setIsCorrect] = useState(true);
+    const [correctKey, setCorrectKey] = useState(searchDropdownProps.result);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const optionArray = Object.entries(searchDropdownProps.value).map(([key, obj]) => ({
+        key: key,
+        value: obj,
+    }));
+
+    const [searchValue, setSearchValue] = useState(optionArray[0].value ?? "");
+
+    const filteredOptions = optionArray.filter((option) =>
+        option.value.toLowerCase().startsWith(searchValue.toLowerCase())
+    );
+
+    const handleOptionClick = (optionKey: string) => {
+        setSelectedValue(optionKey);
+        setSearchValue(optionArray.find((option) => option.key === optionKey)?.value || "");
+        setIsPanelVisible(false);
+        isCorrectValue(optionArray.find((option) => option.key === optionKey)?.value || "");
+        setCorrectKey(optionKey);
+    };
+
+    const isCorrectValue = (value : string) => {
+        const isCorrect = optionArray.some((option) => option.value.toLowerCase() === value.toLowerCase());
+        setIsCorrect(isCorrect);
+        if (isCorrect) {
+            setCorrectKey(optionArray.find((option) => option.value.toLowerCase() === value.toLowerCase())?.key);
+        }
+    }
+
+    // Handle clicks outside the component
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsPanelVisible(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <div ref={containerRef} className="space-y-2 relative">
+            {/* Search Input */}
+            <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => {setSearchValue(e.target.value); isCorrectValue(e.target.value); handleInputChange(setSelectedValue, searchDropdownProps, optionArray.find((option) => option.value.toLowerCase() === e.target.value.toLowerCase())?.key || optionArray[0].key, !optionArray.some((option) => option.value.toLowerCase() === e.target.value.toLowerCase()));}}
+                onFocus={() => setIsPanelVisible(true)}
+                className={`w-full border rounded-md px-3 py-2 text-sm ${
+                   (isCorrect) ? "border border-gray-300" : "border border-red-500"
+                }`}
+                placeholder="Search"
+            />
+
+            {/* Options Panel */}
+            {isPanelVisible && (
+                <div
+                    className="w-full border border-gray-300 rounded-md bg-white shadow-md z-50 mt-1 overflow-auto max-h-48"
+                    style={{ top: "100%" }}
+                >
+                    {filteredOptions.length > 0 ? (
+                        filteredOptions.map((option) => (
+                            <div
+                                key={option.key}
+                                onClick={() => {handleOptionClick(option.key); setSearchValue(option.value); isCorrectValue(option.value); handleInputChange(setSelectedValue, searchDropdownProps, option.key, false);}}
+                                className="px-3 py-2 cursor-pointer hover:bg-gray-100 text-sm"
+                            >
+                                {option.value}
+                            </div>
+                        ))
+                    ) : (
+                        <div className="px-3 py-2 text-sm text-gray-500">No results found</div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+}
+
+
+
 
 const CRON_FREQUENCIES = ["year", "month", "week", "day", "hour", "minute(s)"];
 const MONTH = ["every month", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
