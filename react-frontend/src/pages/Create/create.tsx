@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Action, createPlum, getActions, getTriggers, Trigger } from "../../services/Plums/plums";
+import { Action, createPlum, getActions, getTriggers, Trigger, updatePlum } from "../../services/Plums/plums";
 import Navbar from "../../components/Navbar/navbar";
 import WorkflowStep from "../../components/Create/workflowStep";
 import { useLocation } from "react-router-dom";
@@ -105,7 +105,11 @@ function CreatePage() {
         if (plumName === "" || !triggerCreate || !actionCreate) {
             return;
         }
-        createPlum(plumName, triggerCreate, actionCreate);
+        if (plum) {
+            updatePlum(plum.id, plumName, triggerCreate, actionCreate);
+        } else {
+            createPlum(plumName, triggerCreate, actionCreate);
+        }
     }
 
     // Render the workflow steps
