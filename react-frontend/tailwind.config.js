@@ -9,7 +9,8 @@ module.exports = {
         customGreen: "#226D68",
         customYellow: "#FEEAA1",
         customOrange: "#D6955B",
-        customLightGreen: "#85C83E"
+        customLightGreen: "#85C83E",
+        customDarkLightGreen: "#78B035"
       },
       fontFamily: {
         abrilFatface: ['Abril Fatface', 'serif'],
