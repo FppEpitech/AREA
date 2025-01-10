@@ -199,8 +199,6 @@ router.put('/:plumId', authenticateToken, async (req: Request, res: Response) : 
         triggerValue,
     } = req.body;
 
-    console.log(req.body);
-
     try {
         let query = prisma.plum.update({
             where: { id: parseInt(id) },
@@ -209,19 +207,32 @@ router.put('/:plumId', authenticateToken, async (req: Request, res: Response) : 
                 action: {
                     update: {
                         actionValue : actionValue,
-                        actionTemplateId: actionTemplateId,
+                        actionTemplate: {
+                            connect: { id: actionTemplateId }
+                        }
                     }
                 },
                 trigger: {
                     update: {
                         triggerValue : triggerValue,
-                        triggerTemplateId: triggerTemplateId,
+                        triggerTemplate: {
+                            connect: { id: triggerTemplateId }
+                        }
                     }
+                }
+            },
+            include: {
+                action: {
+                    include: { actionTemplate: true }
+                },
+                trigger: {
+                    include: { triggerTemplate: true }
                 }
             }
         });
         res.status(200).json(await query);
     } catch (e) {
+        res.status(500).json({error: 'Internal server error'});
         console.log("Error while updating plum", e);
     }
 });
