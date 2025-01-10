@@ -72,7 +72,7 @@ export default function Login() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
-                            {error && <p className='text-red-500 font-bold font-inter text-sm'>{"ok"}</p>}
+                            {error && <p className='text-red-500 font-bold font-inter text-sm'>{error}</p>}
                             <button
                                 type="submit"
                                 className="mt-8 w-full py-2 bg-customLightGreen text-white font-bold font-inter rounded-[10px] shadow-sm hover:bg-customDarkLightGreen focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
