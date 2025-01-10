@@ -39,60 +39,6 @@ export default function MyPlums() {
     const [provider] = useState<string[]>([]);
     const [myPlums, setMyPlums] = useState<Plum[]>([]);
 
-    myPlums.push({
-        name: "Send message if low temp",
-        provider: "Google, Facebook",
-        isActivated: true,
-        trigger: {
-            name: "Trigger 1",
-            triggerTemplate: {
-                provider: "Google"
-            }
-        },
-        action: {
-            name: "Action 1",
-            actionTemplate: {
-                provider: "Facebook"
-            }
-        }
-    });
-    myPlums.push({
-        name: "Send message if low temp",
-        provider: "Google, Facebook",
-        isActivated: true,
-        trigger: {
-            name: "Trigger 1",
-            triggerTemplate: {
-                provider: "Google"
-            }
-        },
-        action: {
-            name: "Action 1",
-            actionTemplate: {
-                provider: "Facebook"
-            }
-        }
-    });
-    myPlums.push({
-        name: "Send message if low temp",
-        provider: "Google, Facebook",
-        isActivated: true,
-        trigger: {
-            name: "Trigger 1",
-            triggerTemplate: {
-                provider: "Google"
-            }
-        },
-        action: {
-            name: "Action 1",
-            actionTemplate: {
-                provider: "Facebook"
-            }
-        }
-    });
-
-
-
     const [searchInput, setSearchInput] = useState('');
     const [currentStatusFilter, setCurrentStatusFilter] = useState<'All' | 'On' | 'Off'>('All');
     const [selectedServices, setSelectedServices] = useState<string[]>([]);
