@@ -14,7 +14,7 @@ export default function Filter({
     filterByServices: (selectedServices: string[]) => void;
 }) {
     return (
-        <div className="flex">
+        <div className="flex space-x-6">
             <StatusDrop myPlums={myPlums} filterPlums={filterPlums} />
             <ServiceDrop myPlums={myPlums} services={services} filterByServices={filterByServices} />
         </div>
