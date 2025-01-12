@@ -3,6 +3,7 @@ import { Action, createPlum, getActions, getTriggers, Trigger } from "../../serv
 import Navbar from "../../components/Navbar/navbar";
 import WorkflowStep from "../../components/Create/workflowStep";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer/Footer";
 
 interface Workflow {
     title: string;
@@ -195,6 +196,7 @@ function CreatePage() {
                     </div>
                 </div>
             )}
+            <Footer />
         </div>
     );
 };

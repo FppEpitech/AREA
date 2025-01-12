@@ -8,6 +8,7 @@ import searchSvg from '../../assets/icons/search.svg';
 import filterSvg from '../../assets/icons/filter.svg';
 import plusSvg from '../../assets/icons/plus.svg';
 import feather from '../../assets/icons/feather.svg';
+import Footer from "../../components/Footer/Footer";
 
 interface Template {
     provider: string;
@@ -227,10 +228,7 @@ export default function MyPlums() {
                 </div>
             </div>
 
-            {/* Foot bar*/}
-            <footer className="flex justify-center items-center font-inter text-sm w-full h-[58px] bg-customLightBlue mt-auto">
-                <p>Plumpy 2025 | From Noware</p>
-            </footer>
+            <Footer />
 
         </div>
     );
