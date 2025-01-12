@@ -61,11 +61,9 @@ export const updatePlum = async (id : number, name : string, trigger : Trigger, 
         const token = localStorage.getItem("access_token");
         const body = {
             name: name,
-            actionTemplateName: action.name,
-            actionTemplateProvider: action.provider,
+            actionTemplateId: action.id,
             actionValue: JSON.stringify(action.valueTemplate),
-            triggerTemplateName: trigger.name,
-            triggerTemplateProvider: trigger.provider,
+            triggerTemplateId: trigger.id,
             triggerValue: JSON.stringify(trigger.valueTemplate)
         };
         const headers = {
