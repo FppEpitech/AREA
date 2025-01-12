@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Plum } from "../../pages/MyPlums/myPlums";
 
+import bookSvg from '../../assets/icons/book.svg';
+import arrowDownSvg from '../../assets/icons/arrowDown.svg';
+
 export default function ServiceDrop({ myPlums, services, filterByServices }: {
     myPlums: Plum[];
     services: string[];
@@ -41,29 +44,26 @@ export default function ServiceDrop({ myPlums, services, filterByServices }: {
     }, []);
 
     return (
-        <div className="relative m-2" ref={dropdownRef}>
+        <div className="relative" ref={dropdownRef}>
             <button
                 id="dropdownCheckboxButton"
                 onClick={toggleDropdown}
-                className="text-customGreen shadow-custom bg-customYellow hover:bg-customOrange focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="flex transition text-xl font-inter hover:text-shadow-custom"
                 type="button"
             >
-                Services
-                <svg
-                    className="w-2.5 h-2.5 ms-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                >
-                    <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 4 4 4-4"
+                <p className="flex justify-center text-sm md:text-xl font-inter">
+                    <img
+                        src={bookSvg}
+                        alt="plus"
+                        className="mr-[9px]"
                     />
-                </svg>
+                    Services
+                    <img
+                        src={arrowDownSvg}
+                        alt="plus"
+                        className="ml-[9px]"
+                    />
+                </p>
             </button>
 
             <div

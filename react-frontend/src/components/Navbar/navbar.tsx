@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import logo from '../../assets/logo58.png'
-import setting from '../../assets/navbar/settings.svg'
-import box from '../../assets/navbar/box.svg'
-import compas from '../../assets/navbar/compas.svg'
-import plus from '../../assets/navbar/plus.svg'
+import setting from '../../assets/icons/settings.svg'
+import box from '../../assets/icons/box.svg'
+import compas from '../../assets/icons/compas.svg'
+import plus from '../../assets/icons/plus.svg'
 import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
@@ -30,7 +30,7 @@ export default function Navbar() {
                             className="flex transition text-xl font-inter hover:text-shadow-custom">
                             <img
                                 src={compas}
-                                alt="userLogo"
+                                alt="compas"
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             Explore
@@ -42,7 +42,7 @@ export default function Navbar() {
                             className="flex transition text-xl font-inter hover:text-shadow-custom">
                             <img
                                 src={box}
-                                alt="userLogo"
+                                alt="box"
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             My Plums
@@ -57,7 +57,7 @@ export default function Navbar() {
                                 className='flex text-xl font-inter px-10 py-2'>
                                 <img
                                     src={plus}
-                                    alt="userLogo"
+                                    alt="plus"
                                     className="w-[24px] h-[24px] mr-[9px]"
                                 />
                                 Create
@@ -66,7 +66,7 @@ export default function Navbar() {
                         <button className="transition rounded-full px-3 py-2 flex items-center justify-center h-14">
                             <img
                             src={setting}
-                            alt="userLogo"
+                            alt="setting"
                             className="w-8 h-8"
                             />
                         </button>
@@ -79,7 +79,7 @@ export default function Navbar() {
                         onClick={() => setDropdownOpen(!dropdownOpen)}>
                         <img
                         src={setting}
-                        alt="menuLogo"
+                        alt="setting"
                         className="w-8 h-8"
                         />
                     </button>
@@ -97,7 +97,7 @@ export default function Navbar() {
                             onClick={() => setDropdownOpen(!dropdownOpen)}>
                             <img
                                 src={setting}
-                                alt="menuLogo"
+                                alt="setting"
                                 className="w-8 h-8"
                             />
                         </button>
@@ -109,7 +109,7 @@ export default function Navbar() {
                         <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
                             <img
                                 src={compas}
-                                alt="userLogo"
+                                alt="compas"
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             Explore
@@ -120,7 +120,7 @@ export default function Navbar() {
                         <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
                             <img
                                 src={box}
-                                alt="userLogo"
+                                alt="box"
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             My Plums
@@ -131,7 +131,7 @@ export default function Navbar() {
                         <p className="flex justify-center text-xl font-inter">
                             <img
                                 src={plus}
-                                alt="userLogo"
+                                alt="plus"
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             Create
@@ -140,7 +140,7 @@ export default function Navbar() {
                     <button className="w-full transition rounded-full border-2 border-customLightGreen hover:bg-gray-100 hover:shadow-custom px-3 py-2 flex items-center justify-center h-14">
                         <img
                             src={setting}
-                            alt="userLogo"
+                            alt="setting"
                             className="w-8 h-8"
                         />
                     </button>
