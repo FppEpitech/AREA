@@ -173,11 +173,11 @@ router.get('/', authenticateToken,  async (req : Request, res : Response) : Prom
  *       500:
  *         description: Internal server error
  */
-router.delete('/:plumId', async (req: Request, res: Response) : Promise<any> => {
+router.delete('/:plumId', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
     const { plumId } = req.params;
 
     try {
-        const plum = await prisma.plum.findUnique({where: {id: parseInt(plumId)}});
+        const plum = await prisma.plum.findUnique({where: {id: parseInt(plumId), userId: (req as any).middlewareId}});
         if (!plum)
           return res.status(404).json({error: 'Plum not found'});
 
@@ -189,15 +189,13 @@ router.delete('/:plumId', async (req: Request, res: Response) : Promise<any> => 
     }
 });
 
-router.put('/:plumId', async (req: Request, res: Response) : Promise<any> => {
+router.put('/:plumId', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
     let id = req.params.plumId;
     const {
         name,
-        actionTemplateName,
-        actionTemplateProvider,
+        actionTemplateId,
         actionValue,
-        triggerTemplateName,
-        triggerTemplateProvider,
+        triggerTemplateId,
         triggerValue,
     } = req.body;
 
@@ -210,10 +208,7 @@ router.put('/:plumId', async (req: Request, res: Response) : Promise<any> => {
                     update: {
                         actionValue : actionValue,
                         actionTemplate: {
-                            update :  {
-                                provider : actionTemplateProvider,
-                                name: actionTemplateName
-                            }
+                            connect: { id: actionTemplateId }
                         }
                     }
                 },
@@ -221,17 +216,24 @@ router.put('/:plumId', async (req: Request, res: Response) : Promise<any> => {
                     update: {
                         triggerValue : triggerValue,
                         triggerTemplate: {
-                            update :  {
-                                provider : triggerTemplateProvider,
-                                name: triggerTemplateName
-                            }
+                            connect: { id: triggerTemplateId }
                         }
                     }
                 }
+            },
+            include: {
+                action: {
+                    include: { actionTemplate: true }
+                },
+                trigger: {
+                    include: { triggerTemplate: true }
+                }
             }
         });
+        res.status(200).json(await query);
     } catch (e) {
-        console.log("Error while updating plum");
+        res.status(500).json({error: 'Internal server error'});
+        console.log("Error while updating plum", e);
     }
 });
 
