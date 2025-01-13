@@ -70,6 +70,7 @@ export default function Services() {
     const [triggers, setTriggers] = useState<ITriggerActionCard[]>([]);
     const [actions, setActions] = useState<ITriggerActionCard[]>([]);
     const [activeButton, setActiveButton] = useState("All");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         // Fetch service data
@@ -125,11 +126,15 @@ export default function Services() {
     };
 
     const filteredCards =
-        activeButton === "Triggers"
-            ? triggers
-            : activeButton === "Actions"
-                ? actions
-                : [...triggers, ...actions];
+        (activeButton === "Triggers" ? triggers
+        : activeButton === "Actions" ? actions
+        : [...triggers, ...actions])
+        .filter((card) => {
+            const lowerCaseQuery = searchQuery.toLowerCase();
+            return (
+                card.name.toLowerCase().includes(lowerCaseQuery)
+            );
+    });
 
     if (!service) return <div>Loading...</div>;
 
@@ -183,6 +188,8 @@ export default function Services() {
                         type="search"
                         placeholder={`Search ${id || ""} triggers or actions`}
                         className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
 
