@@ -18,13 +18,13 @@ interface Template {
 interface TriggerPlum {
     name: string;
     triggerTemplate: Template;
-    triggerValue: string;
+    triggerValue: any;
 }
 
 interface ActionPlum {
     name: string;
     actionTemplate: Template;
-    actionValue: string;
+    actionValue: any;
 }
 
 export interface Plum {
