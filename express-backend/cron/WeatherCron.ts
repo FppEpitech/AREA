@@ -48,8 +48,8 @@ interface WeatherResponse {
 }
 
 const conditionMap: { [key: number]: (temp: number, ref: number) => boolean } = {
-    0: (temp, ref) => temp > ref,
-    1: (temp, ref) => temp < ref,
+    0: (temp, ref) => temp < ref,
+    1: (temp, ref) => temp > ref,
     2: (temp, ref) => temp === ref,
 };
 
