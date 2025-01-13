@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/navbar";
 import {getProvidersActions, getProvidersTriggers} from "../../services/Plums/plums";
 
@@ -22,6 +22,7 @@ interface ITriggerActionCard {
     isTrigger: boolean;
     name: string;
     valueTemplate?: ValueTemplate;
+    provider: string;
 }
 
 export interface Trigger {
@@ -35,6 +36,18 @@ export interface Trigger {
 export interface Action extends Trigger {}
 
 function PlumCard(card: ITriggerActionCard) {
+
+    const navigate = useNavigate();
+
+    const createPlumWithCard = (card: ITriggerActionCard) => {
+
+        if (card.isTrigger) {
+            navigate('/create', { state: { givenTrigger: card } });
+        } else {
+            navigate('/create', { state: { givenAction: card } });
+        }
+    };
+
     return (
         <div className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center space-y-4">
             <div className="flex space-x-4">
@@ -56,7 +69,7 @@ function PlumCard(card: ITriggerActionCard) {
             {/* Connect Button */}
             <button
                 className="bg-customGreen text-white px-4 py-2 rounded-md hover:bg-customGreenDark transition duration-200"
-                onClick={() => console.log(`Connect button clicked for ${card.name}`)}
+                onClick={() => createPlumWithCard(card)}
             >
                 Connect
             </button>
@@ -101,6 +114,7 @@ export default function Services() {
                             name: template.name,
                             keywords: template.keywords,
                             valueTemplate: template.valueTemplate, // Include valueTemplate
+                            provider: service.provider,
                         }))
                     );
                 }
@@ -111,6 +125,7 @@ export default function Services() {
                             isTrigger: true,
                             name: template.name,
                             valueTemplate: template.valueTemplate,
+                            provider: service.provider,
                         }))
                     );
                 }
@@ -196,7 +211,7 @@ export default function Services() {
                 {/* Display Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                     {filteredCards.map((card, index) => (
-                        <PlumCard key={index} {...card} />
+                        <PlumCard key={index} {...card} provider={service.provider} />
                     ))}
                 </div>
             </div>
