@@ -16,7 +16,7 @@ jobs:
       - name: Execute the tests
         run: |
           cd react-frontend
-          npm test a
+          npx vitest
   run_back_tests:
     runs-on: ubuntu-latest
     steps:
