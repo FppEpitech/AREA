@@ -1,5 +1,6 @@
 import ExploreContent from "../../components/Explore/ExploreContent";
 import ExploreNavbar from "../../components/Explore/ExploreNavbar";
+import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/navbar";
 
 interface IService {
@@ -43,7 +44,7 @@ export default function Explore () {
     let ServiceCards: IService[] = []; // TODO: Fill this list with Service cards of the db
 
     return (
-        <div>
+        <div className="min-h-screen flex flex-col">
             <Navbar></Navbar>
             <ExploreNavbar />
             <ExploreContent />
@@ -57,6 +58,7 @@ export default function Explore () {
                     <PlumCard key={index} {...card} />
                 ))
             }
+            <Footer />
         </div>
     );
 }
