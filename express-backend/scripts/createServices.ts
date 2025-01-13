@@ -2,18 +2,21 @@ import prisma from '../prismaClient';
 
 async function createDiscord() {
     try {
-        let service = await prisma.service.create({data: {
-            provider: 'Discord',
-            name: 'discord',
-            description: 'Discord service',
-            color: '#5865F7',
-            logo: 'https://discord.com/assets/3437c10597c1526c3dbd98c737c2bcae.svg',
-        }});
-        console.log('service discord created:');
+        let service = await prisma.service.create({
+            data: {
+                provider: 'Discord',
+                name: 'discord',
+                description: 'Discord service',
+                color: '#5865F7',
+                logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/4/4f/Discord_Logo_sans_texte.svg/1818px-Discord_Logo_sans_texte.svg.png',
+            }
+        });
+        console.log('Service Discord created');
     } catch (error) {
-        console.error('Erreur lors de la création du service Discord, already exists ? ');
+        console.error('Error creating Discord service, maybe it already exists?');
     }
 }
+
 
 async function createSpotify() {
     try {
@@ -35,9 +38,9 @@ async function createOpenWeatherMap() {
         let service = await prisma.service.create({data: {
             provider: 'OpenWeatherMap',
             name: 'openweathermap',
-            color: '#F57F17',
+            color: '#87CEEB',
             description: 'OpenWeatherMap service',
-            logo: 'https://openweathermap.org/themes/openweathermap/assets/img/logo_white_cropped.png',
+            logo: 'https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather02-512.png',
         }});
         console.log('service openweathermap created:');
     } catch (error) {
@@ -50,7 +53,7 @@ async function createMail() {
         let service = await prisma.service.create({data: {
             provider: 'Mail',
             name: 'mail',
-            color: '#D93024',
+            color: '#fa423e',
             description: 'Mail service',
             logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png',
         }});
