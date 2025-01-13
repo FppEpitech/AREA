@@ -105,7 +105,8 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex flex-col space-y-4 px-4 pb-4">
-                    <button type="button" className="w-full">
+                    <button type="button" className="w-full"
+                        onClick={() => navigate('/explore')}>
                         <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
                             <img
                                 src={compas}
