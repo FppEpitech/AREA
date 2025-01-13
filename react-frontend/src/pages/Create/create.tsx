@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Action, createPlum, getActions, getTriggers, Trigger } from "../../services/Plums/plums";
 import Navbar from "../../components/Navbar/navbar";
 import WorkflowStep from "../../components/Create/workflowStep";
+import { useNavigate } from "react-router-dom";
 
 interface Workflow {
     title: string;
@@ -20,6 +21,9 @@ function CreatePage() {
     const [actionCreate, setActionCreate] = useState<Action | null>(null);
 
     const [plumName, setPlumName] = useState<string>("");
+
+    const [isCreated, setIsCreated] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchTriggers = async () => {
@@ -94,6 +98,10 @@ function CreatePage() {
             return;
         }
         createPlum(plumName, triggerCreate, actionCreate);
+        setIsCreated(true);
+        setPlumName("");
+        setTriggerCreate(null);
+        setActionCreate(null);
     }
 
     // Render the workflow steps
@@ -102,67 +110,91 @@ function CreatePage() {
             {/* Navbar */}
             <Navbar />
 
-            {/* Centered Workflow */}
-            <div className="flex flex-1 mt-36 pb-3 justify-center">
-                <div className="max-w-md w-full">
+            {!isCreated && (
+                <div className="flex flex-1 mt-36 pb-3 justify-center">
+                    <div className="max-w-md w-full">
 
-                    <input
-                        type="text"
-                        className="w-full mb-7 text-xl px-6"
-                        placeholder="Name of your Plum"
-                        onChange={(e) => setPlumName(e.target.value)}
-                    >
-                    </input>
+                        <input
+                            type="text"
+                            className="w-full mb-7 text-xl px-6"
+                            placeholder="Name of your Plum"
+                            onChange={(e) => setPlumName(e.target.value)}
+                        >
+                        </input>
 
-                    {workflows.map((workflow, index) => (
-                        <div key={index} className="pl-6 pr-6 last:mb-0">
-                            <WorkflowStep
-                                stepNumber={index + 1}
-                                title={workflow.title}
-                                description={workflow.description}
-                                {...index === 0 ? { providers: triggersProviders } : { providers: actionsProviders }}
-                                triggers={triggers}
-                                actions={actions}
-                                setTriggerCreate={setTriggerCreate}
-                                setActionCreate={setActionCreate}
-                            />
-                            {index < workflows.length - 1 && (
-                                <div className="flex flex-col items-center">
-                                    <div className="w-px h-8 bg-gray-300"></div>
-                                    <button
-                                        className="flex items-center justify-center w-8 h-8 text-white bg-customGreen shadow-custom rounded-full hover:bg-customDarkGreen"
-                                        aria-label="Add Step"
-                                        onClick={() => handleCreateButton(index)}
-                                        disabled={true}
-                                    >
-                                        +
-                                    </button>
-                                    <div className="w-px h-8 bg-gray-300"></div>
-                                </div>
+                        {workflows.map((workflow, index) => (
+                            <div key={index} className="pl-6 pr-6 last:mb-0">
+                                <WorkflowStep
+                                    stepNumber={index + 1}
+                                    title={workflow.title}
+                                    description={workflow.description}
+                                    {...index === 0 ? { providers: triggersProviders } : { providers: actionsProviders }}
+                                    triggers={triggers}
+                                    actions={actions}
+                                    setTriggerCreate={setTriggerCreate}
+                                    setActionCreate={setActionCreate}
+                                />
+                                {index < workflows.length - 1 && (
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-px h-8 bg-gray-300"></div>
+                                        <button
+                                            className="flex items-center justify-center w-8 h-8 text-white bg-customGreen shadow-custom rounded-full hover:bg-customDarkGreen"
+                                            aria-label="Add Step"
+                                            onClick={() => handleCreateButton(index)}
+                                            disabled={true}
+                                        >
+                                            +
+                                        </button>
+                                        <div className="w-px h-8 bg-gray-300"></div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                        <div className="flex justify-center mt-5">
+                            {(plumName === "" || !triggerCreate || !actionCreate) && (
+                                <button
+                                    className="p-6 bg-gray-400 text-customLightBlue py-2 rounded-md"
+                                    disabled={true}
+                                >
+                                    Create
+                                </button>
                             )}
-                        </div>
-                    ))}
-                    <div className="flex justify-center mt-5">
-                        {(plumName === "" || !triggerCreate || !actionCreate) && (
+                            {(plumName !== "" && triggerCreate && actionCreate) && (
                             <button
-                                className="p-6 bg-gray-400 text-customLightBlue py-2 rounded-md"
-                                disabled={true}
+                                className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
+                                onClick={() => createThePlum()}
+                                disabled={plumName === "" || !triggerCreate || !actionCreate}
                             >
                                 Create
                             </button>
-                        )}
-                        {(plumName !== "" && triggerCreate && actionCreate) && (
-                        <button
-                            className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
-                            onClick={() => createThePlum()}
-                            disabled={plumName === "" || !triggerCreate || !actionCreate}
-                        >
-                            Create
-                        </button>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
+            {isCreated && (
+                <div className="flex justify-center items-center h-screen">
+                    <div className="text-center">
+                        <h1 className="text-3xl text-customGreen font-abrilFatface mb-5">
+                            Your Plums has been successfully created!
+                        </h1>
+                        <div className="">
+                            <button
+                                className="mx-2 p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
+                                onClick={() => setIsCreated(false)}
+                            >
+                                New Plum
+                            </button>
+                            <button
+                                className="mx-2 p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
+                                onClick={() => navigate('/myPlums')}
+                            >
+                                Your Plums
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
