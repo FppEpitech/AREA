@@ -11,16 +11,19 @@ import feather from '../../assets/icons/feather.svg';
 
 interface Template {
     provider: string;
+    name: string;
 }
 
 interface TriggerPlum {
     name: string;
     triggerTemplate: Template;
+    triggerValue: string;
 }
 
 interface ActionPlum {
     name: string;
     actionTemplate: Template;
+    actionValue: string;
 }
 
 export interface Plum {
@@ -107,6 +110,10 @@ export default function MyPlums() {
         setSelectedServices(provider);
     };
 
+    const goToCreate = (plum: Plum) => {
+        navigate('/create', { state: { plum } });
+    };
+
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
@@ -180,7 +187,7 @@ export default function MyPlums() {
                                     <tr
                                         key={index}
                                         className="bg-white dark:bg-gray-800 border-b"
-                                        onClick={() => {}}
+                                        onClick={() => {goToCreate(plum);}}
                                     >
                                         <th
                                             scope="row"

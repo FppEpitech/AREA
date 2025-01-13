@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Action, createPlum, getActions, getTriggers, Trigger } from "../../services/Plums/plums";
+import { Action, createPlum, getActions, getTriggers, Trigger, updatePlum } from "../../services/Plums/plums";
 import Navbar from "../../components/Navbar/navbar";
 import WorkflowStep from "../../components/Create/workflowStep";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 interface Workflow {
@@ -10,6 +11,9 @@ interface Workflow {
 }
 
 function CreatePage() {
+
+    const location = useLocation();
+    const { plum } = location.state || {};
 
     const [triggers, setTriggers] = useState<Trigger[]>([]);
     const [triggersProviders, setTriggersProviders] = useState<string[]>([]);
@@ -20,7 +24,15 @@ function CreatePage() {
     const [triggerCreate, setTriggerCreate] = useState<Trigger | null>(null);
     const [actionCreate, setActionCreate] = useState<Action | null>(null);
 
-    const [plumName, setPlumName] = useState<string>("");
+    const [plumName, setPlumName] =  useState<string>("");
+
+    useEffect(() => {
+        if (plum) {
+            setPlumName(plum.name);
+            setTriggerCreate(plum.trigger);
+            setActionCreate(plum.action);
+        }
+    }, [plum]);
 
     const [isCreated, setIsCreated] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -97,7 +109,11 @@ function CreatePage() {
         if (plumName === "" || !triggerCreate || !actionCreate) {
             return;
         }
-        createPlum(plumName, triggerCreate, actionCreate);
+        if (plum) {
+            updatePlum(plum.id, plumName, triggerCreate, actionCreate);
+        } else {
+            createPlum(plumName, triggerCreate, actionCreate);
+        }
         setIsCreated(true);
         setPlumName("");
         setTriggerCreate(null);
@@ -118,6 +134,7 @@ function CreatePage() {
                             type="text"
                             className="w-full mb-7 text-xl px-6"
                             placeholder="Name of your Plum"
+                            defaultValue={plumName}
                             onChange={(e) => setPlumName(e.target.value)}
                         >
                         </input>
@@ -133,6 +150,9 @@ function CreatePage() {
                                     actions={actions}
                                     setTriggerCreate={setTriggerCreate}
                                     setActionCreate={setActionCreate}
+                                    triggerCreate={triggerCreate}
+                                    actionCreate={actionCreate}
+                                    plum={plum}
                                 />
                                 {index < workflows.length - 1 && (
                                     <div className="flex flex-col items-center">
@@ -150,25 +170,32 @@ function CreatePage() {
                                 )}
                             </div>
                         ))}
-                        <div className="flex justify-center mt-5">
-                            {(plumName === "" || !triggerCreate || !actionCreate) && (
-                                <button
-                                    className="p-6 bg-gray-400 text-customLightBlue py-2 rounded-md"
-                                    disabled={true}
-                                >
-                                    Create
-                                </button>
-                            )}
-                            {(plumName !== "" && triggerCreate && actionCreate) && (
+                        {(plumName === "" || !triggerCreate || !actionCreate) && (
                             <button
-                                className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
-                                onClick={() => createThePlum()}
-                                disabled={plumName === "" || !triggerCreate || !actionCreate}
+                                className="p-6 bg-gray-400 text-customLightBlue py-2 rounded-md"
+                                disabled={true}
                             >
                                 Create
                             </button>
-                            )}
-                        </div>
+                        )}
+                        {(plumName !== "" && triggerCreate && actionCreate && !plum) && (
+                            <button
+                            className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
+                            onClick={() => createThePlum()}
+                            disabled={plumName === "" || !triggerCreate || !actionCreate}
+                            >
+                                Create
+                            </button>
+                        )}
+                        {(plumName !== "" && triggerCreate && actionCreate && plum) && (
+                            <button
+                            className="p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
+                            onClick={() => createThePlum()}
+                            disabled={plumName === "" || !triggerCreate || !actionCreate}
+                            >
+                                Update
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
