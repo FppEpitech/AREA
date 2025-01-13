@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Navbar from './navbar'; // adjust the import path
+import Navbar from './navbar';
 import { vi } from 'vitest';
 import { BrowserRouter as Router } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -23,11 +23,9 @@ describe('Navbar Component', () => {
             </Router>
         );
 
-        // Check if the logo is rendered
         const logo = screen.getByAltText('Plumpy logo');
         expect(logo).toBeInTheDocument();
 
-        // Check if the Explore, My Plums, and Create buttons are rendered
         const exploreButton = screen.getByText('Explore');
         const myPlumsButton = screen.getByText('My Plums');
         const createButton = screen.getByText('Create');
@@ -44,11 +42,9 @@ describe('Navbar Component', () => {
             </Router>
         );
 
-        // Click the menu button to open the dropdown
         const menuButton = screen.getByAltText('menuLogo');
         fireEvent.click(menuButton);
 
-        // Check if the dropdown is opened and contains the correct elements
         const exploreButtonInDropdown = screen.getByText('Explore');
         const myPlumsButtonInDropdown = screen.getByText('My Plums');
         const createButtonInDropdown = screen.getByText('Create');
