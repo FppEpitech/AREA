@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-interface ValueTemplate {
+export interface ValueTemplate {
     [key: string]: {
         type: string;
         value: string;
@@ -55,6 +55,25 @@ export const createPlum = async (name : string, trigger : Trigger, action : Acti
         console.log(error);
     }
 };
+
+export const updatePlum = async (id : number, name : string, trigger : Trigger, action : Action) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const body = {
+            name: name,
+            actionTemplateId: action.id,
+            actionValue: JSON.stringify(action.valueTemplate),
+            triggerTemplateId: trigger.id,
+            triggerValue: JSON.stringify(trigger.valueTemplate)
+        };
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        await axios.put(`${process.env.REACT_APP_API_URL}/plums/${id}`, body, { headers: headers });
+    } catch(error) {
+        console.log(error);
+    }
+}
 
 export const getPlums = async () => {
     try {
