@@ -3,6 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/navbar";
 import {getProvidersActions, getProvidersTriggers} from "../../services/Plums/plums";
 
+import clockSvg from "../../assets/icons/clock.svg";
+import tvSvg from "../../assets/icons/tv.svg";
+import plus from "../../assets/icons/plus.svg";
+
 interface ValueTemplate {
     [key: string]: {
         type: string;
@@ -49,29 +53,40 @@ function PlumCard(card: ITriggerActionCard) {
     };
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center space-y-4">
-            <div className="flex space-x-4">
-                <span className="text-sm text-gray-500">
+        <div className="bg-white border-2 border-customLightGreen rounded-lg p-6 flex flex-col">
+            <div className="flex">
+                <img
+                    src={card.isTrigger ? clockSvg : tvSvg}
+                    alt="plus"
+                    className="mr-[9px]"
+                />
+                <span className="text-base font-bold font-inter">
                     {card.isTrigger ? "Trigger" : "Action"}
                 </span>
             </div>
-            <p className="text-gray-600 text-center">{card.name}</p>
+            <p className="font-bold font-inter text-2xl mt-4">{card.name}</p>
             {card.valueTemplate ? (
                 <div className="mt-4 text-left w-full">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-base text-gray-600">
                         {Object.keys(card.valueTemplate).join(", ")}
                     </p>
                 </div>
             ) : (
                 <p className="text-sm text-gray-500">No fields available</p>
             )}
-
-            {/* Connect Button */}
-            <button
-                className="bg-customGreen text-white px-4 py-2 rounded-md hover:bg-customGreenDark transition duration-200"
+            <button className="mt-16 flex justify-center max-w-[160px] text-xl hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
+                type="button"
                 onClick={() => createPlumWithCard(card)}
             >
-                Connect
+                <p
+                    className='flex text-xl font-inter m-2'>
+                    <img
+                        src={plus}
+                        alt="plus"
+                        className="w-[24px] h-[24px] mr-2"
+                    />
+                    Use it
+                </p>
             </button>
         </div>
     );
@@ -209,7 +224,7 @@ export default function Services() {
                 </div>
 
                 {/* Display Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-9 mt-4">
                     {filteredCards.map((card, index) => (
                         <PlumCard key={index} {...card} provider={service.provider} />
                     ))}
