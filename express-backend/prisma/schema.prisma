@@ -20,7 +20,7 @@ model User {
   tokens         Token[]
   plums          Plum[]
   actions        Action[]
-  tiggers        Trigger[]
+  triggers        Trigger[]
 }
 
 model Token {
@@ -40,7 +40,7 @@ model Plum {
   userId    Int
   action    Action  @relation(fields: [actionId], references: [id])
   actionId  Int
-  trigger   Trigger @relation(fields: [triggerId], references: [id])
+    trigger   Trigger @relation(fields: [triggerId], references: [id])
   triggerId Int
 }
 
@@ -85,4 +85,12 @@ model Trigger {
   plums             Plum[]
   user              User            @relation(fields: [userId], references: [userId])
   userId            Int
+}
+
+model Service {
+    name      String
+    description String
+    provider  String @unique
+    logo     String
+    color   String
 }

@@ -1,5 +1,6 @@
 import prisma from '../prismaClient';
 
+import { createServices } from "./createServices";
 import { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate} from "./createTriggerTemplate";
 import { isTramwayCloseTemplate } from "./createNaolibTrigger";
 import { sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate } from "./createActionTemplate";
@@ -31,6 +32,7 @@ const types : Map<string, Map<string, () => Promise<void>>> = new Map([
 ]);
 
 async function initAllTemplates() {
+    createServices();
     for (const [type, templates] of types) {
         console.log(`Table ${type} already exists. Check if templates are present...`);
         let dbTemplates : any;

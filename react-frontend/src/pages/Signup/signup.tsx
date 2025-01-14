@@ -1,10 +1,9 @@
 import logo from '../../assets/plumpy_logo.png'
-import waterfall from '../../assets/waterfall.png'
+import googleLogo from '../../assets/login/Google.webp'
+import githubLogo from '../../assets/login/Github.svg'
 import { useState } from "react";
 import { AuthSignUp } from '../../services/auth/auth'
 import { useNavigate } from "react-router-dom";
-import { MobileSignup } from './mobileSignup';
-import { useIsMobile } from '../../components/IsMobile/isMobile';
 
 export default function Signup() {
 
@@ -25,116 +24,126 @@ export default function Signup() {
         await AuthSignUp({ email, password }, navigate, setError);
     };
 
-    const isMobile = useIsMobile();
+    return (
 
-    return isMobile ? (
-        <MobileSignup
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
-            error={error}
-            sendSignUp={sendSignUp}
-        />
-    ) : (
-        <div className="flex items-center justify-center min-h-screen bg-customLightBlue">
-            <div className="flex flex-col md:flex-row bg-white shadow-custom rounded-2xl overflow-hidden w-[1536px] h-[768px]">
-                {/* Left Section with Image */}
-                <div className="md:w-1/3">
-                    <img
-                        src={waterfall}
-                        alt="Waterfall"
-                        className="h-full w-full object-cover"
-                    />
+        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+
+            {/* Left Section */}
+            <div className="bg-white relative">
+
+                {/* Top-Left Logo */}
+                <div className="absolute top-4 left-4">
+                    <img src={logo} alt="Plumpy Logo" className="w-[50px] h-[50px]" />
                 </div>
 
-                {/* Right Section with Form */}
-                <div className="md:w-2/3 p-8 pl-16 pt-20 bg-customGreen text-white flex flex-col">
-                    {/* Logo and Title */}
-                    <div className="flex items-center justify-start mb-6 pt-10">
-                        <img
-                            src={logo}
-                            alt="Plumpy Logo"
-                            className="w-38 h-32 mr-3 pl-4"
-                        />
-                        <h1 className="text-5xl font-abrilFatface text-shadow-custom">Plumpy</h1>
-                    </div>
-
-                    <h2 className="text-3xl font-instrumentSans text-shadow-custom mb-4">Create your account</h2>
-
-                    {/* Content Wrapper */}
-                    <div className="flex flex-wrap md:flex-nowrap justify-between items-start">
-                        {/* Form */}
-                        <div className="md:w-5/6">
-                            <form className="space-y-4">
+                {/* Main Content */}
+                <div className="flex items-center justify-center h-full">
+                    <div className="w-full max-w-md p-8 rounded-md">
+                        <h2 className="text-3xl font-bold font-inter text-customDarkGreen mb-2">
+                            Get started now
+                        </h2>
+                        <form className='mt-12'>
+                            <div className="mb-4">
+                                <label
+                                    htmlFor="email"
+                                    className="block text-sm font-bold font-inter text-gray-700"
+                                >
+                                    Email address
+                                </label>
                                 <input
                                     type="email"
-                                    placeholder="Email address"
-                                    className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                                    id="email"
+                                    placeholder="Enter your email"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-customGreen focus:border-customGreen"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    required>
-                                </input>
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label
+                                    htmlFor="password"
+                                    className="block text-sm font-bold font-inter text-gray-700"
+                                >
+                                    Create password
+                                </label>
                                 <input
                                     type="password"
-                                    placeholder="Create Password"
-                                    className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                                    id="password"
+                                    placeholder="Enter your password"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-customGreen focus:border-customGreen"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    required>
-                                </input>
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label
+                                    htmlFor="password"
+                                    className="block text-sm font-bold font-inter text-gray-700"
+                                >
+                                    Confirm password
+                                </label>
                                 <input
                                     type="password"
-                                    placeholder="Confirm Password"
-                                    className="w-full shadow-custom font-instrumentSans h-12 px-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-customOrange text-customDarkGreen"
+                                    id="passwordConfirm"
+                                    placeholder="Confirm your password"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-customGreen focus:border-customGreen"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    required>
-                                </input>
-                                {error && <p style={{ color: 'red' }}>{error}</p>}
-                                <button
-                                    type="button"
-                                    className="w-full text-2xl shadow-custom font-abrilFatface h-12 bg-customYellow py-2 rounded-lg font-semibold hover:bg-customOrange transition text-customDarkGreen"
-                                    onClick={sendSignUp}>
-                                    Sign up
-                                </button>
-                            </form>
+                                />
+                            </div>
+                            {error && <p className='text-red-500 font-bold font-inter text-sm'>{error}</p>}
+                            <button
+                                type="submit"
+                                className="mt-8 w-full py-2 bg-customLightGreen text-white font-bold font-inter rounded-[10px] shadow-sm hover:bg-customDarkLightGreen focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                onClick={sendSignUp}
+                            >
+                                Signup
+                            </button>
+                        </form>
 
-                            {/* Register */}
-                            <p className="text-sm text-shadow-custom font-instrumentSans mt-4">
-                                Already have an account?{" "}
+                        <div className="flex items-center mt-12">
+                            <div className="flex-grow border-t border-gray-300"></div>
+                                <span className="px-4 text-gray-500 text-sm">Or</span>
+                            <div className="flex-grow border-t border-gray-300"></div>
+                        </div>
+
+                        <div className='flex space-x-6 mt-12'>
+                            <button
+                                type="button"
+                                className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            >
+                                <img src={googleLogo} alt="Google Logo" className="w-6 h-6 mr-2" />
+                                Sign in with Google
+                            </button>
+
+                            <button
+                                type="button"
+                                className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            >
+                                <img src={githubLogo} alt="Github Logo" className="w-6 h-6 mr-2" />
+                                Sign in with Github
+                            </button>
+                        </div>
+
+                        <div>
+                            <p className="text-center font-bold font-inter mt-4 text-sm text-gray-600">
+                                Have an account?{" "}
                                 <a
                                     href="/login"
-                                    className="text-customYellow font-instrumentSans hover:underline"
+                                    className="text-customLightGreen font-semibold font-inter hover:underline"
                                 >
-                                    Login
+                                    Sign In
                                 </a>
                             </p>
                         </div>
 
-                        {/* Separator */}
-                        <div className="block w-1 bg-customDarkGreen h-full mx-10"></div>
-
-                        {/* Oauth2 Login */}
-                        <div className="md:w-1/6 mt-6 md:mt-0">
-                            <p className="text-sl mb-4 text-customYellow text-shadow-custom font-instrumentSans text-center">
-                                or<br />continue with
-                            </p>
-                            <div className="flex flex-col space-y-4">
-                                <button
-                                    className="flex shadow-custom items-center font-instrumentSans bg-customGreen text-customDarkGreen py-2 px-4 rounded-xl hover:bg-customYellow transition border-2 border-customDarkGreen">
-                                    <i className="fab fa-github mr-6"></i> Github
-                                </button>
-                                <button
-                                    className="flex shadow-custom items-center font-instrumentSans bg-customGreen text-customDarkGreen py-2 px-4 rounded-xl shadow hover:bg-customYellow transition border-2 border-customDarkGreen">
-                                    <i className="fab fa-google mr-6"></i> Google
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Right Section */}
+            <div className="bg-customLightGreen flex items-center justify-center hidden lg:flex">
+                <h1 className="text-white text-4xl font-bold">Welcome!</h1>
             </div>
         </div>
     );
