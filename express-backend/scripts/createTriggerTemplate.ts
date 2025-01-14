@@ -43,7 +43,7 @@ async function PressureTriggerTemplate() {
         console.log('TriggerTemplate \'Less than temperature\' created:', triggerPressTemplate);
 
     } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Error creating trigger template:', error);
     } finally {
         await prisma.$disconnect();
     }
@@ -91,7 +91,7 @@ async function temperatureTriggerTemplate() {
         console.log('TriggerTemplate \'Temperature\' created:', triggerTempTemplate);
 
     } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Error creating trigger template:', error);
     } finally {
         await prisma.$disconnect();
     }
@@ -140,7 +140,7 @@ async function cloudinessTriggerTemplate() {
         console.log('TriggerTemplate \'Cloudiness\' created:', triggerCloudTemplate);
 
     } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Error creating trigger template:', error);
     } finally {
         await prisma.$disconnect();
     }
@@ -189,7 +189,7 @@ async function windSpeedTriggerTemplate() {
         console.log('TriggerTemplate \'Wind Speed\' created:', triggerWSTemplate);
 
     } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Error creating trigger template:', error);
     } finally {
         await prisma.$disconnect();
     }
@@ -238,7 +238,7 @@ async function humidityTriggerTemplate() {
         console.log('TriggerTemplate \'Humidity\' created:', triggerHumTemplate);
 
     } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Error creating trigger template:', error);
     } finally {
         await prisma.$disconnect();
     }
@@ -288,7 +288,7 @@ async function weatherTriggerTemplate() {
         console.log('TriggerTemplate \'Weather\' created:', triggerWeatherTemplate);
 
     } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Error creating trigger template:', error);
     } finally {
         await prisma.$disconnect();
     }
@@ -313,7 +313,7 @@ async function isSpotifyNewLikeTriggerTemplate() {
       console.log('TriggerTemplate \'Spotify new like\' created:', triggerEqualTemplate);
 
   } catch (error) {
-      console.error('Erreur lors de la création du ActionTemplate:', error);
+      console.error('Error creating trigger template:', error);
   } finally {
       await prisma.$disconnect();
   }
@@ -353,7 +353,7 @@ async function isMailReceivedTriggerTemplate() {
       }});
         console.log('TriggerTemplate \'Mail received\' created:', triggerEqualTemplate);
   } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate');
+        console.error('Error creating trigger template');
   }
 }
 
@@ -376,7 +376,7 @@ async function isSpotifyMusicPlayingTriggerTemplate() {
       console.log('TriggerTemplate \'Spotify music playing\' created:', triggerEqualTemplate);
 
   } catch (error) {
-      console.error('Erreur lors de la création du ActionTemplate:', error);
+      console.error('Error creating trigger template:', error);
   } finally {
       await prisma.$disconnect();
   }
@@ -401,7 +401,7 @@ async function isSpotifyMusicPausingTriggerTemplate() {
         console.log('TriggerTemplate \'Spotify music pausing\' created:', triggerEqualTemplate);
 
     } catch (error) {
-        console.error('Erreur lors de la création du ActionTemplate:', error);
+        console.error('Error creating trigger template:', error);
     } finally {
         await prisma.$disconnect();
     }

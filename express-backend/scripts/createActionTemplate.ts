@@ -55,7 +55,7 @@ async function sendMailBasicTemplate() {
       console.log('ActionTemplate \'Send Mail Basic\' created:', actionTemplate);
 
     } catch (error) {
-      console.error('Erreur lors de la création du ActionTemplate');
+      console.error('Error creating action templaten, normal ? already exists ?');
     } finally {
       await prisma.$disconnect();
     }
@@ -107,7 +107,7 @@ async function sendMailBasicTemplate() {
       console.log('ActionTemplate \'Send Mail Complex\' created:', actionTemplate);
 
     } catch (error) {
-      console.error('Erreur lors de la création du ActionTemplate');
+      console.error('Error creating action template, normal ? already exists ?');
     } finally {
       await prisma.$disconnect();
     }
