@@ -4,7 +4,7 @@ import logo from '../../assets/logo58.png';
 import dropDownSvg from '../../assets/create/dropDown.svg';
 import dropDownUpSvg from '../../assets/create/dropDownUp.svg';
 import checkSvg from '../../assets/create/check.svg';
-import { TemplateCron, TemplateNumber, TemplateRadio, TemplateString } from "./templatesTypes";
+import { TemplateCron, TemplateNumber, TemplateRadio, TemplateSignup, TemplateString } from "./templatesTypes";
 
 interface ValueTemplate {
     [key: string]: {
@@ -129,6 +129,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                         {config.type === 'string' && <TemplateString value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value")}/>}
                                         {config.type === 'radiobutton' && <TemplateRadio value={config.value} result={config.result} onChange={(newValue) => handleTemplateValueChange(key, newValue, "result")}/>}
                                         {config.type === 'number' && <TemplateNumber value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value")}/>}
+                                        {config.type === 'signup' && <TemplateSignup value={config.value} onChange={() => {}}/>}
                                     </div>
                                 ))}
                             </div>
