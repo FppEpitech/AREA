@@ -373,7 +373,7 @@ async function worldTimeTriggerTemplate() {
     try {
         const triggerTimeTemplate = await prisma.triggerTemplate.create({
             data: {
-                name: 'World Time',
+                name: 'World time',
                 provider: 'WorldTimeAPI',
                 type: 'cron',
                 trigFunc: 'isWorldTime',
