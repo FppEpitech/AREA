@@ -42,10 +42,10 @@ export const createPlum = async (name : string, trigger : Trigger, action : Acti
             name: name,
             actionTemplateName: action.name,
             actionTemplateProvider: action.provider,
-            actionValue: JSON.stringify(action.valueTemplate),
+            actionValue: action.valueTemplate,
             triggerTemplateName: trigger.name,
             triggerTemplateProvider: trigger.provider,
-            triggerValue: JSON.stringify(trigger.valueTemplate)
+            triggerValue: trigger.valueTemplate
         };
         const headers = {
             Authorization: `Bearer ${token}`
