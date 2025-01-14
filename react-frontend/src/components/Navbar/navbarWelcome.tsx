@@ -4,13 +4,18 @@ import { useNavigate } from 'react-router-dom';
 
 import setting from '../../assets/icons/settings.svg'
 import compas from '../../assets/icons/whiteCompas.svg'
+import blackCompas from '../../assets/icons/compas.svg'
 import phone from '../../assets/icons/whitePhone.svg'
+import blackPhone from '../../assets/icons/phone.svg'
 import user from '../../assets/icons/whiteUser.svg'
+import blackuser from '../../assets/icons/blackUser.svg'
+import { useIsMobile } from '../IsMobile/isMobile';
 
 export default function NavbarWelcome() {
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
+    const isMobile = useIsMobile();
 
     return (
         <div className="fixed top-0 left-0 right-0 flex justify-center py-2.5 px-3 z-50">
@@ -28,46 +33,61 @@ export default function NavbarWelcome() {
                     <button type="button"
                         onClick={() => navigate('/explore')}>
                         <p
-                            className="flex transition text-white text-xl font-inter hover:text-shadow-custom">
-                            <img
+                            className="flex transition lg:text-white text-xl font-inter hover:text-shadow-custom">
+                            {!isMobile && (<img
                                 src={compas}
                                 alt="compas"
-                                className="w-[24px] h-[24px] mr-[9px]"
-                            />
+                                className="w-[24px] h-[24px] mr-[9px] text-black"
+                            />)}
+                            {isMobile && (<img
+                                src={blackCompas}
+                                alt="blackCompas"
+                                className="w-[24px] h-[24px] mr-[9px] text-black"
+                            />)}
                             Explore
                         </p>
                     </button>
                     <button type="button"
                         onClick={() => navigate('/contact')}>
                         <p
-                            className="flex transition text-xl text-white font-inter hover:text-shadow-custom">
-                            <img
+                            className="flex transition text-xl lg:text-white font-inter hover:text-shadow-custom">
+                            {!isMobile && (<img
                                 src={phone}
                                 alt="phone"
                                 className="w-[24px] h-[24px] mr-[9px]"
-                            />
+                            />)}
+                            {isMobile && (<img
+                                src={blackPhone}
+                                alt="blackPhone"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />)}
                             Contact
                         </p>
                     </button>
                     <button type="button"
                         onClick={() => navigate('/login')}>
                         <p
-                            className="flex transition text-xl text-white font-inter hover:text-shadow-custom">
-                            <img
+                            className="flex transition text-xl lg:text-white font-inter hover:text-shadow-custom">
+                            {!isMobile && (<img
                                 src={user}
                                 alt="user"
                                 className="w-[24px] h-[24px] mr-[9px]"
-                            />
+                            />)}
+                            {isMobile && (<img
+                                src={blackuser}
+                                alt="blackuser"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />)}
                             Login
                         </p>
                     </button>
                     <div className="flex space-between space-x-5 px-6">
-                        <button className="hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
+                        <button className="hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
                             type="button"
                             onClick={() => navigate('/signup')}>
 
                             <p
-                                className='flex text-xl text-white font-inter px-10 py-2'>
+                                className='flex text-xl lg:text-white font-inter px-10 py-2'>
                                 Register
                             </p>
                         </button>
