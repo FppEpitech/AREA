@@ -33,3 +33,8 @@ export async function AuthSignUp(login : loginInterface, navigate: (path: string
 export function isLogged() {
     return localStorage.getItem('access_token') !== null;
 }
+
+export function logout(navigate: (path: string) => void) {
+    localStorage.removeItem('access_token');
+    navigate('/welcome');
+}
