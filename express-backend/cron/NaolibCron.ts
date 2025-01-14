@@ -39,17 +39,24 @@ export async function isTramwayClose(userId: number, value_json: string): Promis
 
         const response = await axios.get<TramData[]>(url);
 
+
         const matchingTrams = response.data.filter((tram: any) =>
             tram.ligne.numLigne === codeLine && tram.terminus === codeTerminus
         );
 
+        console.log(`matchingTrams: ${JSON.stringify(matchingTrams)}`);
+
 
         for (const tram of matchingTrams) {
             const tramTime = tram.temps;
-            if (tramTime === 'proche' || (tramTime.endsWith('mn') && parseInt(tramTime) < closeTimeValue))
+
+            if (tramTime === 'proche' || (tramTime.endsWith('mn') && parseInt(tramTime) < closeTimeValue)) {
+                console.log('Tramway close detected.');
                 return true;
+            }
         }
 
+        console.log('A tramway isnt close.');
         return false;
     } catch (error: any) {
         console.error('Erreur lors de la vérification de la proximité du tramway:', error.message || error);

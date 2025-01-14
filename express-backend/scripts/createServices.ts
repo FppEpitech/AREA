@@ -63,12 +63,28 @@ async function createMail() {
     }
 }
 
+async function createNaolib() {
+    try {
+        let service = await prisma.service.create({data: {
+            provider: 'Naolib',
+            name: 'naolib',
+            color: '#00561b',
+            description: 'Naolib service',
+            logo: 'https://upload.wikimedia.org/wikipedia/fr/f/f9/Logo_Naolib.svg',
+        }});
+        console.log('service Naolib created:');
+    } catch (error) {
+        console.error('Error during creation of service Naolib, already exists ?');
+    }
+}
+
 async function createServices() {
     try {
         await createDiscord();
         await createSpotify();
         await createOpenWeatherMap();
         await createMail();
+        await createNaolib();
     } catch (error) {
         console.error('Erreur lors de la création de services:', error);
     } finally {
