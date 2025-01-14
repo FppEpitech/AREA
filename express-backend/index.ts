@@ -12,7 +12,6 @@ import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
 import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
-import { sendMailComplex } from './action/sendMail';
 
 const swaggerUi = require("swagger-ui-express");
 
