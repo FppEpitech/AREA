@@ -361,12 +361,12 @@ async function isSpotifyMusicPausingTriggerTemplate() {
         },
         });
         console.log('TriggerTemplate \'Spotify music pausing\' created:', triggerEqualTemplate);
-  
+
     } catch (error) {
         console.error('Erreur lors de la création du ActionTemplate:', error);
     } finally {
         await prisma.$disconnect();
     }
-  }
+}
 
 export { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate};

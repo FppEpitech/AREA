@@ -1,5 +1,6 @@
 import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
 import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./SpotifyCron";
+import { isTramwayClose} from "./NaolibCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
 import { CronClass } from './CronClass';
@@ -26,7 +27,8 @@ const triggersMapFunction: Map<string, (userId: number, value_json: string, data
     ["weather", weather],
     ["spotifyNewLike", spotifyNewLike],
     ["isSpotifyMusicPlaying", isSpotifyMusicPlaying],
-    ["isSpotifyMusicPausing", isSpotifyMusicPausing]
+    ["isSpotifyMusicPausing", isSpotifyMusicPausing],
+    ["isTramwayClose", isTramwayClose]
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
