@@ -2,7 +2,8 @@ const nodemailer = require('nodemailer');
 import CryptoJS from 'crypto-js';
 
 function decryptTokenMail(encryptedToken: string): string {
-    const secret = process.env.PLUMS_HASHING_SECRET
+    console.log(encryptedToken);
+    const secret = process.env.PLUMS_CRYPTING_SECRET
 
     if (!secret)
         throw new Error('SECRET environment variable is not defined');
@@ -10,29 +11,29 @@ function decryptTokenMail(encryptedToken: string): string {
     return bytes.toString(CryptoJS.enc.Utf8);
 }
 
-async function sendMailComplex(userId: number, value_json: string) {
+async function sendMailComplex(userId: number, value_json: any) {
+    value_json = JSON.parse(value_json);
     try {
-        const { destination, object, message, sendingMail, sendingPwd, sendingPort, sendingHost } = JSON.parse(value_json);
         const plumpyDev = nodemailer.createTransport({
-            host: sendingHost.value,
-            port: sendingPort.value,
+            host: value_json.sendingHost.value,
+            port: value_json.sendingPort.value,
             secure: false,
             auth: {
-              user: sendingMail.value,
-              pass: decryptTokenMail(sendingPwd.value)
+              user: value_json.sendingMail.value,
+              pass: decryptTokenMail(value_json.sendingPwd.value)
             }
           });
           const mailOptions = {
-            from: sendingMail.value,
-            to: destination.value,
-            subject: object.value,
-            text: message.value
+            from: value_json.sendingMail.value,
+            to: value_json.destination.value,
+            subject: value_json.object.value,
+            text: value_json.message.value
           };
           plumpyDev.sendMail(mailOptions, function(error : any, info : any) {
                 if (error) {
                     console.log('Error:', error);
                 } else {
-                    console.log("Complex Email sent  to " + destination.value + " : " + info.response);
+                    console.log("Complex Email sent  to " + value_json.destination.value + " : " + info.response);
                 }
             });
     } catch (error) {

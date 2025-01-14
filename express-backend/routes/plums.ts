@@ -7,7 +7,7 @@ import CryptoJS from 'crypto-js';
 const router = express.Router();
 
 function encryptTokenPlums(token: string): string {
-    const secret = process.env.PLUMS_HASHING_SECRET
+    const secret = process.env.PLUMS_CRYPTING_SECRET
 
     if (!secret)
       throw new Error('SECRET environment variable is not defined');
@@ -82,21 +82,18 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
       return res.status(404).json({error: 'TriggerTemplate not found'});
 
 
-    let tmp = JSON.parse(triggerValue);
-    for (let key in tmp) {
-        if (tmp[key].back_hash) {
-            tmp[key].value = encryptTokenPlums(tmp[key].value);
+    for (let key in triggerValue) {
+        if (triggerValue[key].back_hash) {
+            triggerValue[key].value = encryptTokenPlums(triggerValue[key].value);
         }
      }
-    triggerValue = JSON.stringify(tmp);
 
-    tmp = JSON.parse(actionValue);
-    for (let key in tmp) {
-        if (tmp[key].back_hash) {
-            tmp[key].value = encryptTokenPlums(tmp[key].value);
+
+    for (let key in actionValue) {
+        if (actionValue[key].back_hash) {
+            actionValue[key].value = encryptTokenPlums(actionValue[key].value);
         }
      }
-    actionValue = JSON.stringify(tmp);
 
 
     const action = await prisma.action.create({

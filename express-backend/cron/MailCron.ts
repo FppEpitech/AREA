@@ -3,8 +3,8 @@ var Imap = require('imap');
 var inspect = require('util').inspect;
 const { simpleParser } = require('mailparser');
 
-function decryptPlumHashedContent(encryptedToken: string): string {
-    const secret = process.env.PLUMS_HASHING_SECRET
+function decryptPlumCryptedContent(encryptedToken: string): string {
+    const secret = process.env.PLUMS_CRYPTING_SECRET
 
     if (!secret)
         throw new Error('SECRET environment variable is not defined');
@@ -12,17 +12,16 @@ function decryptPlumHashedContent(encryptedToken: string): string {
     return bytes.toString(CryptoJS.enc.Utf8);
 }
 
-export async function isMailReceived(userId: number, value_json: string, data: any): Promise<boolean>
+export async function isMailReceived(userId: number, value_json: any, data: any): Promise<boolean>
 {
-    const parsedJson = JSON.parse(value_json);
-    const decryptedPassword = decryptPlumHashedContent(parsedJson.password?.value);
-    console.log(parsedJson)
+    value_json = JSON.parse(value_json);
+    const decryptedPassword = decryptPlumCryptedContent(value_json.password?.value);
     return new Promise((resolve, reject) => {
         var imap = new Imap({
-            user: parsedJson.user?.value,
+            user: value_json.user?.value,
             password: decryptedPassword,
-            host: parsedJson.host?.value,
-            port: parsedJson.port?.value,
+            host: value_json.host?.value,
+            port: value_json.port?.value,
             secure: true,
             tls: true,
             tlsOptions: { rejectUnauthorized: false },
@@ -41,11 +40,11 @@ export async function isMailReceived(userId: number, value_json: string, data: a
             imap.search(searchCriteria, (err : any, results : any) => {
                 if (err) throw err;
 
-                if (!results || results.length === 0) {
+                if (!results || results.length == 0) {
                     imap.end();
                     resolve(false);
+                    return;
                 }
-                console.log(`Found ${results.length} unseen email(s).`);
                 resolve(true);
             });
             });
@@ -57,7 +56,6 @@ export async function isMailReceived(userId: number, value_json: string, data: a
         });
 
         imap.once('end', () => {
-            console.log('Connection ended.');
             resolve(false);
         });
 
