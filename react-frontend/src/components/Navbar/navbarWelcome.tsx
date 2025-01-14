@@ -3,8 +3,6 @@ import logo from '../../assets/logo58.png'
 import { useNavigate } from 'react-router-dom';
 
 import setting from '../../assets/icons/settings.svg'
-import compas from '../../assets/icons/whiteCompas.svg'
-import blackCompas from '../../assets/icons/compas.svg'
 import phone from '../../assets/icons/whitePhone.svg'
 import blackPhone from '../../assets/icons/phone.svg'
 import user from '../../assets/icons/whiteUser.svg'
@@ -30,23 +28,6 @@ export default function NavbarWelcome() {
                     </div>
                 </button>
                 <div className="hidden md:flex items-center space-x-[45px]">
-                    <button type="button"
-                        onClick={() => navigate('/explore')}>
-                        <p
-                            className="flex transition lg:text-white text-xl font-inter hover:text-shadow-custom">
-                            {!isMobile && (<img
-                                src={compas}
-                                alt="compas"
-                                className="w-[24px] h-[24px] mr-[9px] text-black"
-                            />)}
-                            {isMobile && (<img
-                                src={blackCompas}
-                                alt="blackCompas"
-                                className="w-[24px] h-[24px] mr-[9px] text-black"
-                            />)}
-                            Explore
-                        </p>
-                    </button>
                     <button type="button"
                         onClick={() => navigate('/contact')}>
                         <p
@@ -127,21 +108,10 @@ export default function NavbarWelcome() {
 
                 <div className="flex flex-col space-y-4 px-4 pb-4">
                     <button type="button" className="w-full"
-                        onClick={() => navigate('/explore')}>
-                        <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
-                            <img
-                                src={compas}
-                                alt="compas"
-                                className="w-[24px] h-[24px] mr-[9px]"
-                            />
-                            Explore
-                        </p>
-                    </button>
-                    <button type="button" className="w-full"
                         onClick={() => navigate('/contact')}>
                         <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
                             <img
-                                src={phone}
+                                src={blackPhone}
                                 alt="phone"
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
@@ -152,8 +122,8 @@ export default function NavbarWelcome() {
                         onClick={() => navigate('/login')}>
                         <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
                             <img
-                                src={user}
-                                alt="user"
+                                src={blackuser}
+                                alt="blackuser"
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             Login
