@@ -20,9 +20,11 @@ interface WorkflowSetupProps {
     setSelectType?: React.Dispatch<React.SetStateAction<Trigger[] | Action[] | undefined>>;
     setTriggerCreate: React.Dispatch<React.SetStateAction<Trigger | null>>;
     setActionCreate: React.Dispatch<React.SetStateAction<Action | null>>;
+    triggerCreate: Trigger | null;
+    actionCreate: Action | null;
 }
 
-const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, setSelectType, setTriggerCreate, setActionCreate }) => {
+const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, setSelectType, setTriggerCreate, setActionCreate, triggerCreate, actionCreate }) => {
     const [activeTab, setActiveTab] = useState<'setup' | 'configure' | 'start'>('setup');
     const [selectedTemplate, setSelectedTemplate] = useState<Trigger | Action | undefined>(undefined);
     const [templateValues, setTemplateValues] = useState<ValueTemplate | undefined>();
@@ -34,7 +36,11 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     const provider = selectType && selectType[0]?.provider;
 
     useEffect(() => {
-        if (selectType) {
+        if (triggerCreate && stepNumber === 1) {
+            setSelectedTemplate(triggerCreate);
+        } else if (actionCreate && stepNumber !== 1) {
+            setSelectedTemplate(actionCreate);
+        } else if (selectType) {
             setSelectedTemplate(selectType[0]);
         }
     }, [selectType]);
@@ -99,6 +105,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                             <select
                                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
                                 onChange={handleSelectChange}
+                                value={selectedTemplate?.name}
                             >
                                 {selectType?.map((type) => (
                                     <option value={type.name} key={type.id}>{type.name}</option>

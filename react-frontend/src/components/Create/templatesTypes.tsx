@@ -201,6 +201,37 @@ export function TemplateCron(cronProps: TemplateProps) {
     };
 
     useEffect(() => {
+        if (cronProps.value === "* * * * *") {
+            setFrequency("minute(s)");
+            setMinute("every");
+            return;
+        }
+
+        const cronArray = cronProps.value.toString().split(" ");
+        const [minuteValue, hourValue, dayOfMonthValue, monthValue, dayOfWeekValue] = cronArray;
+
+        setMinute(minuteValue);
+        setHour(hourValue);
+
+        if (monthValue !== "*") {
+            setFrequency("year");
+            setMonth(MONTH[Number(monthValue)]);
+        } else if (dayOfMonthValue !== "*") {
+            setFrequency("month");
+            setDayOfMonth(Number(dayOfMonthValue));
+        } else if (dayOfWeekValue !== "*") {
+            setFrequency("week");
+            setDayOfWeek(DAYS_OF_WEEK[Number(dayOfWeekValue) + 1]);
+        } else if (hourValue !== "*") {
+            setFrequency("day");
+        } else if (minuteValue !== "*") {
+            setFrequency("hour");
+        } else {
+            setFrequency("minute(s)");
+        }
+    }, [cronProps.value]);
+
+    useEffect(() => {
         let cron = "";
         const monthValue = month === "every month" ? "*" : MONTH.indexOf(month);
         const dayOfMonthValue = dayOfMonth === "every days of the month" ? "*" : dayOfMonth;

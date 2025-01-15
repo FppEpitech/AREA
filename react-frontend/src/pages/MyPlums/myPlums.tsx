@@ -1,23 +1,30 @@
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/navbar";
-import feather from '../../assets/myPlums/feather.svg';
-import filter from '../../assets/myPlums/filter.svg';
 import { useNavigate } from "react-router-dom";
 import Filter from "../../components/Filter/Filter";
 import { getPlums } from "../../services/Plums/plums";
 
+import searchSvg from '../../assets/icons/search.svg';
+import filterSvg from '../../assets/icons/filter.svg';
+import plusSvg from '../../assets/icons/plus.svg';
+import feather from '../../assets/icons/feather.svg';
+import Footer from "../../components/Footer/Footer";
+
 interface Template {
     provider: string;
+    name: string;
 }
 
 interface TriggerPlum {
     name: string;
     triggerTemplate: Template;
+    triggerValue: string;
 }
 
 interface ActionPlum {
     name: string;
     actionTemplate: Template;
+    actionValue: string;
 }
 
 export interface Plum {
@@ -104,63 +111,72 @@ export default function MyPlums() {
         setSelectedServices(provider);
     };
 
+    const goToCreate = (plum: Plum) => {
+        navigate('/create', { state: { plum } });
+    };
+
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <Navbar />
             <div className="mt-36 w-5/6 mx-auto">
-                <h1 className="text-3xl font-bold mb-6">My Plums</h1>
-                <div className="flex justify-start mb-6">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg
-                                className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                />
-                            </svg>
-                        </div>
+                <h1 className="text-4xl font-abrilFatface text-customGreen mb-6">Plums</h1>
+                <div className="flex flex-wrap items-center mb-4 space-x-4 space-y-4 md:space-y-0 md:justify-start md:flex-nowrap">
+                    <div className="flex items-center w-full md:w-auto">
+                        <img
+                            src={searchSvg}
+                            alt="search"
+                            className="mr-[9px]"
+                        />
                         <input
                             type="search"
                             id="search"
                             placeholder="Search"
-                            onChange={handleChange}
+                            className="block w-full md:w-[404px] px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-customGreen focus:border-customGreen"
                             value={searchInput}
-                            className="block w-full p-4 ps-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-customGreen focus:border-transparent"
+                            onChange={handleChange}
                         />
                     </div>
                     <button
-                        className="bg-customGreen hover:bg-customDarkGreen text-white font-bold m-2 py-2 px-4 rounded-lg flex justify-center"
+                        className="md:w-[160px] h-[32px] hover:bg-gray-100 transition rounded-full border-2 border-customLightGreen hover:shadow-custom px-4 md:px-10 py-2 flex items-center justify-center"
                         onClick={() => setFilterOpen(!filterOpen)}
                     >
-                        <img className="w-5 mx-3" src={filter} alt="Filter" />
+                        <p className="flex justify-center text-sm md:text-xl font-inter">
+                            <img
+                                src={filterSvg}
+                                alt="plus"
+                                className="mr-[9px]"
+                            />
+                            Filter
+                        </p>
                     </button>
                     <button
-                        className="bg-customGreen hover:bg-customDarkGreen text-white font-bold m-2 py-2 px-4 rounded-lg"
+                        type="button"
+                        className="md:w-auto flex items-center justify-center"
                         onClick={() => navigate('/create')}
                     >
-                        Create
+                        <p className="flex justify-center transition text-sm md:text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={plusSvg}
+                                alt="box"
+                                className="mr-[9px]"
+                            />
+                            Create
+                        </p>
                     </button>
                 </div>
+
+
                 {filterOpen && <Filter myPlums={myPlums} filterPlums={filterPlums} services={provider} filterByServices={filterByServices}/>}
-                <div className="flex justify-center">
+                <div className="flex justify-center mt-4">
                     <div className="relative overflow-x-auto w-full">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 text-inter bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" className="px-6 py-3 rounded-s-lg">
                                         Name
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        Apps
+                                        Services
                                     </th>
                                     <th scope="col" className="px-6 py-3 rounded-e-lg">
                                         Status
@@ -172,34 +188,40 @@ export default function MyPlums() {
                                     <tr
                                         key={index}
                                         className="bg-white dark:bg-gray-800 border-b"
-                                        onClick={() => {}}
+                                        onClick={() => {goToCreate(plum);}}
                                     >
                                         <th
                                             scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                            className="px-6 py-4 font-semibold font-inter text-[#464E5F] whitespace-nowrap dark:text-white"
                                         >
-                                            <div className="flex justify-start">
-                                                <img
-                                                    className="w-5 mx-3"
-                                                    src={feather}
-                                                    alt="Feather"
-                                                />
-                                                {plum.name}
+                                            <div className="flex justify-start items-center space-x-6">
+                                                <div className="bg-customLightGreen rounded-[6px] w-[50px] h-[50px] flex justify-center">
+                                                    <img
+                                                        className="w-[24px] h-[24px] mt-[13px]"
+                                                        src={feather}
+                                                        alt="Feather"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    {plum.name}
+                                                </div>
                                             </div>
                                         </th>
                                         <td className="px-6 py-4">{plum.provider}</td>
                                         <td className="px-6 py-4">
                                             <button
-                                                className={`relative w-14 h-8 flex items-center rounded-full p-1 ${
+                                                type="button"
+                                                aria-label="Activate"
+                                                className={`relative w-20 h-8 flex items-center rounded-full p-1 ${
                                                     plum.isActivated
-                                                        ? 'bg-customGreen'
+                                                        ? 'bg-customLightGreen'
                                                         : 'bg-gray-300'
                                                 } transition-colors duration-300`}
                                             >
                                                 <div
                                                     className={`w-6 h-6 bg-white rounded-full shadow-md transform ${
                                                         plum.isActivated
-                                                            ? 'translate-x-6'
+                                                            ? 'translate-x-12'
                                                             : 'translate-x-0'
                                                     } transition-transform duration-300`}
                                                 ></div>
@@ -212,6 +234,9 @@ export default function MyPlums() {
                     </div>
                 </div>
             </div>
+
+            <Footer />
+
         </div>
     );
 }

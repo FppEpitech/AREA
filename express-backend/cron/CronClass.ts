@@ -6,10 +6,10 @@ class CronClass {
     lastResult: boolean = false;
     data: any;
 
-    constructor(fct: (userId : number, value_json: string, data: any) => Promise<boolean>, userId : number, value_json: string) {
-        const { time } = JSON.parse(value_json)
+    constructor(fct: (userId : number, value_json: any, data: any) => Promise<boolean>, userId : number, value_json: string) {
+        const { time } = JSON.parse(value_json);
         this.data = {};
-        this.cronJob = new CronJob(time?.value, async () => {
+        this.cronJob = new CronJob(time.value, async () => {
             try {
                 this.lastResult = await fct(userId, value_json, this.data);
             } catch (e) {
@@ -23,3 +23,4 @@ class CronClass {
 }
 
 export { CronClass };
+    

@@ -1,8 +1,82 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import logo from '../../assets/logo58.png'
-import user from '../../assets/navbar/user.svg'
-import menu from '../../assets/navbar/menu.svg'
+import burger from '../../assets/icons/settings.svg'
+import setting from '../../assets/icons/setting.svg'
+import box from '../../assets/icons/box.svg'
+import compas from '../../assets/icons/compas.svg'
+import plus from '../../assets/icons/plus.svg'
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../services/auth/auth';
+
+function SettingButton() {
+
+    const navigate = useNavigate();
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen((prev) => !prev);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <button
+                id="dropdownDividerButton"
+                onClick={toggleDropdown}
+                className="px-3 py-2 flex items-center justify-center"
+                type="button"
+            >
+                <img
+                    id='dropdownDividerButton'
+                    src={setting}
+                    alt="setting"
+                    className="w-8 h-8"
+                />
+            </button>
+            <div
+                id="dropdownDivider"
+                style={{ left: '-100px' }}
+                className={`absolute z-10 ${
+                    isDropdownOpen ? 'block' : 'hidden'
+                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+            >
+                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
+                    <li>
+                        <button
+                            className="w-full text-left block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            onClick={() => logout(navigate)}
+                        >
+                            Logout
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    );
+}
 
 export default function Navbar() {
 
@@ -12,54 +86,66 @@ export default function Navbar() {
     return (
         <div className="fixed top-0 left-0 right-0 flex justify-center py-2.5 px-3 z-50">
             {!dropdownOpen && (
-            <div className="flex justify-between items-center bg-customGreen shadow-customNavbar rounded-[30px] overflow-hidden w-[1797px] h-[74px]">
-                <div className='px-4'>
-                    <img className='shadow-custom rounded-full' src={logo} alt="Plumpy logo"
-                    onClick={() => navigate('/explore')}
-                    ></img>
-                </div>
-                <div className="hidden md:flex items-center space-x-16">
+            <div className="flex justify-between items-center w-full h-[74px]">
+                <button type="button"
+                    onClick={() => navigate('/explore')}>
+                    <div className='px-4'>
+                        <img className='shadow-custom rounded-full' src={logo} alt="Plumpy logo"
+                        onClick={() => navigate('/explore')}
+                        ></img>
+                    </div>
+                </button>
+                <div className="hidden md:flex items-center space-x-[45px]">
                     <button type="button"
                         onClick={() => navigate('/explore')}>
                         <p
-                            className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
+                            className="flex transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={compas}
+                                alt="compas"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
                             Explore
                         </p>
                     </button>
                     <button type="button"
                         onClick={() => navigate('/myPlums')}>
                         <p
-                            className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
+                            className="flex transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={box}
+                                alt="box"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
                             My Plums
                         </p>
                     </button>
                     <div className="flex space-between space-x-5 px-6">
-                        <button className="hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom"
+                        <button className="hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
                             type="button"
                             onClick={() => navigate('/create')}>
 
                             <p
-                                className='text-3xl text-customDarkGreen font-instrumentSans text-shadow-custom px-10 py-2'>
+                                className='flex text-xl font-inter px-10 py-2'>
+                                <img
+                                    src={plus}
+                                    alt="plus"
+                                    className="w-[24px] h-[24px] mr-[9px]"
+                                />
                                 Create
                             </p>
                         </button>
-                        <button className="hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom px-3 py-2 flex items-center justify-center h-14">
-                            <img
-                            src={user}
-                            alt="userLogo"
-                            className="w-8 h-8"
-                            />
-                        </button>
+                        <SettingButton />
                     </div>
                 </div>
 
                 {/* Dropdown button for smaller screens */}
-                <div className="md:hidden flex items-center px-6">
-                    <button className="hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom px-3 py-2 flex items-center justify-center h-14"
+                <div className="md:hidden flex items-center">
+                    <button className="hover:text-gray-100 transition rounded-full px-3 py-2 flex items-center justify-center h-14"
                         onClick={() => setDropdownOpen(!dropdownOpen)}>
                         <img
-                        src={menu}
-                        alt="menuLogo"
+                        src={burger}
+                        alt="burger"
                         className="w-8 h-8"
                         />
                     </button>
@@ -67,17 +153,17 @@ export default function Navbar() {
             </div>)}
 
             {dropdownOpen && (
-            <div className="bg-customGreen shadow-customNavbar rounded-lg rounded-[30px] overflow-hidden w-full h-auto">
+            <div className="shadow-customNavbar bg-white rounded-lg rounded-[30px] w-full h-auto">
 
                 <div className='flex justify-between px-4 py-4'>
                     <img className='shadow-custom rounded-full' src={logo} alt="Plumpy logo"></img>
                     <div className="flex items-center">
                         <button
-                            className="hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom px-3 py-2 flex items-center justify-center h-14"
+                            className="transition rounded-full px-3 py-2 flex items-center justify-center h-14"
                             onClick={() => setDropdownOpen(!dropdownOpen)}>
                             <img
-                                src={menu}
-                                alt="menuLogo"
+                                src={burger}
+                                alt="burger"
                                 className="w-8 h-8"
                             />
                         </button>
@@ -85,30 +171,42 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex flex-col space-y-4 px-4 pb-4">
-                    <button type="button" className="w-full">
-                        <p className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
+                    <button type="button" className="w-full"
+                        onClick={() => navigate('/explore')}>
+                        <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={compas}
+                                alt="compas"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
                             Explore
                         </p>
                     </button>
                     <button type="button" className="w-full"
                         onClick={() => navigate('/myPlums')}>
-                        <p className="hover:text-customOrange transition text-3xl font-abrilFatface text-customYellow text-shadow-custom">
+                        <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={box}
+                                alt="box"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
                             My Plums
                         </p>
                     </button>
-                    <button className="w-full hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom px-10 py-2"
+                    <button className="w-full hover:bg-gray-100 transition rounded-full border-2 border-customLightGreen hover:shadow-custom px-10 py-2"
                         onClick={() => navigate('/create')}>
-                        <p className="text-3xl text-customDarkGreen font-instrumentSans text-shadow-custom">
+                        <p className="flex justify-center text-xl font-inter">
+                            <img
+                                src={plus}
+                                alt="plus"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
                             Create
                         </p>
                     </button>
-                    <button className="w-full hover:bg-customOrange transition rounded-full bg-customYellow border-x-2 border-customDarkGreen shadow-custom px-3 py-2 flex items-center justify-center h-14">
-                        <img
-                            src={user}
-                            alt="userLogo"
-                            className="w-8 h-8"
-                        />
-                    </button>
+                    <div className="flex justify-center">
+                    <SettingButton />
+                    </div>
                 </div>
             </div>
         )}

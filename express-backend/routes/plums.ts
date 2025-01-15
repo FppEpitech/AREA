@@ -2,8 +2,18 @@ import prisma from '../prismaClient'
 import express, {Request, Response} from 'express';
 import jwt from 'jsonwebtoken'
 import authenticateToken from '../middlewares/isLoggedIn';
+import CryptoJS from 'crypto-js';
 
 const router = express.Router();
+
+function encryptTokenPlums(token: string): string {
+    const secret = process.env.PLUMS_CRYPTING_SECRET
+
+    if (!secret)
+      throw new Error('SECRET environment variable is not defined');
+    return CryptoJS.AES.encrypt(token, secret).toString();
+  }
+
 
 /**
  * @swagger
@@ -39,7 +49,7 @@ const router = express.Router();
  *         description: Internal server error
  */
 router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
-  const {   name,
+  let {   name,
             actionTemplateName,
             actionTemplateProvider,
             actionValue,
@@ -70,6 +80,20 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
     });
     if (!triggerTemplate)
       return res.status(404).json({error: 'TriggerTemplate not found'});
+
+
+    for (let key in triggerValue) {
+        if (triggerValue[key].back_hash) {
+            triggerValue[key].value = encryptTokenPlums(triggerValue[key].value);
+        }
+     }
+
+
+    for (let key in actionValue) {
+        if (actionValue[key].back_hash) {
+            actionValue[key].value = encryptTokenPlums(actionValue[key].value);
+        }
+     }
 
 
     const action = await prisma.action.create({
@@ -105,6 +129,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
         },
       },
     });
+    console.log(plum);
 
     res.status(201).json(plum);
   } catch (error) {
@@ -173,11 +198,11 @@ router.get('/', authenticateToken,  async (req : Request, res : Response) : Prom
  *       500:
  *         description: Internal server error
  */
-router.delete('/:plumId', async (req: Request, res: Response) : Promise<any> => {
+router.delete('/:plumId', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
     const { plumId } = req.params;
 
     try {
-        const plum = await prisma.plum.findUnique({where: {id: parseInt(plumId)}});
+        const plum = await prisma.plum.findUnique({where: {id: parseInt(plumId), userId: (req as any).middlewareId}});
         if (!plum)
           return res.status(404).json({error: 'Plum not found'});
 
@@ -186,6 +211,54 @@ router.delete('/:plumId', async (req: Request, res: Response) : Promise<any> => 
     } catch (error) {
         console.error('Error deleting Plum:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+router.put('/:plumId', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
+    let id = req.params.plumId;
+    const {
+        name,
+        actionTemplateId,
+        actionValue,
+        triggerTemplateId,
+        triggerValue,
+    } = req.body;
+
+    try {
+        let query = prisma.plum.update({
+            where: { id: parseInt(id) },
+            data: {
+                name: name,
+                action: {
+                    update: {
+                        actionValue : actionValue,
+                        actionTemplate: {
+                            connect: { id: actionTemplateId }
+                        }
+                    }
+                },
+                trigger: {
+                    update: {
+                        triggerValue : triggerValue,
+                        triggerTemplate: {
+                            connect: { id: triggerTemplateId }
+                        }
+                    }
+                }
+            },
+            include: {
+                action: {
+                    include: { actionTemplate: true }
+                },
+                trigger: {
+                    include: { triggerTemplate: true }
+                }
+            }
+        });
+        res.status(200).json(await query);
+    } catch (e) {
+        res.status(500).json({error: 'Internal server error'});
+        console.log("Error while updating plum", e);
     }
 });
 
