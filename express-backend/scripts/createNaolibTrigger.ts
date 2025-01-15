@@ -113,21 +113,15 @@ async function isTramwayCloseTemplate() {
                     },
                     tramTerminus: {
                         value: {
-                            "1": {
-                                "François Mitterrand": "François Mitterrand",
-                                "Jamet": "Jamet",
-                                "Beaujoire": "Beaujoire",
-                                "Ranzay": "Ranzay"
-                            },
-                            "2": {
-                                "Orvault Grand Val": "Orvault Grand Val",
-                                "Gare de Pont Rousseau": "Gare de Pont Rousseau",
-                                "Espace Diderot": "Espace Diderot",
-                            },
-                            "3": {
-                                "Marcel Paul": "Marcel Paul",
-                                "Neustrie": "Neustrie"
-                            }
+                            "François Mitterrand": "François Mitterrand",
+                            "Jamet": "Jamet",
+                            "Beaujoire": "Beaujoire",
+                            "Ranzay": "Ranzay",
+                            "Orvault Grand Val": "Orvault Grand Val",
+                            "Gare de Pont Rousseau": "Gare de Pont Rousseau",
+                            "Espace Diderot": "Espace Diderot",
+                            "Marcel Paul": "Marcel Paul",
+                            "Neustrie": "Neustrie"
                         },
                         type: 'search dropdown',
                         result: 'Beaujoire',
