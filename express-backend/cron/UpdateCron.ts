@@ -21,7 +21,6 @@ import {CronJob} from "cron";
 const cronMap = new Map<number, CronClass>();
 
 const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
-    ["spotifyNewLike", spotifyNewLike],
     ["mailReceived", isMailReceived],
     ["pressure", pressure],
     ["temperature", temperature],
