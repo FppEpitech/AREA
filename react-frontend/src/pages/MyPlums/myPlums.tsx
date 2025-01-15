@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "../../components/Navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import Filter from "../../components/Filter/Filter";
-import { getPlums } from "../../services/Plums/plums";
+import { deletePlum, getPlums } from "../../services/Plums/plums";
+import Footer from "../../components/Footer/Footer";
 
 import searchSvg from '../../assets/icons/search.svg';
 import filterSvg from '../../assets/icons/filter.svg';
 import plusSvg from '../../assets/icons/plus.svg';
 import feather from '../../assets/icons/feather.svg';
-import Footer from "../../components/Footer/Footer";
+import dots from '../../assets/icons/dots.svg';
+import trash from '../../assets/icons/trash.svg';
 
 interface Template {
     provider: string;
@@ -18,13 +20,13 @@ interface Template {
 interface TriggerPlum {
     name: string;
     triggerTemplate: Template;
-    triggerValue: string;
+    triggerValue: any;
 }
 
 interface ActionPlum {
     name: string;
     actionTemplate: Template;
-    actionValue: string;
+    actionValue: any;
 }
 
 export interface Plum {
@@ -33,6 +35,7 @@ export interface Plum {
     isActivated: boolean;
     trigger: TriggerPlum;
     action: ActionPlum;
+    id: number;
 }
 
 export default function MyPlums() {
@@ -48,31 +51,29 @@ export default function MyPlums() {
     const [selectedServices, setSelectedServices] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchPlums = async () => {
-            try {
-                const plums = await getPlums();
-                if (plums) {
+    const fetchPlums = useCallback(async () => {
+        try {
+            const plums = await getPlums();
+            if (plums) {
+                plums.forEach((plum: Plum) => {
+                    plum.provider = plum.trigger.triggerTemplate.provider + ', ' + plum.action.actionTemplate.provider;
+                    if (!provider.includes(plum.trigger.triggerTemplate.provider)) {
+                        provider.push(plum.trigger.triggerTemplate.provider);
+                    }
+                    if (!provider.includes(plum.action.actionTemplate.provider)) {
+                        provider.push(plum.action.actionTemplate.provider);
+                    }
+                });
 
-                    plums.forEach((plum: Plum) => {
-                        plum.provider = plum.trigger.triggerTemplate.provider + ', ' + plum.action.actionTemplate.provider;
-                        if (!provider.includes(plum.trigger.triggerTemplate.provider)) {
-                            provider.push(plum.trigger.triggerTemplate.provider);
-                        }
-                        if (!provider.includes(plum.action.actionTemplate.provider)) {
-                            provider.push(plum.action.actionTemplate.provider);
-                        }
-                    });
-
-                    setOriginalPlums(plums);
-                    setMyPlums(plums);
-                }
-            } catch (error) {
-                console.error("Error fetching plums:", error);
+                setOriginalPlums(plums);
+                setMyPlums(plums);
             }
-        };
-        fetchPlums();
+        } catch (error) {
+            console.error("Error fetching plums:", error);
+        }
     }, []);
+
+    fetchPlums();
 
     const applyFilters = () => {
         let filtered = [...originalPlums];
@@ -113,6 +114,15 @@ export default function MyPlums() {
 
     const goToCreate = (plum: Plum) => {
         navigate('/create', { state: { plum } });
+    };
+
+    const eventDeletePlum = async (plum: Plum) => {
+        try {
+            await deletePlum(plum.id);
+            fetchPlums();
+        } catch (error) {
+            console.error("Error deleting plum:", error);
+        }
     };
 
     return (
@@ -172,14 +182,20 @@ export default function MyPlums() {
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 text-inter bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3 rounded-s-lg">
+                                    <th scope="col" className="px-6 py-3">
                                         Name
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Services
                                     </th>
-                                    <th scope="col" className="px-6 py-3 rounded-e-lg">
+                                    <th scope="col" className="px-6 py-3">
                                         Status
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        <img
+                                            src={dots}
+                                            alt="dots"
+                                        />
                                     </th>
                                 </tr>
                             </thead>
@@ -188,13 +204,15 @@ export default function MyPlums() {
                                     <tr
                                         key={index}
                                         className="bg-white dark:bg-gray-800 border-b"
-                                        onClick={() => {goToCreate(plum);}}
                                     >
                                         <th
                                             scope="row"
                                             className="px-6 py-4 font-semibold font-inter text-[#464E5F] whitespace-nowrap dark:text-white"
                                         >
-                                            <div className="flex justify-start items-center space-x-6">
+                                            <div
+                                                className="flex justify-start items-center space-x-6 hover:underline"
+                                                onClick={() => {goToCreate(plum);}}
+                                            >
                                                 <div className="bg-customLightGreen rounded-[6px] w-[50px] h-[50px] flex justify-center">
                                                     <img
                                                         className="w-[24px] h-[24px] mt-[13px]"
@@ -225,6 +243,17 @@ export default function MyPlums() {
                                                             : 'translate-x-0'
                                                     } transition-transform duration-300`}
                                                 ></div>
+                                            </button>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => {eventDeletePlum(plum);}}
+                                            >
+                                                <img
+                                                    src={trash}
+                                                    alt="trash"
+                                                />
                                             </button>
                                         </td>
                                     </tr>
