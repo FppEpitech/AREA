@@ -6,7 +6,11 @@ export const Oauth2Log = async (route: string) => {
         const headers = {
             Authorization: `Bearer ${token}`
         };
-        await axios.get(`${process.env.REACT_APP_API_URL}/${route}`, { headers: headers });
+
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}${route}`, { headers });
+        const { authUrl } = response.data;
+
+        window.open(authUrl);
     } catch (error) {
         console.error(error);
     }

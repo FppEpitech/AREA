@@ -17,14 +17,14 @@ const SPOTIFY_REDIRECT_URI = `http://localhost:${process.env.PORT}/spotify/callb
  *       302:
  *         description: Redirect to Spotify authentication URL
  */
- router.get('/authentification', authenticateToken, (req, res) => {
+router.get('/authentification', authenticateToken, (req, res) => {
     const userId = (req as any).middlewareId;
     const state = JSON.stringify({userId});
     const scope = 'playlist-modify-public playlist-modify-private user-library-read user-library-modify user-follow-read user-follow-modify user-top-read user-read-playback-state user-modify-playback-state';
 
     const spotifyAuthUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state)}`;
 
-    res.redirect(spotifyAuthUrl);
+    res.json({ authUrl: spotifyAuthUrl });
 });
 
 function encryptToken(token: string): string {
