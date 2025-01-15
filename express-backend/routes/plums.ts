@@ -214,6 +214,48 @@ router.delete('/:plumId', authenticateToken, async (req: Request, res: Response)
     }
 });
 
+/**
+ * @swagger
+ * /plums/{plumId}:
+ *   put:
+ *     summary: Update a plum by ID
+ *     tags: [Plums]
+ *     parameters:
+ *       - in: path
+ *         name: plumId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the plum to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               actionTemplateId:
+ *                 type: integer
+ *               actionValue:
+ *                 type: object
+ *                 additionalProperties:
+ *                   type: string
+ *               triggerTemplateId:
+ *                 type: integer
+ *               triggerValue:
+ *                 type: object
+ *                 additionalProperties:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Plum updated successfully
+ *       404:
+ *         description: Plum not found
+ *       500:
+ *         description: Internal server error
+ */
 router.put('/:plumId', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
     let id = req.params.plumId;
     const {

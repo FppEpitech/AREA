@@ -30,6 +30,33 @@ router.get('/templates', async (req: Request, res: Response) : Promise<any> => {
     }
 });
 
+/**
+ * @swagger
+ * /action/templates/{provider}:
+ *   get:
+ *     summary: Get all action templates for a specific provider
+ *     tags: [Templates]
+ *     parameters:
+ *       - in: path
+ *         name: provider
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The provider for which to fetch templates
+ *     responses:
+ *       200:
+ *         description: A list of action templates
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       400:
+ *         description: Provider is required
+ *       500:
+ *         description: Failed to fetch action templates
+ */
 router.get('/templates/:provider', async (req: Request, res: Response) : Promise<any> => {
     const { provider } = req.params;
     if (!provider) {

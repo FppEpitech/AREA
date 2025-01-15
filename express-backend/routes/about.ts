@@ -2,7 +2,55 @@ import prisma from '../prismaClient';
 import express, { Request, Response } from 'express';
 
 const router = express.Router();
-
+/**
+ * @swagger
+ * /about:
+ *   get:
+ *     summary: Get server and client information
+ *     responses:
+ *       200:
+ *         description: Successfully fetched server and client information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 client:
+ *                   type: object
+ *                   properties:
+ *                     host:
+ *                       type: string
+ *                 server:
+ *                   type: object
+ *                   properties:
+ *                     current_time:
+ *                       type: integer
+ *                     services:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                           actions:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 name:
+ *                                   type: string
+ *                                 description:
+ *                                   type: string
+ *                           reactions:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 name:
+ *                                   type: string
+ *                                 description:
+ *                                   type: string
+ */
 router.get('/', async (req: Request, res: Response): Promise<any> => {
     try {
         const clientIp = req.ip;
