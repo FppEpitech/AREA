@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/navbar";
 import {getProvidersActions, getProvidersTriggers} from "../../services/Plums/plums";
 
@@ -26,6 +26,7 @@ interface ITriggerActionCard {
     isTrigger: boolean;
     name: string;
     valueTemplate?: ValueTemplate;
+    provider: string;
 }
 
 export interface Trigger {
@@ -39,6 +40,18 @@ export interface Trigger {
 export interface Action extends Trigger {}
 
 function PlumCard(card: ITriggerActionCard) {
+
+    const navigate = useNavigate();
+
+    const createPlumWithCard = (card: ITriggerActionCard) => {
+
+        if (card.isTrigger) {
+            navigate('/create', { state: { givenTrigger: card } });
+        } else {
+            navigate('/create', { state: { givenAction: card } });
+        }
+    };
+
     return (
         <div className="bg-white border-2 border-customLightGreen rounded-lg p-6 flex flex-col">
             <div className="flex">
@@ -63,7 +76,7 @@ function PlumCard(card: ITriggerActionCard) {
             )}
             <button className="mt-16 flex justify-center max-w-[160px] text-xl hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
                 type="button"
-                onClick={() => console.log(`Connect button clicked for ${card.name}`)}
+                onClick={() => createPlumWithCard(card)}
             >
                 <p
                     className='flex text-xl font-inter m-2'>
@@ -85,6 +98,7 @@ export default function Services() {
     const [triggers, setTriggers] = useState<ITriggerActionCard[]>([]);
     const [actions, setActions] = useState<ITriggerActionCard[]>([]);
     const [activeButton, setActiveButton] = useState("All");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         // Fetch service data
@@ -115,6 +129,7 @@ export default function Services() {
                             name: template.name,
                             keywords: template.keywords,
                             valueTemplate: template.valueTemplate, // Include valueTemplate
+                            provider: service.provider,
                         }))
                     );
                 }
@@ -125,6 +140,7 @@ export default function Services() {
                             isTrigger: true,
                             name: template.name,
                             valueTemplate: template.valueTemplate,
+                            provider: service.provider,
                         }))
                     );
                 }
@@ -140,11 +156,15 @@ export default function Services() {
     };
 
     const filteredCards =
-        activeButton === "Triggers"
-            ? triggers
-            : activeButton === "Actions"
-                ? actions
-                : [...triggers, ...actions];
+        (activeButton === "Triggers" ? triggers
+        : activeButton === "Actions" ? actions
+        : [...triggers, ...actions])
+        .filter((card) => {
+            const lowerCaseQuery = searchQuery.toLowerCase();
+            return (
+                card.name.toLowerCase().includes(lowerCaseQuery)
+            );
+    });
 
     if (!service) return <div>Loading...</div>;
 
@@ -198,13 +218,15 @@ export default function Services() {
                         type="search"
                         placeholder={`Search ${id || ""} triggers or actions`}
                         className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
 
                 {/* Display Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-9 mt-4">
                     {filteredCards.map((card, index) => (
-                        <PlumCard key={index} {...card} />
+                        <PlumCard key={index} {...card} provider={service.provider} />
                     ))}
                 </div>
             </div>
