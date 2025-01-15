@@ -8,6 +8,7 @@ import Services from '../Services/services';
 import MyPlums from '../MyPlums/myPlums';
 import ClientApk from "../Client_apk/Client_apk";
 import GuardedRoute from '../../guards/authGuard';
+import Contact from '../Contact/contact';
 import Welcome from '../Welcome/welcome';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="welcome" element={<Welcome />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
+            <Route path="contact" element={<Contact />} />
             <Route path="explore" element={<GuardedRoute element={<Explore />} />}/>
             <Route path="myPlums" element={<GuardedRoute element={<MyPlums />} />}/>
             <Route path="create" element={<GuardedRoute element={<CreatePage />} />}/>

@@ -27,8 +27,9 @@ router.get('/authentification', authenticateToken, (req, res) => {
     res.json({ authUrl: spotifyAuthUrl });
 });
 
-function encryptToken(token: string): string {
-  const secret = process.env.SPOTIFY_SECRET
+
+function encryptTokenSpotify(token: string): string {
+  const secret = process.env.SPOTIFY_HASHING_SECRET
 
   if (!secret)
     throw new Error('SECRET environment variable is not defined');
@@ -90,7 +91,7 @@ router.get('/callback', async (req, res) : Promise<any> => {
 
       const { access_token, refresh_token } = tokenData;
 
-      const encryptedAccessToken = encryptToken(access_token);
+      const encryptedAccessToken = encryptTokenSpotify(access_token);
 
       const newToken = await prisma.token.create({
         data: {

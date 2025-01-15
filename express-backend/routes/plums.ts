@@ -2,8 +2,18 @@ import prisma from '../prismaClient'
 import express, {Request, Response} from 'express';
 import jwt from 'jsonwebtoken'
 import authenticateToken from '../middlewares/isLoggedIn';
+import CryptoJS from 'crypto-js';
 
 const router = express.Router();
+
+function encryptTokenPlums(token: string): string {
+    const secret = process.env.PLUMS_CRYPTING_SECRET
+
+    if (!secret)
+      throw new Error('SECRET environment variable is not defined');
+    return CryptoJS.AES.encrypt(token, secret).toString();
+  }
+
 
 /**
  * @swagger
@@ -39,7 +49,7 @@ const router = express.Router();
  *         description: Internal server error
  */
 router.post('/', authenticateToken, async (req: Request, res: Response) : Promise<any> => {
-  const {   name,
+  let {   name,
             actionTemplateName,
             actionTemplateProvider,
             actionValue,
@@ -70,6 +80,20 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
     });
     if (!triggerTemplate)
       return res.status(404).json({error: 'TriggerTemplate not found'});
+
+
+    for (let key in triggerValue) {
+        if (triggerValue[key].back_hash) {
+            triggerValue[key].value = encryptTokenPlums(triggerValue[key].value);
+        }
+     }
+
+
+    for (let key in actionValue) {
+        if (actionValue[key].back_hash) {
+            actionValue[key].value = encryptTokenPlums(actionValue[key].value);
+        }
+     }
 
 
     const action = await prisma.action.create({
@@ -105,6 +129,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
         },
       },
     });
+    console.log(plum);
 
     res.status(201).json(plum);
   } catch (error) {

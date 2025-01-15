@@ -75,6 +75,18 @@ export const updatePlum = async (id : number, name : string, trigger : Trigger, 
     }
 }
 
+export const deletePlum = async (id : number) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        await axios.delete(`${process.env.REACT_APP_API_URL}/plums/${id}`, { headers: headers });
+    } catch(error) {
+        console.log(error);
+    }
+}
+
 export const getPlums = async () => {
     try {
         const token = localStorage.getItem("access_token");

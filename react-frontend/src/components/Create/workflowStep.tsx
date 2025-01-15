@@ -32,7 +32,7 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
                     const selected = await getProvidersTriggers(plum.trigger.triggerTemplate.provider);
                     if (trigger) {
                         try {
-                            trigger.valueTemplate = JSON.parse(plum.trigger.triggerValue);
+                            trigger.valueTemplate = plum.trigger.triggerValue;
                             setTriggerCreate(trigger);
                         }
                         catch (e) {
@@ -46,7 +46,7 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
                     const selected = await getProvidersActions(plum.action.actionTemplate.provider);
                     if (action) {
                         try {
-                            action.valueTemplate = JSON.parse(plum.action.actionValue);
+                            action.valueTemplate = plum.action.actionValue;
                             setActionCreate(action);
                         } catch (e) {
                             console.error(e);

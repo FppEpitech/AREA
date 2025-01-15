@@ -4,7 +4,7 @@ import logo from '../../assets/logo58.png';
 import dropDownSvg from '../../assets/create/dropDown.svg';
 import dropDownUpSvg from '../../assets/create/dropDownUp.svg';
 import checkSvg from '../../assets/create/check.svg';
-import { TemplateCron, TemplateNumber, TemplateRadio, TemplateSignup, TemplateString } from "./templatesTypes";
+import { TemplateCron, TemplateNumber, TemplateRadio, TemplateSignup, TemplateString, TemplateSearchDropdown } from "./templatesTypes";
 
 interface ValueTemplate {
     [key: string]: {
@@ -30,6 +30,8 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     const [templateValues, setTemplateValues] = useState<ValueTemplate | undefined>();
     const [hide, setHide] = useState<boolean>(false);
     const [completed, setCompleted] = useState<boolean>(false);
+    const [error, setError] = useState<[string, boolean] | null>(null);
+    const [isError, setIsError] = useState<boolean>(false);
 
     const provider = selectType && selectType[0]?.provider;
 
@@ -46,6 +48,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     useEffect(() => {
         if (selectedTemplate?.valueTemplate) {
             setTemplateValues(selectedTemplate.valueTemplate as ValueTemplate);
+            setError(null);
         }
     }, [selectedTemplate]);
 
@@ -56,6 +59,13 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     };
 
     const finalizeSetup = () => {
+
+        if (error?.includes(true)) {
+            setIsError(true);
+            return;
+        }
+        setIsError(false);
+
         setCompleted(true);
         setHide(true);
         if (stepNumber === 1) {
@@ -65,7 +75,10 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
         }
     };
 
-    const handleTemplateValueChange = (key: string, newValue: any, type: string) => {
+    const handleTemplateValueChange = (key: string, newValue: any, type: string, isError: boolean) => {
+
+        setError([key, isError]);
+
         if (templateValues && type === "value") {
             templateValues[key].value = newValue;
         } else if (templateValues && type === "result") {
@@ -124,11 +137,11 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                 {Object.entries(templateValues).map(([key, config]) => (
                                     <div key={key} className="space-y-1">
                                         <label className="block text-sm font-semibold">{key}<span className="text-red-500">*</span></label>
-
-                                        {config.type === 'CRON expression' && <TemplateCron value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value")}/>}
-                                        {config.type === 'string' && <TemplateString value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value")}/>}
-                                        {config.type === 'radiobutton' && <TemplateRadio value={config.value} result={config.result} onChange={(newValue) => handleTemplateValueChange(key, newValue, "result")}/>}
-                                        {config.type === 'number' && <TemplateNumber value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value")}/>}
+                                        {config.type === 'CRON expression' && <TemplateCron value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
+                                        {config.type === 'string' && <TemplateString value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
+                                        {config.type === 'radiobutton' && <TemplateRadio value={config.value} result={config.result} onChange={(newValue) => handleTemplateValueChange(key, newValue, "result", false)}/>}
+                                        {config.type === 'number' && <TemplateNumber value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
+                                        {config.type === 'search dropdown' && (<TemplateSearchDropdown value={config.value} result={config.result} onChange={(newValue: any, isError : boolean) => handleTemplateValueChange(key, newValue, "result", isError)}/>)}
                                         {config.type === 'signup' && <TemplateSignup value={config.value} onChange={() => {}}/>}
                                     </div>
                                 ))}
@@ -139,6 +152,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
             case 'start':
                 return (
                     <div>
+                        {isError && <p className="text-red-500 text-sm">Please fill all required fields</p>}
                         <button
                         className="w-full bg-customGreen text-customLightBlue px-4 py-2 rounded-md hover:bg-customDarkGreen"
                         onClick={() => finalizeSetup()}
