@@ -10,7 +10,7 @@ const GuardedRoute: React.FC<GuardedRouteProps> = ({ element, ...rest }) => {
     const location = useLocation();
 
     if (!isLogged()) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/welcome" state={{ from: location }} replace />;
     }
 
     return React.cloneElement(element, rest);

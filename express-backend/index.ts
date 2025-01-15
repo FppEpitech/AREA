@@ -12,7 +12,7 @@ import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
 import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
-
+    
 const swaggerUi = require("swagger-ui-express");
 
 dotenv.config();

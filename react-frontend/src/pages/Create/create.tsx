@@ -16,6 +16,8 @@ function CreatePage() {
 
     const location = useLocation();
     const { plum } = location.state || {};
+    const { givenTrigger } = location.state || {};
+    const { givenAction } = location.state || {};
 
     const [triggers, setTriggers] = useState<Trigger[]>([]);
     const [triggersProviders, setTriggersProviders] = useState<string[]>([]);
@@ -34,7 +36,15 @@ function CreatePage() {
             setTriggerCreate(plum.trigger);
             setActionCreate(plum.action);
         }
-    }, [plum]);
+        if (givenTrigger) {
+            setPlumName(givenTrigger.name + "...");
+            setTriggerCreate(givenTrigger);
+        }
+        if (givenAction) {
+            setPlumName("..." + givenAction.name);
+            setActionCreate(givenAction);
+        }
+    }, [plum, givenTrigger, givenAction]);
 
     const [isCreated, setIsCreated] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -161,6 +171,8 @@ function CreatePage() {
                                     triggerCreate={triggerCreate}
                                     actionCreate={actionCreate}
                                     plum={plum}
+                                    givenTrigger={givenTrigger}
+                                    givenAction={givenAction}
                                 />
                                 {index < workflows.length - 1 && (
                                     <div className="flex flex-col items-center">
