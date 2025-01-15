@@ -15,9 +15,11 @@ interface WorkflowStepProps {
     triggerCreate: Trigger | null;
     actionCreate: Action | null;
     plum: Plum;
+    givenTrigger?: Trigger;
+    givenAction?: Action;
 }
 
-const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, triggers, setTriggerCreate, setActionCreate, triggerCreate, actionCreate, plum }) => {
+const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, description, providers, actions, triggers, setTriggerCreate, setActionCreate, triggerCreate, actionCreate, plum, givenTrigger, givenAction }) => {
 
     const [selectType, setSelectType] = useState<Trigger[] | Action[] | undefined>(undefined);
     const [selectedProvider, setSelectedProvider] = useState<string>(title);
@@ -53,10 +55,19 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
                     setSelectType(selected);
                     setSelectedProvider(plum.action.actionTemplate.provider);
                 }
+            } else if (givenTrigger && stepNumber === 1) {
+                const selected = await getProvidersTriggers(givenTrigger.provider);
+                setSelectType(selected);
+                setSelectedProvider(givenTrigger.provider);
+            } else if (givenAction && stepNumber !== 1) {
+                const selected = await getProvidersActions(givenAction.provider);
+                setSelectType(selected);
+                setSelectedProvider(givenAction.provider);
+
             }
         };
         updateSelections();
-    }, [plum, triggers]);
+    }, [plum, triggers, actions, givenTrigger, givenAction]);
 
     const handleSelectChange = async (event: React.ChangeEvent<HTMLSelectElement>, value : any[], setter: React.Dispatch<React.SetStateAction<any | undefined>>) => {
         const selectedName = event.target.value;

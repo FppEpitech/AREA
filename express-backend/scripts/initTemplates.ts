@@ -1,8 +1,8 @@
 import prisma from '../prismaClient';
 
 import { createServices } from "./createServices";
-import { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate} from "./createTriggerTemplate";
 import { isTramwayCloseTemplate } from "./createNaolibTrigger";
+import { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate, worldTimeTriggerTemplate} from "./createTriggerTemplate";
 import { sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate } from "./createActionTemplate";
 
 const triggerTemplates : Map<string, () => Promise<void>> = new Map([
@@ -16,6 +16,7 @@ const triggerTemplates : Map<string, () => Promise<void>> = new Map([
     ["Spotify music playing", isSpotifyMusicPlayingTriggerTemplate],
     ["Spotify music pausing", isSpotifyMusicPausingTriggerTemplate],
     ["Tramway is close", isTramwayCloseTemplate],
+    ["World time", worldTimeTriggerTemplate]
 ]);
 
 const actionTemplates : Map<string, () => Promise<void>> = new Map([

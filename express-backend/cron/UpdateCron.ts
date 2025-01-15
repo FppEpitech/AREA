@@ -3,6 +3,7 @@ import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./S
 import { isTramwayClose} from "./NaolibCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
+import { isWorldTime } from "./TimeCron";
 import { CronClass } from './CronClass';
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
@@ -28,7 +29,8 @@ const triggersMapFunction: Map<string, (userId: number, value_json: string, data
     ["spotifyNewLike", spotifyNewLike],
     ["isSpotifyMusicPlaying", isSpotifyMusicPlaying],
     ["isSpotifyMusicPausing", isSpotifyMusicPausing],
-    ["isTramwayClose", isTramwayClose]
+    ["isTramwayClose", isTramwayClose],
+    ["isWorldTime", isWorldTime]
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([

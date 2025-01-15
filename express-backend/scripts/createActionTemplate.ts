@@ -36,6 +36,10 @@ async function stopPlayingSpotifyMusicTemplate() {
         actFunc: 'stopPlayingSpotifyMusic',
         provider: 'Spotify',
         valueTemplate: {
+          signup: {
+            value: "/spotify/authentification",
+            type: "signup",
+          }
         },
       },
     });
@@ -56,6 +60,10 @@ async function resumePlayingSpotifyMusicTemplate() {
         actFunc: 'resumePlayingSpotifyMusic',
         provider: 'Spotify',
         valueTemplate: {
+          signup: {
+            value: "/spotify/authentification",
+            type: "signup",
+          }
         },
       },
     });
@@ -76,6 +84,10 @@ async function skipNextSpotifyMusicTemplate() {
         actFunc: 'skipToNextTrackSpotify',
         provider: 'Spotify',
         valueTemplate: {
+          signup: {
+            value: "/spotify/authentification",
+            type: "signup",
+          }
         },
       },
     });
@@ -96,6 +108,10 @@ async function skipPreviousSpotifyMusicTemplate() {
         actFunc: 'previousPlayingSpotifyMusic',
         provider: 'Spotify',
         valueTemplate: {
+          signup: {
+            value: "/spotify/authentification",
+            type: "signup",
+          }
         },
       },
     });
