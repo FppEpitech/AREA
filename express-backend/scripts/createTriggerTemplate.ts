@@ -417,7 +417,7 @@ async function isSpotifyMusicPausingTriggerTemplate() {
     } finally {
         await prisma.$disconnect();
     }
-  }
+}
 
 async function worldTimeTriggerTemplate() {
     try {

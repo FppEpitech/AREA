@@ -1,5 +1,6 @@
 import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
 import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./SpotifyCron";
+import { isTramwayClose} from "./NaolibCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
 import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
 import { isWorldTime } from "./TimeCron";
@@ -31,6 +32,7 @@ const triggersMapFunction: Map<string, (userId: number, value_json: string, data
     ["spotifyNewLike", spotifyNewLike],
     ["isSpotifyMusicPlaying", isSpotifyMusicPlaying],
     ["isSpotifyMusicPausing", isSpotifyMusicPausing],
+    ["isTramwayClose", isTramwayClose],
     ["isWorldTime", isWorldTime]
 ]);
 
