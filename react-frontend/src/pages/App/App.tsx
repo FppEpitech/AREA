@@ -10,6 +10,7 @@ import ClientApk from "../Client_apk/Client_apk";
 import GuardedRoute from '../../guards/authGuard';
 import Contact from '../Contact/contact';
 import Welcome from '../Welcome/welcome';
+import { OAuthRedirectSuccess, OAuthRedirectFailed } from '../OAuthRedirect/oauthRedirect';
 
 function App() {
     return (
@@ -25,6 +26,8 @@ function App() {
             <Route path="create" element={<GuardedRoute element={<CreatePage />} />}/>
             <Route path="services/:id" element={<GuardedRoute element={<Services />} />}/>
             <Route path="client.apk" element={<ClientApk />} />
+            <Route path="/authentification_success" element={<OAuthRedirectSuccess />} />
+            <Route path="/authentification_failed" element={<OAuthRedirectFailed />} />
             {/* <Route path="*" element={<NoPage />} /> TODO: Error 404 */}
         </Routes>
         </BrowserRouter>
