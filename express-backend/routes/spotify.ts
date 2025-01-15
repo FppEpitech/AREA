@@ -66,7 +66,7 @@ router.get('/callback', async (req, res) : Promise<any> => {
       const decodedState = JSON.parse(state as string);
       userId = decodedState.userId;
     } catch (error) {
-      return res.status(400).json({ error: 'Invalid state parameter' });
+      return res.redirect(301, `${process.env.FRONTEND_URL}/authentification_failed`);
     }
 
     try {
@@ -102,10 +102,10 @@ router.get('/callback', async (req, res) : Promise<any> => {
         },
       });
 
-      res.status(200).json({message: 'Spotify authenticated successfully', token: newToken});
+      return res.redirect(301, `${process.env.FRONTEND_URL}/authentification_success`);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Failed to authenticate with Spotify' });
+      return res.redirect(301, `${process.env.FRONTEND_URL}/authentification_failed`);
     }
 });
 
