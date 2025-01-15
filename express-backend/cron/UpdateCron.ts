@@ -1,6 +1,7 @@
-import { lessThan, greaterThan, isEqual } from "./WeatherCron";
-import { spotifyNewLike } from "./SpotifyCron";
+import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
+import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./SpotifyCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
+import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
 import { CronClass } from './CronClass';
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
@@ -17,14 +18,23 @@ import {CronJob} from "cron";
 const cronMap = new Map<number, CronClass>();
 
 const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
-    ["lessThan", lessThan],
-    ["greaterThan", greaterThan],
-    ["isEqual", isEqual],
-    ["spotifyNewLike", spotifyNewLike]
+    ["pressure", pressure],
+    ["temperature", temperature],
+    ["cloudiness", cloudiness],
+    ["windSpeed", windSpeed],
+    ["humidity", humidity],
+    ["weather", weather],
+    ["spotifyNewLike", spotifyNewLike],
+    ["isSpotifyMusicPlaying", isSpotifyMusicPlaying],
+    ["isSpotifyMusicPausing", isSpotifyMusicPausing]
 ]);
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
-    ["sendDiscordMessage", sendDiscordMessage]
+    ["sendDiscordMessage", sendDiscordMessage],
+    ["stopPlayingSpotifyMusic", stopPlayingSpotifyMusic],
+    ["resumePlayingSpotifyMusic", resumePlayingSpotifyMusic],
+    ["skipToNextTrackSpotify", skipToNextTrackSpotify],
+    ["previousPlayingSpotifyMusic", previousPlayingSpotifyMusic]
 ]);
 
 async function updateCron() {
@@ -34,20 +44,25 @@ async function updateCron() {
             console.log('Trigger table does not exist.');
             return;
         }
-        const triggers = await prisma.trigger.findMany();
-        for (const trigger of triggers) {
-            if (cronMap.has(trigger.id))
+        const plumsTriggers = await prisma.plum.findMany();
+        for (const plums of plumsTriggers) {
+            const trigger = await prisma.trigger.findUnique({where: {id: plums.triggerId}});
+            if (cronMap.has(plums.id) || !trigger)
                 continue;
             const triggerTemplate = await prisma.triggerTemplate.findUnique({
                 where: { id: trigger.triggerTemplateId }
             });
             if (triggerTemplate?.type !== 'cron')
                 continue;
-            const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(triggerTemplate?.valueTemplate));
-            cronMap.set(trigger.id, cron);
+            try {
+                const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(trigger.triggerValue));
+                cronMap.set(trigger.id, cron);
+            } catch (error) {
+                console.error('Error adding cron job:', error);
+            }
         }
         for (const [id, cron] of cronMap) {
-            if (!triggers.some(trigger => trigger.id === id)) {
+            if (!plumsTriggers.find(plum => plum.id === id)) {
                 cron.cronJob.stop();
                 cronMap.delete(id);
             }
@@ -74,7 +89,7 @@ async function checkCronResult() {
                 continue;
             const actionFunc = actionsMapFunction.get(actionTemplate?.actFunc);
             if (actionFunc && action.actionValue)
-                await actionFunc(plumTrigger.userId, action?.actionValue.toString());
+                await actionFunc(plumTrigger.userId,  JSON.stringify(action?.actionValue));
         }
     } catch (error) {
         console.error('Error checking cron results:', error);

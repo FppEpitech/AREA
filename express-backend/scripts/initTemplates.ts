@@ -1,17 +1,27 @@
 import prisma from '../prismaClient';
 
-import { lessThanTriggerTemplate, isEqualTriggerTemplate, isSpotifyNewLikeTriggerTemplate, greaterThanTriggerTemplate } from "./createTriggerTemplate";
-import { sendDiscordMessageTemplate } from "./createActionTemplate";
+import { createServices } from "./createServices";
+import { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate} from "./createTriggerTemplate";
+import { sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate } from "./createActionTemplate";
 
 const triggerTemplates : Map<string, () => Promise<void>> = new Map([
-    ["Less than temperature", lessThanTriggerTemplate],
-    ["Greater than temperature", greaterThanTriggerTemplate],
-    ["Equal temperature", isEqualTriggerTemplate],
-    ["Spotify new like", isSpotifyNewLikeTriggerTemplate]
+    ["Pressure", PressureTriggerTemplate],
+    ["Temperature", temperatureTriggerTemplate],
+    ["Cloudiness", cloudinessTriggerTemplate],
+    ["Wind Speed", windSpeedTriggerTemplate],
+    ["Humidity", humidityTriggerTemplate],
+    ["Weather", weatherTriggerTemplate],
+    ["Spotify new like", isSpotifyNewLikeTriggerTemplate],
+    ["Spotify music playing", isSpotifyMusicPlayingTriggerTemplate],
+    ["Spotify music pausing", isSpotifyMusicPausingTriggerTemplate]
 ]);
 
 const actionTemplates : Map<string, () => Promise<void>> = new Map([
-    ["Send Discord Message", sendDiscordMessageTemplate]
+    ["Send Discord Message", sendDiscordMessageTemplate],
+    ["Skip to previous music", skipPreviousSpotifyMusicTemplate],
+    ["Skip to next music", skipNextSpotifyMusicTemplate],
+    ["Resume the music", resumePlayingSpotifyMusicTemplate],
+    ["Stop a Spotify playing music", stopPlayingSpotifyMusicTemplate]
 ]);
 
 const types : Map<string, Map<string, () => Promise<void>>> = new Map([
@@ -20,6 +30,7 @@ const types : Map<string, Map<string, () => Promise<void>>> = new Map([
 ]);
 
 async function initAllTemplates() {
+    createServices();
     for (const [type, templates] of types) {
         console.log(`Table ${type} already exists. Check if templates are present...`);
         let dbTemplates : any;

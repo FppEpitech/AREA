@@ -10,6 +10,7 @@ import actionRouter from './routes/action';
 import spotifyRouter from './routes/spotify';
 import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
+import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
 
 const swaggerUi = require("swagger-ui-express");
@@ -33,6 +34,7 @@ app.use('/triggers', triggerRouter);
 app.use('/spotify', spotifyRouter);
 app.use('/account', accountRouter);
 app.use('/about.json', aboutRouter);
+app.use('/services', servicesRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
