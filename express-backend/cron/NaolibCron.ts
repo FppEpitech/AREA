@@ -44,19 +44,15 @@ export async function isTramwayClose(userId: number, value_json: string): Promis
             tram.ligne.numLigne === codeLine && tram.terminus === codeTerminus
         );
 
-        console.log(`matchingTrams: ${JSON.stringify(matchingTrams)}`);
-
 
         for (const tram of matchingTrams) {
             const tramTime = tram.temps;
 
             if (tramTime === 'proche' || (tramTime.endsWith('mn') && parseInt(tramTime) < closeTimeValue)) {
-                console.log('Tramway close detected.');
                 return true;
             }
         }
 
-        console.log('A tramway isnt close.');
         return false;
     } catch (error: any) {
         console.error('Error during verification of proximity about the tramway', error.message || error);
