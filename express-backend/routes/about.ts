@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express';
 const router = express.Router();
 /**
  * @swagger
- * /about:
+ * /about.json:
  *   get:
  *     summary: Get server and client information
  *     responses:
