@@ -95,10 +95,10 @@ export function TemplateSearchDropdown(searchDropdownProps: TemplateProps) {
         value: obj,
     }));
 
-    const [searchValue, setSearchValue] = useState(optionArray[0].value ?? "");
+    const [searchValue, setSearchValue] = useState(optionArray.find((option) => option.key === selectedValue)?.value || "");
 
     const filteredOptions = optionArray.filter((option) =>
-        option.value.toLowerCase().startsWith(searchValue.toLowerCase())
+        option.value.toString().toLowerCase().startsWith(searchValue.toString().toLowerCase())
     );
 
     const handleOptionClick = (optionKey: string) => {
@@ -110,10 +110,10 @@ export function TemplateSearchDropdown(searchDropdownProps: TemplateProps) {
     };
 
     const isCorrectValue = (value : string) => {
-        const isCorrect = optionArray.some((option) => option.value.toLowerCase() === value.toLowerCase());
+        const isCorrect = optionArray.some((option) => option.value.toString().toLowerCase() === value.toString().toLowerCase());
         setIsCorrect(isCorrect);
         if (isCorrect) {
-            setCorrectKey(optionArray.find((option) => option.value.toLowerCase() === value.toLowerCase())?.key);
+            setCorrectKey(optionArray.find((option) => option.value.toString().toLowerCase() === value.toString().toLowerCase())?.key);
         }
     }
 

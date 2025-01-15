@@ -142,7 +142,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                         {config.type === 'string' && <TemplateString value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
                                         {config.type === 'radiobutton' && <TemplateRadio value={config.value} result={config.result} onChange={(newValue) => handleTemplateValueChange(key, newValue, "result", false)}/>}
                                         {config.type === 'number' && <TemplateNumber value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
-                                        {config.type === 'search dropdown' && (<TemplateSearchDropdown value={config.value} onChange={(newValue: any, isError : boolean) => handleTemplateValueChange(key, newValue, "result", isError)}/>)}
+                                        {config.type === 'search dropdown' && (<TemplateSearchDropdown value={config.value} result={config.result} onChange={(newValue: any, isError : boolean) => handleTemplateValueChange(key, newValue, "result", isError)}/>)}
                                     </div>
                                 ))}
                             </div>
