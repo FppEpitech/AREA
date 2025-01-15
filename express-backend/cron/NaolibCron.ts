@@ -59,7 +59,7 @@ export async function isTramwayClose(userId: number, value_json: string): Promis
         console.log('A tramway isnt close.');
         return false;
     } catch (error: any) {
-        console.error('Erreur lors de la vérification de la proximité du tramway:', error.message || error);
+        console.error('Error during verification of proximity about the tramway', error.message || error);
         return false;
     }
 }
