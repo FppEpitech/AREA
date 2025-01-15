@@ -2,7 +2,9 @@ import prisma from '../prismaClient';
 
 async function createDiscord() {
     try {
-        let service = await prisma.service.create({
+        if (await prisma.service.findFirst({where: {name: 'discord'}}))
+            return;
+        await prisma.service.create({
             data: {
                 provider: 'Discord',
                 name: 'discord',
@@ -13,14 +15,15 @@ async function createDiscord() {
         });
         console.log('Service Discord created');
     } catch (error) {
-        console.error('Error creating Discord service, maybe it already exists?');
+        console.error('Error during creation of Discord service:', error);
     }
 }
 
-
 async function createSpotify() {
     try {
-        let service = await prisma.service.create({data: {
+        if (await prisma.service.findFirst({where: {name: 'spotify'}}))
+            return;
+        await prisma.service.create({data: {
             provider: 'Spotify',
             name: 'spotify',
             color: '#1DB953',
@@ -29,13 +32,15 @@ async function createSpotify() {
         }});
         console.log('service spotify created:');
     } catch (error) {
-        console.error('Erreur lors de la création du service Spotify, already exists ?');
+        console.log('Error during creation of Spotify service:', error);
     }
 }
 
 async function createOpenWeatherMap() {
     try {
-        let service = await prisma.service.create({data: {
+        if (await prisma.service.findFirst({where: {name: 'openweathermap'}}))
+            return;
+        await prisma.service.create({data: {
             provider: 'OpenWeatherMap',
             name: 'openweathermap',
             color: '#87CEEB',
@@ -44,13 +49,15 @@ async function createOpenWeatherMap() {
         }});
         console.log('service openweathermap created:');
     } catch (error) {
-        console.error('Erreur lors de la création du service OpenWeatherMap, already exists ?');
+        console.log('Error during creation of OpenWeatherMap service:', error);
     }
 }
 
 async function createMail() {
     try {
-        let service = await prisma.service.create({data: {
+        if (await prisma.service.findFirst({where: {name: 'mail'}}))
+            return;
+        await prisma.service.create({data: {
             provider: 'Mail',
             name: 'mail',
             color: '#fa423e',
@@ -59,7 +66,24 @@ async function createMail() {
         }});
         console.log('service mail created:');
     } catch (error) {
-        console.error('Erreur lors de la création du service Mail, already exists ?');
+        console.log('Error during creation of Mail service:', error);
+    }
+}
+
+async function createWorldTime() {
+    try {
+        if (await prisma.service.findFirst({where: {name: 'worldtime'}}))
+            return;
+        await prisma.service.create({data: {
+                provider: 'WorldTime',
+                name: 'worldtime',
+                color: '#4b8424',
+                description: 'WorldTime service',
+                logo: 'https://cdn-icons-png.flaticon.com/512/109/109613.png',
+            }});
+        console.log('service mail created:');
+    } catch (error) {
+        console.log('Error during creation of world service:', error);
     }
 }
 
@@ -69,8 +93,9 @@ async function createServices() {
         await createSpotify();
         await createOpenWeatherMap();
         await createMail();
+        await createWorldTime();
     } catch (error) {
-        console.error('Erreur lors de la création de services:', error);
+        console.log('Error during creation of service:', error);
     } finally {
         await prisma.$disconnect();
     }

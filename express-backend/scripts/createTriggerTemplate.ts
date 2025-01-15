@@ -381,4 +381,59 @@ async function isSpotifyMusicPausingTriggerTemplate() {
     }
   }
 
-export { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate};
+async function worldTimeTriggerTemplate() {
+    try {
+        const triggerTimeTemplate = await prisma.triggerTemplate.create({
+            data: {
+                name: 'World time',
+                provider: 'WorldTimeAPI',
+                type: 'cron',
+                trigFunc: 'isWorldTime',
+                valueTemplate: {
+                    year: {
+                        value: 2025,
+                        type: 'number',
+                    },
+                    month: {
+                        value: 1,
+                        type: 'number',
+                        check: '1-12',
+                    },
+                    day: {
+                        value: 1,
+                        type: 'number',
+                        check: '1-31',
+                    },
+                    hour: {
+                        value: 0,
+                        type: 'number',
+                        check: '0-23',
+                    },
+                    minute: {
+                        value: 0,
+                        type: 'number',
+                        check: '0-59',
+                    },
+                    continent: {
+                        value: 'Europe',
+                        type: 'string',
+                        check: 'continent',
+                    },
+                    city: {
+                        value: 'Paris',
+                        type: 'string',
+                        check: 'city',
+                    }
+                },
+            },
+        });
+        console.log('TriggerTemplate \'World Time\' created:', triggerTimeTemplate);
+
+    } catch (error) {
+        console.error('Error during creation of trigger template:', error);
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+export { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate, worldTimeTriggerTemplate };
