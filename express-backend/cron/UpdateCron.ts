@@ -5,6 +5,8 @@ import sendDiscordMessage from "../action/sendDiscordMessage";
 import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
 import { isWorldTime } from "./TimeCron";
 import { CronClass } from './CronClass';
+import { sendMailBasic, sendMailComplex } from "../action/sendMail";
+import { isMailReceived } from "./MailCron";
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
@@ -20,6 +22,7 @@ import {CronJob} from "cron";
 const cronMap = new Map<number, CronClass>();
 
 const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
+    ["mailReceived", isMailReceived],
     ["pressure", pressure],
     ["temperature", temperature],
     ["cloudiness", cloudiness],
@@ -35,6 +38,8 @@ const triggersMapFunction: Map<string, (userId: number, value_json: string, data
 
 const actionsMapFunction: Map<string, (userId: number, value_json: string) => Promise<void>> = new Map([
     ["sendDiscordMessage", sendDiscordMessage],
+    ["sendMailBasic", sendMailBasic],
+    ["sendMailComplex", sendMailComplex],
     ["stopPlayingSpotifyMusic", stopPlayingSpotifyMusic],
     ["resumePlayingSpotifyMusic", resumePlayingSpotifyMusic],
     ["skipToNextTrackSpotify", skipToNextTrackSpotify],

@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 
 
 function decryptToken(encryptedToken: string): string {
-    const secret = process.env.SPOTIFY_SECRET
+    const secret = process.env.SPOTIFY_HASHING_SECRET
 
     if (!secret)
         throw new Error('SECRET environment variable is not defined');

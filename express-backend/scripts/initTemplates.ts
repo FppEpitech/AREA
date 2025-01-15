@@ -2,8 +2,8 @@ import prisma from '../prismaClient';
 
 import { createServices } from "./createServices";
 import { isTramwayCloseTemplate } from "./createNaolibTrigger";
-import { PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate, worldTimeTriggerTemplate} from "./createTriggerTemplate";
-import { sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate } from "./createActionTemplate";
+import { isMailReceivedTriggerTemplate, PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate, worldTimeTriggerTemplate} from "./createTriggerTemplate";
+import { sendMailBasicTemplate, sendMailComplexTemplate, sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate } from "./createActionTemplate";
 
 const triggerTemplates : Map<string, () => Promise<void>> = new Map([
     ["Pressure", PressureTriggerTemplate],
@@ -13,6 +13,7 @@ const triggerTemplates : Map<string, () => Promise<void>> = new Map([
     ["Humidity", humidityTriggerTemplate],
     ["Weather", weatherTriggerTemplate],
     ["Spotify new like", isSpotifyNewLikeTriggerTemplate],
+    ["Is mail received", isMailReceivedTriggerTemplate],
     ["Spotify music playing", isSpotifyMusicPlayingTriggerTemplate],
     ["Spotify music pausing", isSpotifyMusicPausingTriggerTemplate],
     ["Tramway is close", isTramwayCloseTemplate],
@@ -21,6 +22,8 @@ const triggerTemplates : Map<string, () => Promise<void>> = new Map([
 
 const actionTemplates : Map<string, () => Promise<void>> = new Map([
     ["Send Discord Message", sendDiscordMessageTemplate],
+    ["Send Email", sendMailBasicTemplate],
+    ["Send Email (Complex)", sendMailComplexTemplate],
     ["Skip to previous music", skipPreviousSpotifyMusicTemplate],
     ["Skip to next music", skipNextSpotifyMusicTemplate],
     ["Resume the music", resumePlayingSpotifyMusicTemplate],
