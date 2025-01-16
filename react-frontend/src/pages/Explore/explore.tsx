@@ -189,70 +189,72 @@ export default function Explore() {
     });
 
     return (
-        <div className="bg-white min-h-screen">
-            <Navbar />
-            <ExploreNavbar />
-            <div className="container mx-auto p-4">
-                {/* Filter Buttons */}
-                <div className="flex justify-center space-x-6 mb-8">
-                    <button
-                        className={`text-xl font-semibold ${
-                            activeFilter === "All"
-                                ? "text-customGreen border-b-2 border-customGreen"
-                                : "text-gray-500"
-                        }`}
-                        onClick={() => setActiveFilter("All")}
-                    >
-                        All
-                    </button>
-                    <button
-                        className={`text-xl font-semibold ${
-                            activeFilter === "Services"
-                                ? "text-customGreen border-b-2 border-customGreen"
-                                : "text-gray-500"
-                        }`}
-                        onClick={() => setActiveFilter("Services")}
-                    >
-                        Services
-                    </button>
-                    <button
-                        className={`text-xl font-semibold ${
-                            activeFilter === "Triggers & Actions"
-                                ? "text-customGreen border-b-2 border-customGreen"
-                                : "text-gray-500"
-                        }`}
-                        onClick={() => setActiveFilter("Triggers & Actions")}
-                    >
-                        Triggers & Actions
-                    </button>
-                </div>
-
-                {/* Search Bar */}
-                <div className="mb-6 flex justify-center">
-                    <input
-                        type="search"
-                        placeholder="Search by name..."
-                        className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                </div>
-            </div>
-
-            <div className="bg-customLightBlue" w-full>
+        <div className="flex flex-col min-h-screen bg-white">
+            <main className="w-full h-full">
+                <Navbar/>
+                <ExploreNavbar/>
                 <div className="container mx-auto p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {filteredItems.map((item, index) =>
-                            "type" in item ? (
-                                <PlumCard key={index} {...item} />
-                            ) : (
-                                <ServiceCard key={index} {...item} />
-                            )
-                        )}
+                    {/* Filter Buttons */}
+                    <div className="flex justify-center space-x-6 mb-8">
+                        <button
+                            className={`text-xl font-semibold ${
+                                activeFilter === "All"
+                                    ? "text-customGreen border-b-2 border-customGreen"
+                                    : "text-gray-500"
+                            }`}
+                            onClick={() => setActiveFilter("All")}
+                        >
+                            All
+                        </button>
+                        <button
+                            className={`text-xl font-semibold ${
+                                activeFilter === "Services"
+                                    ? "text-customGreen border-b-2 border-customGreen"
+                                    : "text-gray-500"
+                            }`}
+                            onClick={() => setActiveFilter("Services")}
+                        >
+                            Services
+                        </button>
+                        <button
+                            className={`text-xl font-semibold ${
+                                activeFilter === "Triggers & Actions"
+                                    ? "text-customGreen border-b-2 border-customGreen"
+                                    : "text-gray-500"
+                            }`}
+                            onClick={() => setActiveFilter("Triggers & Actions")}
+                        >
+                            Triggers & Actions
+                        </button>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="mb-6 flex justify-center">
+                        <input
+                            type="search"
+                            placeholder="Search by name..."
+                            className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
                     </div>
                 </div>
-            </div>
-            <Footer />
+
+                <div className="flex-grow bg-customLightBlue relative">
+                    <div className="container mx-auto p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {filteredItems.map((item, index) =>
+                                "type" in item ? (
+                                    <PlumCard key={index} {...item} />
+                                ) : (
+                                    <ServiceCard key={index} {...item} />
+                                )
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <Footer/>
         </div>
     );
 }
