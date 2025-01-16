@@ -5,8 +5,11 @@ class CronClass {
     cronJob: CronJob;
     lastResult: boolean = false;
     data: any;
+    lastUpdatedAt : Date = new Date();
 
-    constructor(fct: (userId : number, value_json: any, data: any) => Promise<boolean>, userId : number, value_json: string) {
+    constructor(fct: (userId : number, value_json: any, data: any) => Promise<boolean>, userId : number, value_json: string, updatedAt: Date) {
+        this.lastUpdatedAt = updatedAt;
+
         const { time } = JSON.parse(value_json);
         this.data = {};
         this.cronJob = new CronJob(time.value, async () => {
@@ -23,4 +26,3 @@ class CronClass {
 }
 
 export { CronClass };
-    
