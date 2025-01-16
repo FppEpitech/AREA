@@ -240,7 +240,7 @@ export default function Explore() {
                     </div>
                 </div>
 
-                <div className="flex-grow bg-customLightBlue relative">
+                <div className="flex-grow bg-customLightBlue relative min-h-screen">
                     <div className="container mx-auto p-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {filteredItems.map((item, index) =>
