@@ -56,7 +56,6 @@ async function updateCron() {
         }
         const plumsTriggers = await prisma.plum.findMany();
         for (const plums of plumsTriggers) {
-            //plums.id != trigger
             const trigger = await prisma.trigger.findUnique({where: {id: plums.triggerId}});
             if (!trigger)
                 continue;
