@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 
-export async function isTramwayCloseScrypt(): Promise<boolean> {
+export async function isTramwayCloseScript(): Promise<boolean> {
     try {
         console.log('Fetching tramway stops data...');
 
@@ -49,4 +49,4 @@ export async function isTramwayCloseScrypt(): Promise<boolean> {
 }
 
 
-isTramwayCloseScrypt();
+isTramwayCloseScript();

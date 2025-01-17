@@ -1,6 +1,6 @@
 import axios from 'axios';
 import prisma from '../prismaClient'
-import decryptToken from '../cron/SpotifyCron'
+import decryptToken from '../cron/spotifyCron'
 
 export async function stopPlayingSpotifyMusic(userId: number, value_json: string) {
     try {
@@ -100,4 +100,3 @@ export async function previousPlayingSpotifyMusic(userId: number) {
         console.error('Error going to previous Spotify track:', error.message || error);
     }
 }
-
