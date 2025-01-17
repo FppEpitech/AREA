@@ -30,6 +30,33 @@ router.get('/templates', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /trigger/templates/{provider}:
+ *   get:
+ *     summary: Get all trigger templates for a provider
+ *     tags: [Trigger]
+ *     parameters:
+ *       - in: path
+ *         name: provider
+ *         required: true
+ *         description: Provider name
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of trigger templates
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       400:
+ *         description: Provider is required
+ *       500:
+ *         description: Failed to fetch trigger templates
+ */
 router.get('/templates/:provider', async (req: Request, res: Response) : Promise<any> => {
     const { provider } = req.params;
     if (!provider) {
