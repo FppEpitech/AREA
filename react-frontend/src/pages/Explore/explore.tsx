@@ -9,6 +9,7 @@ import Footer from "../../components/Footer/Footer";
 import plus from "../../assets/icons/plus.svg";
 import clockSvg from "../../assets/icons/clock.svg";
 import tvSvg from "../../assets/icons/tv.svg";
+import { getServices } from "../../services/Providers/providers";
 
 function shuffleArray(array: any[]) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -118,8 +119,7 @@ export default function Explore() {
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await fetch("/services");
-                const data = await response.json();
+                const data = await getServices();
                 const servicesData = data.map((service: any) => ({
                     name: service.name,
                     logo: service.logo,

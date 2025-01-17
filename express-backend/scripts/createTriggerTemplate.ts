@@ -328,7 +328,7 @@ async function isMailReceivedTriggerTemplate() {
       const triggerEqualTemplate = await prisma.triggerTemplate.create({
       data: {
           name: 'Mail received',
-          provider: 'mail',
+          provider: 'Mail',
           type: 'cron',
           trigFunc: 'mailReceived',
           valueTemplate: {
@@ -424,7 +424,7 @@ async function worldTimeTriggerTemplate() {
         const triggerTimeTemplate = await prisma.triggerTemplate.create({
             data: {
                 name: 'World time',
-                provider: 'WorldTimeAPI',
+                provider: 'WorldTime',
                 type: 'cron',
                 trigFunc: 'isWorldTime',
                 valueTemplate: {
