@@ -59,18 +59,19 @@ async function updateCron() {
             const trigger = await prisma.trigger.findUnique({where: {id: plums.triggerId}});
             if (!trigger)
                 continue;
-            if (cronMap.has(plums.triggerId) && (plums.updatedAt == cronMap.get(plums.triggerId)?.lastUpdatedAt))
+            if (cronMap.has(plums.triggerId) && (plums.updatedAt.toISOString() == cronMap.get(plums.triggerId)?.lastUpdatedAt.toISOString()))
                 continue;
             const triggerTemplate = await prisma.triggerTemplate.findUnique({
                 where: { id: trigger.triggerTemplateId }
             });
             if (triggerTemplate?.type !== 'cron')
                 continue;
-            if (plums.updatedAt != cronMap.get(plums.triggerId)?.lastUpdatedAt) {
+            if (plums.updatedAt.toISOString() != cronMap.get(plums.triggerId)?.lastUpdatedAt.toISOString()) {
                 cronMap.get(plums.triggerId)?.cronJob.stop();
                 cronMap.delete(plums.triggerId);
             }
             try {
+                console.log("Creating trigger cron job for trigger id:", trigger.id);
                 const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(trigger.triggerValue), plums.updatedAt);
                 cronMap.set(trigger.id, cron);
             } catch (error) {
