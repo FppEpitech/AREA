@@ -22,6 +22,7 @@ export async function AuthSignUp(login : loginInterface, navigate: (path: string
         const body = {mail : login.email, password : login.password};
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/account/register`, body);
         localStorage.setItem('access_token', response.data.token);
+        localStorage.setItem("token_date", Date.now().toString());
         navigate('/explore');
     } catch (error : any) {
         if (error.status === 409)
