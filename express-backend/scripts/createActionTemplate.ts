@@ -34,7 +34,7 @@ async function sendMailBasicTemplate() {
         data: {
           name: 'Send Basic Mail',
           actFunc: 'sendMailBasic',
-          provider: 'mail',
+          provider: 'Mail',
           valueTemplate: {
             destination : {
                 type : 'string',
@@ -67,7 +67,7 @@ async function sendMailBasicTemplate() {
         data: {
           name: 'Send Complex Mail',
           actFunc: 'sendMailComplex',
-          provider: 'mail',
+          provider: 'Mail',
           valueTemplate: {
             destination : {
                 type : 'string',

@@ -4,7 +4,7 @@ import logo from '../../assets/logo58.png';
 import dropDownSvg from '../../assets/create/dropDown.svg';
 import dropDownUpSvg from '../../assets/create/dropDownUp.svg';
 import checkSvg from '../../assets/create/check.svg';
-import { TemplateCron, TemplateNumber, TemplateRadio, TemplateSearchDropdown, TemplateString } from "./templatesTypes";
+import { TemplateCron, TemplateNumber, TemplateRadio, TemplateSignup, TemplateString, TemplateSearchDropdown } from "./templatesTypes";
 
 interface ValueTemplate {
     [key: string]: {
@@ -112,20 +112,6 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                 ))}
                             </select>
                         </div>
-                        <div>
-                            <label className="block text-sm font-semibold mb-1">Account <span className="text-red-500">*</span></label>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="text"
-                                    placeholder={`Connect ${provider}`}
-                                    disabled
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-500"
-                                />
-                                <button className="bg-customGreen text-white px-3 py-2 rounded-md hover:bg-customDarkGreen">
-                                    Sign
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 );
             case 'configure':
@@ -137,12 +123,12 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                 {Object.entries(templateValues).map(([key, config]) => (
                                     <div key={key} className="space-y-1">
                                         <label className="block text-sm font-semibold">{key}<span className="text-red-500">*</span></label>
-
                                         {config.type === 'CRON expression' && <TemplateCron value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
                                         {config.type === 'string' && <TemplateString value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
                                         {config.type === 'radiobutton' && <TemplateRadio value={config.value} result={config.result} onChange={(newValue) => handleTemplateValueChange(key, newValue, "result", false)}/>}
                                         {config.type === 'number' && <TemplateNumber value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
                                         {config.type === 'search dropdown' && (<TemplateSearchDropdown value={config.value} result={config.result} onChange={(newValue: any, isError : boolean) => handleTemplateValueChange(key, newValue, "result", isError)}/>)}
+                                        {config.type === 'signup' && <TemplateSignup value={config.value} onChange={() => {}}/>}
                                     </div>
                                 ))}
                             </div>
