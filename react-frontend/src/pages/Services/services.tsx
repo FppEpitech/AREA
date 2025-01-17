@@ -6,6 +6,7 @@ import {getProvidersActions, getProvidersTriggers} from "../../services/Plums/pl
 import clockSvg from "../../assets/icons/clock.svg";
 import tvSvg from "../../assets/icons/tv.svg";
 import plus from "../../assets/icons/plus.svg";
+import { getServices } from "../../services/Providers/providers";
 
 interface ValueTemplate {
     [key: string]: {
@@ -104,8 +105,7 @@ export default function Services() {
         // Fetch service data
         const fetchService = async () => {
             try {
-                const response = await fetch(`/services`);
-                const services = await response.json();
+                const services = await getServices();
                 const selectedService = services.find((s: IService) => s.name === id);
                 setService(selectedService || null);
             } catch (error) {
