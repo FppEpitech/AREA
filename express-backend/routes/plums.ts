@@ -129,7 +129,6 @@ router.post('/', authenticateToken, async (req: Request, res: Response) : Promis
         },
       },
     });
-    console.log(plum);
 
     res.status(201).json(plum);
   } catch (error) {
