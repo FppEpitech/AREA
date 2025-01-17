@@ -303,4 +303,27 @@ router.put('/:plumId', authenticateToken, async (req: Request, res: Response) : 
     }
 });
 
+router.put("/:plumId/status", authenticateToken, async (req: Request, res: Response) : Promise<any> => {
+    const userId = (req as any).middlewareId;
+    let { plumId } = req.params;
+    const status: boolean = Boolean(req.body.status);
+
+    if (!status)
+        return res.status(400).json({error: 'Status not provided'});
+
+    try {
+        const plum = await prisma.plum.update({where : { id: parseInt(plumId), userId: userId }, data : {
+            status : status
+        }})
+
+    } catch (error) {
+        return res.status(500).json({error: 'Error while updating the plum\'s status.'});
+
+    }
+
+    // log terminal
+
+
+});
+
 export default router;

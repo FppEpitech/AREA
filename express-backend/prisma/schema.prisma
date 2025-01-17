@@ -42,6 +42,7 @@ model Plum {
   actionId  Int
   trigger   Trigger @relation(fields: [triggerId], references: [id])
   triggerId Int
+  status Boolean @default(true)
 }
 
 model ActionTemplate {

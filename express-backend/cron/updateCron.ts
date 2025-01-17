@@ -54,9 +54,9 @@ async function updateCron() {
             return;
         }
         const plumsTriggers = await prisma.plum.findMany();
-        for (const plums of plumsTriggers) {
-            const trigger = await prisma.trigger.findUnique({where: {id: plums.triggerId}});
-            if (cronMap.has(plums.id) || !trigger)
+        for (const plum of plumsTriggers) {
+            const trigger = await prisma.trigger.findUnique({where: {id: plum.triggerId}});
+            if (cronMap.has(plum.id) || !trigger)
                 continue;
             const triggerTemplate = await prisma.triggerTemplate.findUnique({
                 where: { id: trigger.triggerTemplateId }
@@ -64,7 +64,7 @@ async function updateCron() {
             if (triggerTemplate?.type !== 'cron')
                 continue;
             try {
-                const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(trigger.triggerValue));
+                const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(trigger.triggerValue), plum.status);
                 cronMap.set(trigger.id, cron);
             } catch (error) {
                 console.error('Error adding cron job:', error);
