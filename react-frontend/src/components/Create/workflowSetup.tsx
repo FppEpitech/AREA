@@ -112,20 +112,6 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                 ))}
                             </select>
                         </div>
-                        <div>
-                            <label className="block text-sm font-semibold mb-1">Account <span className="text-red-500">*</span></label>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="text"
-                                    placeholder={`Connect ${provider}`}
-                                    disabled
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-500"
-                                />
-                                <button className="bg-customGreen text-white px-3 py-2 rounded-md hover:bg-customDarkGreen">
-                                    Sign
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 );
             case 'configure':
