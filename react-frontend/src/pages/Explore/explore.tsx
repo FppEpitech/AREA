@@ -44,7 +44,7 @@ function ServiceCard({ name, logo, color }: IService) {
         <button
             onClick={handleClick}
             style={{ backgroundColor: color }}
-            className="flex items-center justify-center text-center text-white h-64 rounded-lg p-6 transition-transform hover:scale-105"
+            className="flex items-center justify-center text-center text-white rounded-lg p-6 transition-transform hover:scale-105"
         >
             <div>
                 <img
