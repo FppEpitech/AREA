@@ -303,6 +303,37 @@ router.put('/:plumId', authenticateToken, async (req: Request, res: Response) : 
     }
 });
 
+/**
+ * @swagger
+ * /plums/{plumId}/status:
+ *   put:
+ *     summary: Update plum status
+ *     tags: [Plums]
+ *     parameters:
+ *       - in: path
+ *         name: plumId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: id of the Plum to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: boolean
+ *                 description: New status of the plum
+ *     responses:
+ *       200:
+ *         description: Plum status updated successfully
+ *       400:
+ *         description: Status not provided
+ *       500:
+ *         description: Error while updating the plum's status
+ */
 router.put("/:plumId/status", authenticateToken, async (req: Request, res: Response) : Promise<any> => {
     const userId = (req as any).middlewareId;
     let { plumId } = req.params;
