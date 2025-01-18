@@ -1,6 +1,6 @@
 import express, { Response, Request } from 'express';
 import dotenv from 'dotenv';
-import { updateCronJob, checkCronResultJob } from './cron/UpdateCron';
+import { updateCronJob, checkCronResultJob } from './cron/updateCron';
 import cors from 'cors';
 import plumsRouter from './routes/plums';
 import * as path from 'path';
