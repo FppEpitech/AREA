@@ -131,7 +131,7 @@ async function stopPlayingSpotifyMusicTemplate() {
     console.log('ActionTemplate \'Stop a Spotify playing music\' created:', actionTemplate);
 
   } catch (error) {
-    console.log('Error during creation of ActionTemplatejfkdlmq:', error);
+    console.log('Error during creation of ActionTemplate:', error);
   } finally {
     await prisma.$disconnect();
   }
