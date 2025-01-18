@@ -14,8 +14,10 @@ import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
 import samplePlumsRouter from "./routes/samplePlums";
 import tokenRouter from './routes/token';
-
+import helmet from "helmet";
 const swaggerUi = require("swagger-ui-express");
+const rateLimit = require('express-rate-limit');
+
 
 dotenv.config();
 initAllTemplates();
@@ -27,6 +29,11 @@ const PORT = process.env.PORT || 8081;
 
 app.use(express.json());
 app.use(cors());
+app.use(helmet())
+app.use(rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 200
+}));
 
 app.use('/token', tokenRouter);
 app.use('/plums', plumsRouter);
