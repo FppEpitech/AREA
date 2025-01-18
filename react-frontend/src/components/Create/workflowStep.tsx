@@ -3,6 +3,8 @@ import { Action, getProvidersActions, getProvidersTriggers, Trigger } from "../.
 import WorkflowSetup from "./workflowSetup";
 import { Plum } from "../../pages/MyPlums/myPlums";
 
+import trashSvg from '../../assets/icons/trash.svg';
+
 interface WorkflowStepProps {
     stepNumber: number;
     title: string;
@@ -87,6 +89,16 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
         setSelectedProvider(selectedName);
     };
 
+    const clear = () => {
+        setSelectType(undefined);
+        setSelectedProvider(title);
+        if (stepNumber === 1) {
+            setTriggerCreate(null);
+        } else {
+            setActionCreate(null);
+        }
+    }
+
     return (
         <div className="block p-6 bg-white font-inter border-2 border-customLightGreen rounded-lg">
             <div className="columns-2">
@@ -111,7 +123,19 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
 
             </div>
 
-            <p className="font-normal text-gray-700 dark:text-gray-400">{stepNumber}. {description}</p>
+            <div className="flex justify-between">
+                <p className="font-normal text-gray-700 dark:text-gray-400">{stepNumber}. {description}</p>
+                <button
+                    className="text-gray-400 hover:text-gray-600"
+                    onClick={() => clear()}
+                >
+                    <img
+                        src={trashSvg}
+                        alt="trash"
+                        className="w-[20px] h-[20px]"
+                    />
+                </button>
+            </div>
 
             {
             selectType && selectType.length > 0 && (

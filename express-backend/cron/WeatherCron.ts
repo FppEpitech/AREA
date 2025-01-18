@@ -85,12 +85,39 @@ export async function humidity(userId: number, value_json: string, data: any) : 
 }
 
 export async function weather(userId: number, value_json: string, data: any) : Promise<boolean> {
-    const { city, country, weather, condition } = JSON.parse(value_json);
-    return await checkWeather(`${city?.value},${country?.value}`, temp => conditionMap[condition?.result](temp, weather?.value), 'weather[0].id');
+    const { city, country, condition } = JSON.parse(value_json);
+    return await checkWeatherType(`${city?.value},${country?.value}`, condition?.result);
 }
 
 function getNestedValue(obj: any, path: string): any {
     return path.split('.').reduce((acc, key) => acc?.[key], obj);
+}
+
+const weatherMap: { [key: number]: string } = {
+    0: "clear sky",
+    1: "few clouds",
+    2: "scattered clouds",
+    3: "broken clouds",
+    4: "shower rain",
+    5: "rain",
+    6: "thunderstorm",
+    7: "snow",
+    8: "mist"
+};
+
+async function checkWeatherType(city: string, condition: number): Promise<boolean> {
+    const apiKey = process.env.WEATHER_API_KEY;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+    try {
+        const response = await axios.get<WeatherResponse>(apiUrl);
+        const result : any = response.data.weather[0].description;
+
+        return result === weatherMap[condition];
+    } catch (error) {
+        console.error('Error while fetching weather data:', error);
+    }
+    return false;
 }
 
 async function checkWeather(city: string, condition: (temp: number) => boolean, path: string): Promise<boolean> {
