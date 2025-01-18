@@ -353,7 +353,9 @@ async function isMailReceivedTriggerTemplate() {
       }});
         console.log('TriggerTemplate \'Mail received\' created:', triggerEqualTemplate);
   } catch (error) {
-        console.error('Error creating trigger template');
+        // console.error('Error creating trigger template');
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

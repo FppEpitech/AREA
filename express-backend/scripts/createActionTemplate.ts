@@ -55,7 +55,7 @@ async function sendMailBasicTemplate() {
       console.log('ActionTemplate \'Send Mail Basic\' created:', actionTemplate);
 
     } catch (error) {
-      console.error('Error creating action templaten, normal ? already exists ?');
+    //   console.error('Error creating action template, normal ? already exists ?');
     } finally {
       await prisma.$disconnect();
     }
@@ -107,7 +107,7 @@ async function sendMailBasicTemplate() {
       console.log('ActionTemplate \'Send Mail Complex\' created:', actionTemplate);
 
     } catch (error) {
-      console.error('Error creating action template, normal ? already exists ?');
+    //   console.error('Error creating action template, normal ? already exists ?');
     } finally {
       await prisma.$disconnect();
     }
@@ -131,7 +131,7 @@ async function stopPlayingSpotifyMusicTemplate() {
     console.log('ActionTemplate \'Stop a Spotify playing music\' created:', actionTemplate);
 
   } catch (error) {
-    console.error('Error during creation of ActionTemplate:', error);
+    console.log('Error during creation of ActionTemplate:', error);
   } finally {
     await prisma.$disconnect();
   }
