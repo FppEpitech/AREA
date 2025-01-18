@@ -51,7 +51,7 @@ export default function MyPlums() {
     const [selectedServices, setSelectedServices] = useState<string[]>([]);
     const [filterOpen, setFilterOpen] = useState(false);
 
-    const fetchPlums = useCallback(async () => {
+    const fetchPlums = async () => {
         try {
             const plums = await getPlums();
             if (plums) {
@@ -71,9 +71,11 @@ export default function MyPlums() {
         } catch (error) {
             console.error("Error fetching plums:", error);
         }
-    }, []);
+    }
 
-    fetchPlums();
+    useEffect(() => {
+        fetchPlums();
+    }, []);
 
     const applyFilters = () => {
         let filtered = [...originalPlums];
