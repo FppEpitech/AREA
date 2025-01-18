@@ -352,9 +352,6 @@ router.put("/:plumId/status", authenticateToken, async (req: Request, res: Respo
 
     }
 
-    // log terminal
-
-
 });
 
 export default router;
