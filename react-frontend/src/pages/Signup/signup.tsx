@@ -116,13 +116,6 @@ export default function Signup() {
                                 Sign in with Google
                             </button>
 
-                            <button
-                                type="button"
-                                className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                            >
-                                <img src={githubLogo} alt="Github Logo" className="w-6 h-6 mr-2" />
-                                Sign in with Github
-                            </button>
                         </div>
 
                         <div>
