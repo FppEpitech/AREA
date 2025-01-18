@@ -10,7 +10,7 @@ export const Oauth2Log = async (route: string) => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}${route}`, { headers });
         const { authUrl } = response.data;
 
-        window.open(authUrl);
+        window.location.href = authUrl;
     } catch (error) {
         console.error(error);
     }

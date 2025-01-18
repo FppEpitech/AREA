@@ -67,7 +67,7 @@ router.get('/callback', async (req, res) : Promise<any> => {
       const decodedState = JSON.parse(state as string);
       userId = decodedState.userId;
     } catch (error) {
-      return res.redirect(301, `${process.env.FRONTEND_URL}/authentification_failed`);
+      return res.redirect(301, `${process.env.FRONTEND_URL}/myServices`);
     }
 
     try {
@@ -96,17 +96,17 @@ router.get('/callback', async (req, res) : Promise<any> => {
       const newToken = await prisma.token.create({
         data: {
           userId: userId,
-          provider: 'spotify',
+          provider: 'Spotify',
           tokenHashed: encryptedAccessToken,
           scope: 1,
           creationDate: new Date().toISOString(),
         },
       });
 
-      return res.redirect(301, `${process.env.FRONTEND_URL}/authentification_success`);
+      return res.redirect(301, `${process.env.FRONTEND_URL}/myServices`);
     } catch (error) {
       console.error(error);
-      return res.redirect(301, `${process.env.FRONTEND_URL}/authentification_failed`);
+      return res.redirect(301, `${process.env.FRONTEND_URL}/myServices`);
     }
 });
 

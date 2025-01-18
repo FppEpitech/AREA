@@ -7,6 +7,7 @@ import compas from '../../assets/icons/compas.svg'
 import plus from '../../assets/icons/plus.svg'
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../services/auth/auth';
+import service from '../../assets/icons/service.svg'
 
 function SettingButton() {
 
@@ -84,7 +85,7 @@ export default function Navbar() {
     const navigate = useNavigate();
 
     return (
-        <div className="fixed top-0 left-0 right-0 flex justify-center py-2.5 px-3 z-50">
+        <div className="fixed bg-white border-b top-0 left-0 right-0 flex justify-center px-3 z-50">
             {!dropdownOpen && (
             <div className="flex justify-between items-center w-full h-[74px]">
                 <button type="button"
@@ -118,6 +119,18 @@ export default function Navbar() {
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             My Plums
+                        </p>
+                    </button>
+                    <button type="button"
+                        onClick={() => navigate('/myServices')}>
+                        <p
+                            className="flex transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={service}
+                                alt="service"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
+                            Services
                         </p>
                     </button>
                     <div className="flex space-between space-x-5 px-6">
@@ -191,6 +204,17 @@ export default function Navbar() {
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             My Plums
+                        </p>
+                    </button>
+                    <button type="button" className="w-full"
+                        onClick={() => navigate('/myServices')}>
+                        <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={service}
+                                alt="service"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
+                            Services
                         </p>
                     </button>
                     <button className="w-full hover:bg-gray-100 transition rounded-full border-2 border-customLightGreen hover:shadow-custom px-10 py-2"
