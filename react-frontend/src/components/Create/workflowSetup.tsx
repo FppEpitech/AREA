@@ -25,6 +25,12 @@ interface WorkflowSetupProps {
     actionCreate: Action | null;
 }
 
+interface Service {
+    name: string;
+    authRoute: string;
+    provider: string;
+}
+
 const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, setSelectType, setTriggerCreate, setActionCreate, triggerCreate, actionCreate }) => {
     const [activeTab, setActiveTab] = useState<'setup' | 'configure' | 'start'>('setup');
     const [selectedTemplate, setSelectedTemplate] = useState<Trigger | Action | undefined>(undefined);
@@ -37,6 +43,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
 
     const provider = selectType && selectType[0]?.provider;
 
+    const [services, setServices] = useState<Service[]>([]);
     const [tokens, setTokens] = useState<any[]>([]);
 
     useEffect(() => {
@@ -64,7 +71,10 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
 
     const fetchServices = async () => {
         const servicesTokenData = await getServicesWithTokens();
+        const servicesData = await getServices();
         setTokens(servicesTokenData);
+        const tokenProviders = servicesTokenData.map((token : any) => token.provider);
+        setServices(servicesData.filter((service : Service) => (!service.authRoute && !tokenProviders.includes(service.name)) ));
     };
 
     useEffect(() => {
@@ -77,7 +87,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
             setIsError(true);
             return;
         }
-        if (tokens.find((token : any) => token.provider === provider))
+        if (tokens.find((token : any) => token.provider === provider) || services.find((service : Service) => service.provider === provider))
             setIsErrorAuth(false);
         else {
             setIsErrorAuth(true);
