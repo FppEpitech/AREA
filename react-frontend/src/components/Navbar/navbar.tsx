@@ -84,7 +84,7 @@ export default function Navbar() {
     const navigate = useNavigate();
 
     return (
-        <div className="fixed top-0 left-0 right-0 flex justify-center py-2.5 px-3 z-50">
+        <div className="fixed bg-white border-b top-0 left-0 right-0 flex justify-center px-3 z-50">
             {!dropdownOpen && (
             <div className="flex justify-between items-center w-full h-[74px]">
                 <button type="button"
