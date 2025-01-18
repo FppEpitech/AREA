@@ -306,10 +306,6 @@ async function isSpotifyNewLikeTriggerTemplate() {
                 time: {
                     value: '* * * * *',
                     type: 'CRON expression',
-                },
-                signup: {
-                    value: "/spotify/authentification",
-                    type: "signup",
                 }
           },
       },
@@ -373,10 +369,6 @@ async function isSpotifyMusicPlayingTriggerTemplate() {
                 time: {
                     value: '* * * * *',
                     type: 'CRON expression',
-                },
-                signup: {
-                    value: "/spotify/authentification",
-                    type: "signup",
                 }
           },
       },
@@ -402,10 +394,6 @@ async function isSpotifyMusicPausingTriggerTemplate() {
                 time: {
                     value: '* * * * *',
                     type: 'CRON expression',
-                },
-                signup: {
-                    value: "/spotify/authentification",
-                    type: "signup",
                 }
             },
         },

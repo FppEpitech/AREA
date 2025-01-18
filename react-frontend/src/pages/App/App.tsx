@@ -11,6 +11,7 @@ import GuardedRoute from '../../guards/authGuard';
 import Contact from '../Contact/contact';
 import Welcome from '../Welcome/welcome';
 import { OAuthRedirectSuccess, OAuthRedirectFailed } from '../OAuthRedirect/oauthRedirect';
+import MyServices from '../MyServices/myServices';
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="explore" element={<GuardedRoute element={<Explore />} />}/>
             <Route path="myPlums" element={<GuardedRoute element={<MyPlums />} />}/>
+            <Route path="myServices" element={<GuardedRoute element={<MyServices />} />}/>
             <Route path="create" element={<GuardedRoute element={<CreatePage />} />}/>
             <Route path="services/:id" element={<GuardedRoute element={<Services />} />}/>
             <Route path="client.apk" element={<ClientApk />} />

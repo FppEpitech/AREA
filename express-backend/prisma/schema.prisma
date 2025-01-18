@@ -93,6 +93,7 @@ model Service {
   provider    String @unique
   logo        String
   color       String
+  authRoute   String?
 }
 
 model SamplePlums {

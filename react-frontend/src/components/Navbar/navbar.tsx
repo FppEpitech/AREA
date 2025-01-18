@@ -7,6 +7,7 @@ import compas from '../../assets/icons/compas.svg'
 import plus from '../../assets/icons/plus.svg'
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../services/auth/auth';
+import service from '../../assets/icons/service.svg'
 
 function SettingButton() {
 
@@ -120,6 +121,18 @@ export default function Navbar() {
                             My Plums
                         </p>
                     </button>
+                    <button type="button"
+                        onClick={() => navigate('/myServices')}>
+                        <p
+                            className="flex transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={service}
+                                alt="service"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
+                            Services
+                        </p>
+                    </button>
                     <div className="flex space-between space-x-5 px-6">
                         <button className="hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
                             type="button"
@@ -191,6 +204,17 @@ export default function Navbar() {
                                 className="w-[24px] h-[24px] mr-[9px]"
                             />
                             My Plums
+                        </p>
+                    </button>
+                    <button type="button" className="w-full"
+                        onClick={() => navigate('/myServices')}>
+                        <p className="flex justify-center transition text-xl font-inter hover:text-shadow-custom">
+                            <img
+                                src={service}
+                                alt="service"
+                                className="w-[24px] h-[24px] mr-[9px]"
+                            />
+                            Services
                         </p>
                     </button>
                     <button className="w-full hover:bg-gray-100 transition rounded-full border-2 border-customLightGreen hover:shadow-custom px-10 py-2"
