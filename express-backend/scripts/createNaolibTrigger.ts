@@ -137,7 +137,7 @@ async function isTramwayCloseTemplate() {
         console.log('TriggerTemplate \'Naolib tramway close\' created:', triggerNaolibTemplate);
 
     } catch (error) {
-        console.error('Error during creation of TriggerTemplate nao:', error);
+        console.error('Error during creation of TriggerTemplate:', error);
     } finally {
         await prisma.$disconnect();
     }

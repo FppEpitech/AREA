@@ -114,7 +114,6 @@ async function sendMailBasicTemplate() {
   }
 
 async function stopPlayingSpotifyMusicTemplate() {
-    console.log("YES ALLING THE FUNCTION");
   try {
     const actionTemplate = await prisma.actionTemplate.create({
       data: {
