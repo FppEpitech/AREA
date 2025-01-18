@@ -1,12 +1,12 @@
-import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./WeatherCron";
-import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./SpotifyCron";
-import { isTramwayClose} from "./NaolibCron";
+import { pressure, temperature, cloudiness, windSpeed, humidity, weather } from "./weatherCron";
+import { spotifyNewLike, isSpotifyMusicPlaying, isSpotifyMusicPausing} from "./spotifyCron";
+import { isTramwayClose} from "./naolibCron";
 import sendDiscordMessage from "../action/sendDiscordMessage";
-import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/SpotifyAction";
-import { isWorldTime } from "./TimeCron";
-import { CronClass } from './CronClass';
+import {stopPlayingSpotifyMusic, resumePlayingSpotifyMusic, skipToNextTrackSpotify, previousPlayingSpotifyMusic} from "../action/spotifyAction";
+import { isWorldTime } from "./timeCron";
+import { CronClass } from './cronClass';
 import { sendMailBasic, sendMailComplex } from "../action/sendMail";
-import { isMailReceived } from "./MailCron";
+import { isMailReceived } from "./mailCron";
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
