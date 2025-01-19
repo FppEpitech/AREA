@@ -17,6 +17,8 @@
     "cors": "^2.8.5",
     "cron": "^3.2.1",
     "crypto-js": "^4.2.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
     "imap": "^0.8.19",
     "mailparser": "^3.7.2",
     "nodemailer": "^6.9.16",
