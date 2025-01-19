@@ -1,19 +1,18 @@
 import axios from 'axios';
 
 export async function isWorldTime(userId: number, value_json: string, data: any): Promise<boolean> {
-    const { city, country, year, month, day, hour, minute } = JSON.parse(value_json);
-    const WorldTimeAPI: string = 'http://worldtimeapi.org/api/timezone/' + city?.value + '/' + country?.value;
+    const { city, continent, year, month, day, hour, minute } = JSON.parse(value_json);
+    const WorldTimeAPI: string = 'https://timeapi.io/api/time/current/zone?timeZone=' + continent?.value + '%2F' + city?.value;
 
     try {
         const response = await axios.get(WorldTimeAPI);
         const result: any = response.data;
-        const stringData = result?.dateTime;
-        const date = new Date(stringData);
-        const respYear = date.getUTCFullYear();
-        const respMonth = date.getUTCMonth() + 1;
-        const respDay = date.getUTCDate();
-        const respHour = date.getUTCHours();
-        const respMinute = date.getUTCMinutes();
+        console.log('World Time API response:', result);
+        const respYear = result.year;
+        const respMonth = result.month;
+        const respDay = result.day;
+        const respHour = result.hour;
+        const respMinute = result.minute;
 
         return (
             respYear === year?.value &&
