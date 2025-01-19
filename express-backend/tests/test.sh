@@ -3,6 +3,10 @@
 # Define the path for the .env file
 ENV_FILE=".env"
 TEMP_ENV_FILE="/tmp/.env"
+TEST_DB_NAME="test_db"
+TEST_USER="test_user"
+TEST_PASSWORD="test_password"  # Optional: Use a password if needed
+PORT="5433"  # Port for the test database
 
 # Check if .env exists at the start of the script
 if [ -f "$ENV_FILE" ]; then
@@ -13,34 +17,62 @@ else
 fi
 
 # Stop PostgreSQL service if running
-echo "Stopping PostgreSQL service..."
-sudo systemctl stop postgresql || exit 1
-
-# Wait for PostgreSQL to stop
-sleep 1
-
-# Start PostgreSQL service
-echo "Starting PostgreSQL service..."
+echo "Ensuring PostgreSQL service is running..."
 sudo systemctl start postgresql || exit 1
 
-# Wait for PostgreSQL to start
-sleep 1
+# Wait for PostgreSQL to start (increase the wait time if necessary)
+sleep 5
 
-# Ensure PostgreSQL is running before attempting to drop database and user
+# Ensure PostgreSQL is running before attempting to create database and user
 if ! sudo systemctl is-active --quiet postgresql; then
   echo "PostgreSQL service is not active. Exiting."
   exit 1
 fi
 
-# Drop test database
+# Create a temporary .env file with the new configuration for testing
+echo "Creating temporary .env file with test settings..."
+echo "PORT=$PORT" > "$ENV_FILE"
+echo "DATABASE_URL=postgresql://$TEST_USER:$TEST_PASSWORD@localhost:$PORT/$TEST_DB_NAME" >> "$ENV_FILE"
+echo "SECRET=SECRET" >> "$ENV_FILE"
+
+# Create test database and user if they do not exist
+echo "Creating test database '$TEST_DB_NAME' and user '$TEST_USER'..."
+
+# Check if the database exists
+if ! sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = '$TEST_DB_NAME'" | grep -q 1; then
+  sudo -u postgres psql -c "CREATE DATABASE $TEST_DB_NAME;" || exit 1
+else
+  echo "Database $TEST_DB_NAME already exists."
+fi
+
+# Create user if it does not exist
+if ! sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname = '$TEST_USER'" | grep -q 1; then
+  sudo -u postgres psql -c "CREATE USER $TEST_USER WITH PASSWORD '$TEST_PASSWORD';" || exit 1
+  sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $TEST_DB_NAME TO $TEST_USER;" || exit 1
+else
+  echo "User $TEST_USER already exists."
+fi
+
+# Install dependencies and generate Prisma client
+npm install
+
+# Generate Prisma client with the modified .env
+npx prisma generate
+
+# Run migrations with the modified .env
+sudo npx prisma migrate dev
+
+# Run tests with the modified .env
+npm test
+
+# Drop test database and user after tests
 echo "Dropping test database..."
-sudo -u postgres psql -c "DROP DATABASE IF EXISTS test_db;"
+sudo -u postgres psql -c "DROP DATABASE IF EXISTS $TEST_DB_NAME;"
 
-# Drop test user
 echo "Dropping test user..."
-sudo -u postgres psql -c "DROP USER IF EXISTS test_user;"
+sudo -u postgres psql -c "DROP USER IF EXISTS $TEST_USER;"
 
-# Ensure the PostgreSQL service is stopped at the end
+# Ensure PostgreSQL service is stopped at the end
 echo "Stopping PostgreSQL service after cleanup..."
 sudo systemctl stop postgresql || exit 1
 
