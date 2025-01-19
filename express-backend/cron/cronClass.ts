@@ -12,10 +12,13 @@ class CronClass {
     constructor(fct: (userId : number, value_json: any, data: any) => Promise<boolean>, userId : number, value_json: string, status : boolean, updatedAt: Date) {
         this.lastUpdatedAt = updatedAt;
 
-        const { time } = JSON.parse(value_json);
+        const { time, city, continent } = JSON.parse(value_json);
+        let cronTime = time.value;
+        if (city !== undefined && continent !== undefined)
+            cronTime = '* * * * *';
         this.status = status;
         this.data = {};
-        this.cronJob = new CronJob(time.value, async () => {
+        this.cronJob = new CronJob(cronTime, async () => {
             try {
                 this.lastResult = (status) ? await fct(userId, value_json, this.data) : false;
             } catch (e) {

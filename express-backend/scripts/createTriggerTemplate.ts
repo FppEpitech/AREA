@@ -423,30 +423,6 @@ async function worldTimeTriggerTemplate() {
                         value: '* * * * *',
                         type: 'CRON expression',
                     },
-                    year: {
-                        value: 2025,
-                        type: 'number',
-                    },
-                    month: {
-                        value: 1,
-                        type: 'number',
-                        check: '1-12',
-                    },
-                    day: {
-                        value: 1,
-                        type: 'number',
-                        check: '1-31',
-                    },
-                    hour: {
-                        value: 0,
-                        type: 'number',
-                        check: '0-23',
-                    },
-                    minute: {
-                        value: 0,
-                        type: 'number',
-                        check: '0-59',
-                    },
                     continent: {
                         value: 'Europe',
                         type: 'string',

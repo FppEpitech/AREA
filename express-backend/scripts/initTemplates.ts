@@ -2,7 +2,7 @@ import prisma from '../prismaClient';
 
 import { createServices } from "./createServices";
 import { isTramwayCloseTemplate } from "./createNaolibTrigger";
-import { isMailReceivedTriggerTemplate, PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate, worldTimeTriggerTemplate} from "./createTriggerTemplate";
+import { isMailReceivedTriggerTemplate, PressureTriggerTemplate, temperatureTriggerTemplate, cloudinessTriggerTemplate, windSpeedTriggerTemplate, humidityTriggerTemplate, weatherTriggerTemplate, isSpotifyNewLikeTriggerTemplate, isSpotifyMusicPlayingTriggerTemplate, isSpotifyMusicPausingTriggerTemplate, worldTimeTriggerTemplate } from "./createTriggerTemplate";
 import { sendMailBasicTemplate, sendMailComplexTemplate, sendDiscordMessageTemplate, skipPreviousSpotifyMusicTemplate, skipNextSpotifyMusicTemplate, resumePlayingSpotifyMusicTemplate, stopPlayingSpotifyMusicTemplate } from "./createActionTemplate";
 
 const triggerTemplates : Map<string, () => Promise<void>> = new Map([

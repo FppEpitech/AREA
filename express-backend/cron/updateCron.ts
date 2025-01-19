@@ -10,7 +10,6 @@ import { isMailReceived } from "./mailCron";
 import prisma from '../prismaClient'
 import {CronJob} from "cron";
 
-
 /**
  * Map of cron jobs.
  * If a cron is find in the db, it will be added to the map. And will be started.
@@ -104,6 +103,7 @@ async function checkCronResult() {
             if (!actionTemplate)
                 continue;
             const actionFunc = actionsMapFunction.get(actionTemplate?.actFunc);
+            cron.lastResult = false;
             if (actionFunc && action.actionValue)
                 await actionFunc(plumTrigger.userId,  JSON.stringify(action?.actionValue));
         }
