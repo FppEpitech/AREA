@@ -4,14 +4,9 @@ import prisma from '../prismaClient'
 import { User } from '@prisma/client';
 import express, { Router, Response, Request } from 'express';
 import authenticateToken from '../middlewares/isLoggedIn';
-import admin from "firebase-admin";
 import path from "path";
 import { error } from 'console';
-
-const serviceAccountPath = path.resolve("fbCredentials.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountPath),
-});
+import admin from "firebase-admin";
 
 const accountRouter = Router();
 
