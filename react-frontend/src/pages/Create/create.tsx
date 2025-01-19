@@ -30,6 +30,8 @@ function CreatePage() {
 
     const [plumName, setPlumName] =  useState<string>("");
 
+    const [isCreationFine, setIsCreationFine] = useState<boolean>(false);
+
     useEffect(() => {
         if (plum) {
             setPlumName(plum.name);
@@ -117,14 +119,14 @@ function CreatePage() {
     }
 
     // Create the Plum
-    const createThePlum = () => {
+    const createThePlum = async () => {
         if (plumName === "" || !triggerCreate || !actionCreate) {
             return;
         }
         if (plum) {
-            updatePlum(plum.id, plumName, triggerCreate, actionCreate);
+            setIsCreationFine(await updatePlum(plum.id, plumName, triggerCreate, actionCreate));
         } else {
-            createPlum(plumName, triggerCreate, actionCreate);
+            setIsCreationFine(await createPlum(plumName, triggerCreate, actionCreate));
         }
         setIsCreated(true);
         setPlumName("");
@@ -238,13 +240,20 @@ function CreatePage() {
             {isCreated && (
                 <div className="flex justify-center items-center h-screen">
                     <div className="text-center">
-                        <h1 className="text-3xl text-customGreen font-abrilFatface mb-5">
-                            Your Plums has been successfully created!
-                        </h1>
+                        { isCreationFine && (
+                            <h1 className="text-3xl font-bold font-inter mb-5">
+                                Your Plums has been successfully created!
+                            </h1>
+                        )}
+                        { !isCreationFine && (
+                            <h1 className="text-3xl font-bold font-inter mb-5">
+                                The creation failed, please try again.
+                            </h1>
+                        )}
                         <div className="">
                             <button
                                 className="mx-2 p-6 bg-customGreen text-customLightBlue py-2 rounded-md hover:bg-customDarkGreen"
-                                onClick={() => setIsCreated(false)}
+                                onClick={() => {setIsCreated(false); setIsCreationFine(false)}}
                             >
                                 New Plum
                             </button>

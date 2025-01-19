@@ -43,6 +43,7 @@ model Plum {
   actionId  Int
   trigger   Trigger @relation(fields: [triggerId], references: [id])
   triggerId Int
+  updatedAt DateTime @updatedAt
 }
 
 model ActionTemplate {

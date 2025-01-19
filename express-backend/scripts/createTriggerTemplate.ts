@@ -273,11 +273,12 @@ async function weatherTriggerTemplate() {
                             1: "few clouds",
                             2: "scattered clouds",
                             3: "broken clouds",
-                            4: "shower rain",
-                            5: "rain",
-                            6: "thunderstorm",
-                            7: "snow",
-                            8: "mist"
+                            4: "overcast clouds",
+                            5: "shower rain",
+                            6: "rain",
+                            7: "thunderstorm",
+                            8: "snow",
+                            9: "mist"
                         },
                         type: 'radiobutton',
                         result: 0,
