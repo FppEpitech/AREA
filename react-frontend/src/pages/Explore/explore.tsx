@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ExploreNavbar from "../../components/Explore/ExploreNavbar";
 import Navbar from "../../components/Navbar/navbar";
-import { getActions, getTriggers } from "../../services/Plums/plums";
+import { getActions, getSamplePlums, getTriggers } from "../../services/Plums/plums";
 import Footer from "../../components/Footer/Footer";
 
 
@@ -165,9 +165,16 @@ export default function Explore() {
             }
         };
 
+        const fetchSamplePlums = async () => {
+            const data = await getSamplePlums();
+            return data;
+        };
+
         const fetchAllItems = async () => {
             const servicesData = await fetchServices();
             const plumCardsData = await fetchPlumCards();
+            const sampleplumsData = await fetchSamplePlums();
+            console.log(sampleplumsData);
             setAllItems(shuffleArray([...servicesData, ...plumCardsData]));
         };
 

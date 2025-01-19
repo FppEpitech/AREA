@@ -117,3 +117,16 @@ export const getProvidersActions = async (provider : string): Promise<Action[]> 
         return [];
     }
 };
+
+export const getSamplePlums = async () => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/sampleplums`, { headers: headers });
+        return response.data;
+    } catch (error) {
+        return [];
+    }
+};
