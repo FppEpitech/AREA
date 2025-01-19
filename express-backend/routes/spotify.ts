@@ -5,8 +5,6 @@ import CryptoJS from 'crypto-js';
 
 const router = express.Router();
 
-const SPOTIFY_REDIRECT_URI = `http://localhost:${process.env.PORT}/spotify/callback`;
-
 /**
  * @swagger
  * /spotify/authentification:
@@ -18,6 +16,12 @@ const SPOTIFY_REDIRECT_URI = `http://localhost:${process.env.PORT}/spotify/callb
  *         description: Redirect to Spotify authentication URL
  */
 router.get('/authentification', authenticateToken, (req, res) => {
+
+    const protocol = req.protocol;
+    const host = req.get('host');
+    const serverUrl = `${protocol}://${host}`;
+    const SPOTIFY_REDIRECT_URI = `${serverUrl}/spotify/callback`;
+
     const userId = (req as any).middlewareId;
     const state = JSON.stringify({userId});
     const scope = 'playlist-modify-public playlist-modify-private user-library-read user-library-modify user-follow-read user-follow-modify user-top-read user-read-playback-state user-modify-playback-state';
@@ -59,6 +63,16 @@ function encryptTokenSpotify(token: string): string {
  */
 router.get('/callback', async (req, res) : Promise<any> => {
     const { code, state } = req.query;
+    const protocol = req.protocol;
+    const host = req.get('host');
+    const serverUrl = `${protocol}://${host}`;
+    const SPOTIFY_REDIRECT_URI = `${serverUrl}/spotify/callback`;
+
+    const userAgent = req.get('User-Agent') || '';
+    const isMobile = /mobile/i.test(userAgent);
+
+    const fallbackUrlWeb = `${process.env.FRONTEND_URL}/myServices`;
+    const fallbackUrlMobile = 'plumpy://myServices';
 
     if (!code)
       return res.status(400).json({error: 'Code is missing'});
@@ -67,7 +81,8 @@ router.get('/callback', async (req, res) : Promise<any> => {
       const decodedState = JSON.parse(state as string);
       userId = decodedState.userId;
     } catch (error) {
-      return res.redirect(301, `${process.env.FRONTEND_URL}/myServices`);
+        const redirectUrl = isMobile ? fallbackUrlMobile : fallbackUrlWeb;
+        return res.redirect(301, redirectUrl);
     }
 
     try {
@@ -102,11 +117,12 @@ router.get('/callback', async (req, res) : Promise<any> => {
           creationDate: new Date().toISOString(),
         },
       });
-
-      return res.redirect(301, `${process.env.FRONTEND_URL}/myServices`);
+      const redirectUrl = isMobile ? fallbackUrlMobile : fallbackUrlWeb;
+      return res.redirect(301, redirectUrl);
     } catch (error) {
       console.error(error);
-      return res.redirect(301, `${process.env.FRONTEND_URL}/myServices`);
+      const redirectUrl = isMobile ? fallbackUrlMobile : fallbackUrlWeb;
+      return res.redirect(301, redirectUrl);
     }
 });
 
