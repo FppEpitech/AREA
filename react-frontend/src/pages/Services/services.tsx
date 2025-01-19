@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/navbar";
-import {getProvidersActions, getProvidersTriggers} from "../../services/Plums/plums";
+import { getProvidersActions, getProvidersTriggers } from "../../services/Plums/plums";
 
 import clockSvg from "../../assets/icons/clock.svg";
 import tvSvg from "../../assets/icons/tv.svg";
@@ -41,11 +41,9 @@ export interface Trigger {
 export interface Action extends Trigger {}
 
 function PlumCard(card: ITriggerActionCard) {
-
     const navigate = useNavigate();
 
     const createPlumWithCard = (card: ITriggerActionCard) => {
-
         if (card.isTrigger) {
             navigate('/create', { state: { givenTrigger: card } });
         } else {
@@ -54,33 +52,33 @@ function PlumCard(card: ITriggerActionCard) {
     };
 
     return (
-        <div className="bg-white border-2 border-customLightGreen rounded-lg p-6 flex flex-col">
+        <div className="bg-white border-2 border-customLightGreen rounded-lg p-6 flex flex-col dark:bg-customDarkCard dark:border-customDarkBorder">
             <div className="flex">
                 <img
                     src={card.isTrigger ? clockSvg : tvSvg}
                     alt="plus"
                     className="mr-[9px]"
                 />
-                <span className="text-base font-bold font-inter">
+                <span className="text-base font-bold font-inter dark:text-white">
                     {card.isTrigger ? "Trigger" : "Action"}
                 </span>
             </div>
-            <p className="font-bold font-inter text-2xl mt-4">{card.name}</p>
+            <p className="font-bold font-inter text-2xl mt-4 dark:text-white">{card.name}</p>
             {card.valueTemplate ? (
                 <div className="mt-4 text-left w-full">
-                    <p className="text-base text-gray-600">
+                    <p className="text-base text-gray-600 dark:text-gray-400">
                         {Object.keys(card.valueTemplate).join(", ")}
                     </p>
                 </div>
             ) : (
-                <p className="text-sm text-gray-500">No fields available</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">No fields available</p>
             )}
-            <button className="mt-16 flex justify-center max-w-[160px] text-xl hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
+            <button
+                className="mt-16 flex justify-center max-w-[160px] text-xl dark:bg-customDarkDarkGreen dark:text-white hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen dark:border-customGreen dark:hover:bg-customDarkGreen dark:hover:text-white"
                 type="button"
                 onClick={() => createPlumWithCard(card)}
             >
-                <p
-                    className='flex text-xl font-inter m-2'>
+                <p className="flex text-xl font-inter m-2">
                     <img
                         src={plus}
                         alt="plus"
@@ -94,7 +92,7 @@ function PlumCard(card: ITriggerActionCard) {
 }
 
 export default function Services() {
-    const { id } = useParams<{ id: string }>();
+    const {id} = useParams<{ id: string }>();
     const [service, setService] = useState<IService | null>(null);
     const [triggers, setTriggers] = useState<ITriggerActionCard[]>([]);
     const [actions, setActions] = useState<ITriggerActionCard[]>([]);
@@ -157,19 +155,19 @@ export default function Services() {
 
     const filteredCards =
         (activeButton === "Triggers" ? triggers
-        : activeButton === "Actions" ? actions
-        : [...triggers, ...actions])
-        .filter((card) => {
-            const lowerCaseQuery = searchQuery.toLowerCase();
-            return (
-                card.name.toLowerCase().includes(lowerCaseQuery)
-            );
-    });
+            : activeButton === "Actions" ? actions
+                : [...triggers, ...actions])
+            .filter((card) => {
+                const lowerCaseQuery = searchQuery.toLowerCase();
+                return (
+                    card.name.toLowerCase().includes(lowerCaseQuery)
+                );
+            });
 
     if (!service) return <div>Loading...</div>;
 
     return (
-        <div className="relative min-h-screen bg-white">
+        <div className="relative min-h-screen bg-white dark:bg-customDarkBg">
             <Navbar />
             <div
                 style={{ backgroundColor: service.color }}
@@ -192,7 +190,7 @@ export default function Services() {
                         <button
                             className={`text-customGreen font-medium pb-1 ${
                                 activeButton === "All" ? "border-b-2 border-customGreen" : ""
-                            }`}
+                            } dark:text-white dark:border-customDarkGreen`}
                             onClick={() => handleButtonClick("All")}
                         >
                             All
@@ -200,7 +198,7 @@ export default function Services() {
                         <button
                             className={`text-customGreen font-medium pb-1 ${
                                 activeButton === "Triggers" ? "border-b-2 border-customGreen" : ""
-                            }`}
+                            } dark:text-white dark:border-customDarkGreen`}
                             onClick={() => handleButtonClick("Triggers")}
                         >
                             Triggers
@@ -208,7 +206,7 @@ export default function Services() {
                         <button
                             className={`text-customGreen font-medium pb-1 ${
                                 activeButton === "Actions" ? "border-b-2 border-customGreen" : ""
-                            }`}
+                            } dark:text-white dark:border-customDarkGreen`}
                             onClick={() => handleButtonClick("Actions")}
                         >
                             Actions
@@ -217,7 +215,7 @@ export default function Services() {
                     <input
                         type="search"
                         placeholder={`Search ${id || ""} triggers or actions`}
-                        className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen"
+                        className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen dark:bg-customDarkCard dark:text-white dark:border-customDarkBorder"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />

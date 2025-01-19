@@ -1,16 +1,27 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  darkMode: 'media',
   theme: {
     extend: {
       colors: {
+        // Light mode colors
         customLightBlue: "#ECF8F6",
         customDarkGreen: "#18534F",
         customGreen: "#226D68",
         customYellow: "#FEEAA1",
         customOrange: "#D6955B",
         customLightGreen: "#85C83E",
-        customDarkLightGreen: "#78B035"
+
+        // Dark mode equivalents
+        customDarkBg: "#121212",
+        customDarkCard: "#1E1E1E",
+        customDarkDarkGreen: "#0F3D3A",
+        customDarkLightGreen: "#78B035",
+        customDarkText: "#E5E5E5",
+        customDarkYellow: "#F3D774",
+        customDarkOrange: "#C2854D",
+        customDarkBorder: "#2D2D2D",
       },
       fontFamily: {
         abrilFatface: ['Abril Fatface', 'serif'],
