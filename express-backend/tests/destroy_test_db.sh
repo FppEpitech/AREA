@@ -24,4 +24,12 @@ fi
 echo "Dropping test database..."
 sudo -u postgres psql -c "DROP DATABASE IF EXISTS test_db;"
 
+echo "Revoking privileges from test user..."
+sudo -u postgres psql -c "REVOKE ALL PRIVILEGES ON SCHEMA public FROM test_user;"
+sudo -u postgres psql -c "REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM test_user;"
+sudo -u postgres psql -c "REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM test_user;"
+
+echo "Dropping test user..."
+sudo -u postgres psql -c "DROP USER IF EXISTS test_user;"
+
 echo "Test environment cleared successfully!"
