@@ -6,6 +6,7 @@ import express, { Router, Response, Request } from 'express';
 import authenticateToken from '../middlewares/isLoggedIn';
 import admin from "firebase-admin";
 import path from "path";
+import { error } from 'console';
 
 const serviceAccountPath = path.resolve("fbCredentials.json");
 admin.initializeApp({
@@ -71,9 +72,11 @@ accountRouter.post('/register', async (req: Request, res: Response): Promise<any
         let user : User | null = await prisma.user.findUnique({
             where: { mail: mail },
         });
-        if (user && !user.externalProvider)
-            return res.status(500).json({ msg: `Internal Server Error`});
-        if (user && user.externalProvider) {
+        if (user && !user.externalProvider) {
+            console.log("akiki");
+            return res.status(500).json({ msg: `Internal Server Error`, error});
+        }
+        if (!(user && user.externalProvider)) {
             user = await createNewUser(mail, password);
             const token = generateToken(user.userId);
             return res.status(201).json({ token: token });
@@ -82,13 +85,15 @@ accountRouter.post('/register', async (req: Request, res: Response): Promise<any
                 where: { mail: mail },
                 data: {
                     hashedPassword: await bcrypt.hash(password, 10),
+                    externalProvider: false,
                 },
             });
             let token = generateToken(editedUser.userId);
             return res.status(201).json({ token: token});
         }
     } catch (error) {
-        return res.status(500).json({ msg: `Internal Server Error`});
+        console.log(error);
+        return res.status(500).json({ msg: `Internal Server Error`, error});
     }
 });
 
@@ -192,7 +197,7 @@ accountRouter.delete('/deleteSelf', authenticateToken, async (req: Request, res:
         return res.status(500).json({ msg: `Internal Server Error ${error}`});
     }
 });
-accountRouter.post('/loginGoogle', async (req: Request, res: Response): Promise<any> => {
+accountRouter.post('/loginExternal', async (req: Request, res: Response): Promise<any> => {
     const { idToken } = req.body;
     if (!idToken) {
         return res.status(400).json({ msg: "Bad parameters: Missing idToken" });
@@ -201,7 +206,7 @@ accountRouter.post('/loginGoogle', async (req: Request, res: Response): Promise<
         const decodedToken = await admin.auth().verifyIdToken(idToken.token);
         const uid = decodedToken.uid;
         const fbUser = await admin.auth().getUser(uid);
-
+        console.log(fbUser);
         if (!fbUser || !fbUser.displayName || !fbUser.email) {
             return res.status(409).json({ msg: "Invalid Credentials" });
         }
