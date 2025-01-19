@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import Filter from "../../components/Filter/Filter";
-import { deletePlum, getPlums } from "../../services/Plums/plums";
+import { deletePlum, getPlums, updatePlumStatus } from "../../services/Plums/plums";
 import Footer from "../../components/Footer/Footer";
 
 import searchSvg from '../../assets/icons/search.svg';
@@ -32,7 +32,7 @@ interface ActionPlum {
 export interface Plum {
     name: string;
     provider: string;
-    isActivated: boolean;
+    status: boolean;
     trigger: TriggerPlum;
     action: ActionPlum;
     id: number;
@@ -84,8 +84,8 @@ export default function MyPlums() {
         }
 
         if (currentStatusFilter !== 'All') {
-            const isActivated = currentStatusFilter === 'On';
-            filtered = filtered.filter((plum) => plum.isActivated === isActivated);
+            const status = currentStatusFilter === 'On';
+            filtered = filtered.filter((plum) => plum.status === status);
         }
 
         if (selectedServices.length > 0) {
@@ -123,6 +123,39 @@ export default function MyPlums() {
             fetchPlums();
         } catch (error) {
             console.error("Error deleting plum:", error);
+        }
+    };
+
+    const [isToggling, setIsToggling] = useState(false);
+
+    const eventTogglePlumStatus = async (plum: Plum) => {
+        if (isToggling) return;
+        setIsToggling(true);
+
+        try {
+            const newStatus = !plum.status;
+
+            if (plum.status === newStatus) {
+                console.log("No status change required.");
+                setIsToggling(false);
+                return;
+            }
+
+            const success = await updatePlumStatus(plum.id, newStatus);
+
+            if (success) {
+                setMyPlums(prevPlums =>
+                    prevPlums.map(p =>
+                        p.id === plum.id ? { ...p, status: newStatus } : p
+                    )
+                );
+            } else {
+                console.error("Failed to update plum status.");
+            }
+        } catch (error) {
+            console.error("Error toggling plum status:", error);
+        } finally {
+            setIsToggling(false);
         }
     };
 
@@ -208,14 +241,18 @@ export default function MyPlums() {
                                         <button
                                             type="button"
                                             aria-label="Activate"
-                                            className={`relative w-20 h-8 flex items-center rounded-full p-1 ${plum.isActivated ? 'bg-customLightGreen' : 'bg-gray-300 dark:bg-customDarkCard'} transition-colors duration-300`}
+                                            className={`relative w-20 h-8 flex items-center rounded-full p-1 ${plum.status ? 'bg-customLightGreen' : 'bg-gray-300 dark:bg-customDarkBorder'} transition-colors duration-300`}
+                                            onClick={() => eventTogglePlumStatus(plum)} // Toggle the status on click
                                         >
-                                            <div className={`w-6 h-6 bg-white rounded-full shadow-md transform ${plum.isActivated ? 'translate-x-12' : 'translate-x-0'} transition-transform duration-300`}></div>
+                                            <div
+                                                className={`w-6 h-6 bg-white rounded-full shadow-md transform ${plum.status ? 'translate-x-12' : 'translate-x-0'} transition-transform duration-300`}></div>
                                         </button>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <button type="button" onClick={() => { eventDeletePlum(plum); }}>
-                                            <img src={trash} alt="trash" />
+                                        <button type="button" onClick={() => {
+                                            eventDeletePlum(plum);
+                                        }}>
+                                            <img src={trash} alt="trash"/>
                                         </button>
                                     </td>
                                 </tr>
