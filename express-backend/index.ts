@@ -12,13 +12,14 @@ import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
 import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
-import samplePlumsRouter from "./routes/samplePlums";
 import tokenRouter from './routes/token';
+import { createSamplePlums } from './scripts/createSamplePlums';
 
 const swaggerUi = require("swagger-ui-express");
 
 dotenv.config();
 initAllTemplates();
+createSamplePlums();
 checkCronResultJob.start();
 updateCronJob.start();
 
@@ -36,7 +37,6 @@ app.use('/spotify', spotifyRouter);
 app.use('/account', accountRouter);
 app.use('/about.json', aboutRouter);
 app.use('/services', servicesRouter);
-app.use('/sampleplums', samplePlumsRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
