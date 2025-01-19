@@ -130,7 +130,7 @@ export default function MyPlums() {
         <div className="flex flex-col min-h-screen bg-customLightBlue dark:bg-customDarkBg">
             <Navbar />
             <div className="mt-36 w-5/6 mx-auto">
-                <h1 className="text-4xl font-abrilFatface text-customGreen dark:text-customDarkGreen mb-6">Plums</h1>
+                <h1 className="text-4xl font-abrilFatface text-customGreen dark:text-customDarkGreen mb-6">My Plums</h1>
                 <div className="flex flex-wrap items-center mb-4 space-x-4 space-y-4 md:space-y-0 md:justify-start md:flex-nowrap">
                     <div className="flex items-center w-full md:w-auto">
                         <img

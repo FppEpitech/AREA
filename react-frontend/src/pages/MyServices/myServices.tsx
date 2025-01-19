@@ -51,13 +51,13 @@ export default function MyServices() {
         <div className="flex flex-col min-h-screen bg-customLightBlue dark:bg-customDarkBg">
             <Navbar />
             <div className="mt-36 w-5/6 mx-auto">
-                <h1 className="text-4xl font-abrilFatface text-customGreen dark:text-customDarkGreen mb-6">Services</h1>
+                <h1 className="text-4xl font-abrilFatface text-customGreen dark:text-customDarkGreen mb-6">My Services</h1>
 
                 {services && services.map((service, index) => (
                     <div key={index} className="flex items-center justify-between py-4 mb-4 rounded-full shadow-custom border dark:border-customDarkBorder dark:bg-customDarkCard">
                         <div className="flex items-center">
                             <img src={service.logo} alt="logo" className="w-10 h-10 mx-4" />
-                            <p className="text-customDarkText dark:text-white">{service.provider}</p>
+                            <p className="text-customGreen dark:text-white">{service.provider}</p>
                         </div>
                         <div className="flex items-center mx-5">
                             <button
