@@ -12,11 +12,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd react-frontend
-          npm install
+          npm install @types/node@^18 --save-dev
+          npm install --legacy-peer-deps
       - name: Execute the tests
         run: |
           cd react-frontend
-          npm test a
+          npx vitest
   run_back_tests:
     runs-on: ubuntu-latest
     steps:
