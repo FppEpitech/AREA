@@ -18,10 +18,14 @@ import sampleRouter from './routes/samplePlums';
 import admin from "firebase-admin";
 const swaggerUi = require("swagger-ui-express");
 
-const serviceAccountPath = path.resolve("fbCredentials.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountPath),
-});
+try {
+    const serviceAccountPath = path.resolve("fbCredentials.json");
+        admin.initializeApp({
+        credential: admin.credential.cert(serviceAccountPath),
+    });
+} catch (e) {
+    console.error("Error initializing Firebase Admin", e);
+}
 
 dotenv.config();
 initAllTemplates();
