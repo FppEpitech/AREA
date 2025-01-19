@@ -19,6 +19,7 @@ import {CronJob} from "cron";
  *
  * While a cronJob is in the map, it will be executed.
  */
+
 const cronMap = new Map<number, CronClass>();
 
 const triggersMapFunction: Map<string, (userId: number, value_json: string, data: any) => Promise<boolean>> = new Map([
@@ -56,15 +57,22 @@ async function updateCron() {
         const plumsTriggers = await prisma.plum.findMany();
         for (const plums of plumsTriggers) {
             const trigger = await prisma.trigger.findUnique({where: {id: plums.triggerId}});
-            if (cronMap.has(plums.id) || !trigger)
+            if (!trigger)
+                continue;
+            if (cronMap.has(plums.triggerId) && (plums.updatedAt.toISOString() == cronMap.get(plums.triggerId)?.lastUpdatedAt.toISOString()))
                 continue;
             const triggerTemplate = await prisma.triggerTemplate.findUnique({
                 where: { id: trigger.triggerTemplateId }
             });
             if (triggerTemplate?.type !== 'cron')
                 continue;
+            if (plums.updatedAt.toISOString() != cronMap.get(plums.triggerId)?.lastUpdatedAt.toISOString()) {
+                cronMap.get(plums.triggerId)?.cronJob.stop();
+                cronMap.delete(plums.triggerId);
+            }
             try {
-                const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(trigger.triggerValue));
+                console.log("Creating trigger cron job for trigger id:", trigger.id);
+                const cron = new CronClass(triggersMapFunction.get(triggerTemplate?.trigFunc) as (userId: number, value_json: string, data: any) => Promise<boolean>, trigger.userId, JSON.stringify(trigger.triggerValue), plums.updatedAt);
                 cronMap.set(trigger.id, cron);
             } catch (error) {
                 console.error('Error adding cron job:', error);
@@ -81,7 +89,6 @@ async function updateCron() {
     }
 }
 
-// for all cron is one === true so find by plum trigger id his action and execute it
 async function checkCronResult() {
     try {
         for (const [id, cron] of cronMap) {
