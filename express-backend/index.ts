@@ -12,12 +12,24 @@ import aboutRouter from './routes/about';
 import swaggerDocs from './docs/swagger';
 import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
-import samplePlumsRouter from "./routes/samplePlums";
-
+import tokenRouter from './routes/token';
+import { createSamplePlums } from './scripts/createSamplePlums';
+import sampleRouter from './routes/samplePlums';
+import admin from "firebase-admin";
 const swaggerUi = require("swagger-ui-express");
+
+try {
+    const serviceAccountPath = path.resolve("fbCredentials.json");
+        admin.initializeApp({
+        credential: admin.credential.cert(serviceAccountPath),
+    });
+} catch (e) {
+    console.error("Error initializing Firebase Admin", e);
+}
 
 dotenv.config();
 initAllTemplates();
+createSamplePlums();
 checkCronResultJob.start();
 updateCronJob.start();
 
@@ -27,6 +39,7 @@ const PORT = process.env.PORT || 8081;
 app.use(express.json());
 app.use(cors());
 
+app.use('/token', tokenRouter);
 app.use('/plums', plumsRouter);
 app.use('/actions', actionRouter);
 app.use('/triggers', triggerRouter);
@@ -34,7 +47,7 @@ app.use('/spotify', spotifyRouter);
 app.use('/account', accountRouter);
 app.use('/about.json', aboutRouter);
 app.use('/services', servicesRouter);
-app.use('/sampleplums', samplePlumsRouter);
+app.use('/sampleplums', sampleRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 

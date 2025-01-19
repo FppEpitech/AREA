@@ -6,8 +6,12 @@ class CronClass {
     lastResult: boolean = false;
     data: any;
     status : Boolean = true;
+    lastUpdatedAt : Date = new Date();
 
-    constructor(fct: (userId : number, value_json: any, data: any) => Promise<boolean>, userId : number, value_json: string, status : boolean) {
+
+    constructor(fct: (userId : number, value_json: any, data: any) => Promise<boolean>, userId : number, value_json: string, status : boolean, updatedAt: Date) {
+        this.lastUpdatedAt = updatedAt;
+
         const { time } = JSON.parse(value_json);
         this.status = status;
         this.data = {};

@@ -38,28 +38,29 @@ export default function StatusDrop({ myPlums, filterPlums }: { myPlums: Plum[]; 
             <button
                 id="dropdownDividerButton"
                 onClick={toggleDropdown}
-                className="flex transition text-xl font-inter hover:text-shadow-custom"
+                className="px-3 py-2 flex items-center justify-center rounded-full
+                    border-2 border-customLightGreen dark:border-customGreen dark:bg-customDarkGreen dark:hover:bg-customDarkDarkGreen
+                    transition-colors duration-300"
                 type="button"
             >
-                <p className="flex justify-center text-sm md:text-xl font-inter">
+                <p className="flex items-center text-sm md:text-xl font-inter">
                     <img
                         src={checkSvg}
-                        alt="plus"
-                        className="mr-[9px]"
+                        alt="check"
+                        className="w-[24px] h-[24px] mr-[9px]"
                     />
                     Status
                     <img
                         src={arrowDownSvg}
-                        alt="plus"
-                        className="ml-[9px]"
+                        alt="arrow-down"
+                        className="w-[24px] h-[24px] ml-[9px]"
                     />
                 </p>
             </button>
             <div
                 id="dropdownDivider"
-                className={`absolute z-10 ${
-                    isDropdownOpen ? 'block' : 'hidden'
-                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                style={{ left: '-100px' }}
+                className={`absolute z-10 ${isDropdownOpen ? 'block' : 'hidden'} bg-white dark:bg-customDarkGreen divide-y divide-gray-100 dark:divide-gray-600 rounded-lg shadow w-44`}
             >
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
                     <li>

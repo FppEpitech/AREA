@@ -34,7 +34,7 @@ export default function Contact() {
     ];
 
     return (
-        <div className="relative flex flex-col min-h-screen">
+        <div className="relative flex flex-col min-h-screen bg-white dark:bg-customDarkBg">
             {/* Background Image */}
             <img
                 src={welcomeBackground}
@@ -47,16 +47,18 @@ export default function Contact() {
 
             {/* Header */}
             <div className="mt-48 flex justify-center relative z-10">
-                <h1 className="text-4xl bg-white p-6 rounded-[10px] font-abrilFatface text-customGreen mb-6">The dev team</h1>
+                <h1 className="text-4xl bg-white dark:bg-customDarkCard p-6 rounded-[10px] font-abrilFatface text-customGreen mb-6 dark:text-customDarkText">
+                    The dev team
+                </h1>
             </div>
 
             {/* Middle Section */}
-            <div className="mt-9 flex-grow bg-customLightBlue flex justify-center items-center relative z-10">
+            <div className="mt-9 flex-grow bg-customLightBlue dark:bg-customDarkBg flex justify-center items-center relative z-10">
                 <div className="mx-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-y-5">
                     {names.map((name, index) => (
                         <button
                             key={index}
-                            className="m-4 bg-white border-2 border-customLightGreen rounded-lg p-6 flex flex-col items-center"
+                            className="m-4 bg-white dark:bg-customDarkCard border-2 border-customLightGreen dark:border-customDarkBorder rounded-lg p-6 flex flex-col items-center"
                             type="button"
                             onClick={() => window.open(name.github)}
                         >
@@ -65,7 +67,9 @@ export default function Contact() {
                                 alt={name.name}
                                 src={`https://api.dicebear.com/9.x/pixel-art/svg?seed=${name.picture}`}
                             />
-                            <p className="mt-5 text-center">{name.name}</p>
+                            <p className="mt-5 text-center text-gray-800 dark:text-customDarkText">
+                                {name.name}
+                            </p>
                         </button>
                     ))}
                 </div>

@@ -11,6 +11,7 @@ async function createDiscord() {
                 description: 'Discord service',
                 color: '#5865F7',
                 logo: 'https://upload.wikimedia.org/wikipedia/fr/thumb/4/4f/Discord_Logo_sans_texte.svg/1818px-Discord_Logo_sans_texte.svg.png',
+                authRoute: '',
             }
         });
         console.log('Service Discord created');
@@ -29,6 +30,7 @@ async function createSpotify() {
             color: '#1DB953',
             description: 'Spotify service',
             logo: 'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',
+            authRoute: '/spotify/authentification',
         }});
         console.log('service spotify created');
     } catch (error) {
@@ -46,6 +48,7 @@ async function createOpenWeatherMap() {
             color: '#87CEEB',
             description: 'OpenWeatherMap service',
             logo: 'https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather02-512.png',
+            authRoute: '',
         }});
         console.log('service openweathermap created');
     } catch (error) {
@@ -63,6 +66,7 @@ async function createMail() {
             color: '#fa423e',
             description: 'Mail service',
             logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png',
+            authRoute: '',
         }});
         console.log('service mail created');
     } catch (error) {
@@ -80,6 +84,7 @@ async function createWorldTime() {
                 color: '#4b8424',
                 description: 'WorldTime service',
                 logo: 'https://cdn-icons-png.flaticon.com/512/109/109613.png',
+                authRoute: '',
             }});
         console.log('service mail created');
     } catch (error) {
@@ -97,6 +102,7 @@ async function createNaolib() {
             color: '#00561b',
             description: 'Naolib service',
             logo: 'https://upload.wikimedia.org/wikipedia/fr/f/f9/Logo_Naolib.svg',
+            authRoute: '',
         }});
         console.log('service Naolib created');
     } catch (error) {

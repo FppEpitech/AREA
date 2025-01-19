@@ -51,8 +51,10 @@ export const createPlum = async (name : string, trigger : Trigger, action : Acti
             Authorization: `Bearer ${token}`
         };
         await axios.post(`${process.env.REACT_APP_API_URL}/plums`, body, { headers: headers });
+        return true;
     } catch(error) {
         console.log(error);
+        return false;
     }
 };
 
@@ -70,8 +72,10 @@ export const updatePlum = async (id : number, name : string, trigger : Trigger, 
             Authorization: `Bearer ${token}`
         };
         await axios.put(`${process.env.REACT_APP_API_URL}/plums/${id}`, body, { headers: headers });
+        return true;
     } catch(error) {
         console.log(error);
+        return false;
     }
 }
 

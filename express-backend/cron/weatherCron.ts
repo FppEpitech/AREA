@@ -98,11 +98,12 @@ const weatherMap: { [key: number]: string } = {
     1: "few clouds",
     2: "scattered clouds",
     3: "broken clouds",
-    4: "shower rain",
-    5: "rain",
-    6: "thunderstorm",
-    7: "snow",
-    8: "mist"
+    4: "overcast clouds",
+    5: "shower rain",
+    6: "rain",
+    7: "thunderstorm",
+    8: "snow",
+    9: "mist"
 };
 
 async function checkWeatherType(city: string, condition: number): Promise<boolean> {

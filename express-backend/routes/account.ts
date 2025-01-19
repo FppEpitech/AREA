@@ -4,6 +4,9 @@ import prisma from '../prismaClient'
 import { User } from '@prisma/client';
 import express, { Router, Response, Request } from 'express';
 import authenticateToken from '../middlewares/isLoggedIn';
+import path from "path";
+import { error } from 'console';
+import admin from "firebase-admin";
 
 const accountRouter = Router();
 
@@ -64,13 +67,28 @@ accountRouter.post('/register', async (req: Request, res: Response): Promise<any
         let user : User | null = await prisma.user.findUnique({
             where: { mail: mail },
         });
-        if (user)
-            return res.status(409).json({ msg: "User exists." });
-        user = await createNewUser(mail, password);
-        const token = generateToken(user.userId);
-        return res.status(201).json({ token: token });
+        if (user && !user.externalProvider) {
+            console.log("akiki");
+            return res.status(500).json({ msg: `Internal Server Error`, error});
+        }
+        if (!(user && user.externalProvider)) {
+            user = await createNewUser(mail, password);
+            const token = generateToken(user.userId);
+            return res.status(201).json({ token: token });
+        } else {
+            let editedUser = await prisma.user.update({
+                where: { mail: mail },
+                data: {
+                    hashedPassword: await bcrypt.hash(password, 10),
+                    externalProvider: false,
+                },
+            });
+            let token = generateToken(editedUser.userId);
+            return res.status(201).json({ token: token});
+        }
     } catch (error) {
-        return res.status(500).json({ msg: `Internal Server Error ${error}`});
+        console.log(error);
+        return res.status(500).json({ msg: `Internal Server Error`, error});
     }
 });
 
@@ -110,7 +128,7 @@ accountRouter.post('/login', async (req: Request, res: Response) : Promise<any> 
         let user : User | null = await prisma.user.findUnique({
             where: { mail: mail },
         });
-        if (!user) {
+        if (!user || user.externalProvider) {
             return res.status(409).json({ msg: "Invalid Credentials" });
         }
         const isValidPassword = await bcrypt.compare(password, user?.hashedPassword);
@@ -174,6 +192,39 @@ accountRouter.delete('/deleteSelf', authenticateToken, async (req: Request, res:
         return res.status(500).json({ msg: `Internal Server Error ${error}`});
     }
 });
+accountRouter.post('/loginExternal', async (req: Request, res: Response): Promise<any> => {
+    const { idToken } = req.body;
+    if (!idToken) {
+        return res.status(400).json({ msg: "Bad parameters: Missing idToken" });
+    }
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(idToken.token);
+        const uid = decodedToken.uid;
+        const fbUser = await admin.auth().getUser(uid);
+        console.log(fbUser);
+        if (!fbUser || !fbUser.displayName || !fbUser.email) {
+            return res.status(409).json({ msg: "Invalid Credentials" });
+        }
+        const user = await prisma.user.findUnique({where : { mail: fbUser.email }});
+        if (!user) {
+            let newUser = await prisma.user.create({
+                data: {
+                    mail: fbUser.email,
+                    externalProvider: true,
+                    hashedPassword: "",
+            }});
+            if (!newUser)
+                return res.status(500).json({ msg: `Internal Server Error` });
+            return res.status(200).json({ token: generateToken(newUser.userId) });
+        } else {
+            const token = generateToken(user.userId);
+            return res.status(200).json({ token: token });
+        }
+    } catch (e) {
+        return res.status(500).json({ msg: `Internal Server Error: ${e}` });
+    }
+});
+
 
 export { generateToken };
 export default accountRouter

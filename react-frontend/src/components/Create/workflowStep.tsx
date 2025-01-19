@@ -100,17 +100,19 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
     }
 
     return (
-        <div className="block p-6 bg-white font-inter border-2 border-customLightGreen rounded-lg">
-            <div className="columns-2">
+        <div className="block p-6 bg-white dark:bg-customDarkCard font-inter border-2 border-customLightGreen rounded-lg shadow-md dark:border-customGreen">
+            <div className="columns-2 gap-4">
                 <div className="form-group">
                     <label
                         htmlFor="workflow-options"
-                        className="mb-2 text-2xl font-bold font-inter tracking-tight text-gray-900 dark:text-white">{title}
+                        className="mb-2 text-2xl font-bold font-inter tracking-tight text-gray-900 dark:text-white"
+                    >
+                        {title}
                     </label>
                     <select
                         name="workflow-options"
                         id="workflow-options"
-                        className="block w-full p-2 mt-2 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full p-3 mt-2 rounded-md shadow-sm focus:ring-customGreen focus:border-customGreen bg-white dark:bg-customDarkGreen dark:text-white dark:border-gray-600 transition-colors"
                         onChange={(e) => handleSelectChange(e, triggers, setSelectType)}
                         value={selectedProvider}
                     >
@@ -120,13 +122,12 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
                         ))}
                     </select>
                 </div>
-
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-4">
                 <p className="font-normal text-gray-700 dark:text-gray-400">{stepNumber}. {description}</p>
                 <button
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-500 transition-colors"
                     onClick={() => clear()}
                 >
                     <img
@@ -137,19 +138,19 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ stepNumber, title, descript
                 </button>
             </div>
 
-            {
-            selectType && selectType.length > 0 && (
-                <WorkflowSetup
-                    stepNumber={stepNumber}
-                    selectType={selectType}
-                    setSelectType={setSelectType}
-                    setTriggerCreate={setTriggerCreate}
-                    setActionCreate={setActionCreate}
-                    actionCreate={actionCreate}
-                    triggerCreate={triggerCreate}
-                />
-            )
-        }
+            {selectType && selectType.length > 0 && (
+                <div className="mt-4">
+                    <WorkflowSetup
+                        stepNumber={stepNumber}
+                        selectType={selectType}
+                        setSelectType={setSelectType}
+                        setTriggerCreate={setTriggerCreate}
+                        setActionCreate={setActionCreate}
+                        actionCreate={actionCreate}
+                        triggerCreate={triggerCreate}
+                    />
+                </div>
+            )}
         </div>
     );
 };
