@@ -4,7 +4,8 @@ import logo from '../../assets/logo58.png';
 import dropDownSvg from '../../assets/create/dropDown.svg';
 import dropDownUpSvg from '../../assets/create/dropDownUp.svg';
 import checkSvg from '../../assets/create/check.svg';
-import { TemplateCron, TemplateNumber, TemplateRadio, TemplateSignup, TemplateString, TemplateSearchDropdown } from "./templatesTypes";
+import { TemplateCron, TemplateNumber, TemplateRadio, TemplateString, TemplateSearchDropdown } from "./templatesTypes";
+import { getServices, getServicesWithTokens } from "../../services/Providers/providers";
 
 interface ValueTemplate {
     [key: string]: {
@@ -24,6 +25,12 @@ interface WorkflowSetupProps {
     actionCreate: Action | null;
 }
 
+interface Service {
+    name: string;
+    authRoute: string;
+    provider: string;
+}
+
 const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, setSelectType, setTriggerCreate, setActionCreate, triggerCreate, actionCreate }) => {
     const [activeTab, setActiveTab] = useState<'setup' | 'configure' | 'start'>('setup');
     const [selectedTemplate, setSelectedTemplate] = useState<Trigger | Action | undefined>(undefined);
@@ -32,8 +39,12 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     const [completed, setCompleted] = useState<boolean>(false);
     const [error, setError] = useState<[string, boolean] | null>(null);
     const [isError, setIsError] = useState<boolean>(false);
+    const [isErrorAuth, setIsErrorAuth] = useState<boolean>(false);
 
     const provider = selectType && selectType[0]?.provider;
+
+    const [services, setServices] = useState<Service[]>([]);
+    const [tokens, setTokens] = useState<any[]>([]);
 
     useEffect(() => {
         if (triggerCreate && stepNumber === 1) {
@@ -58,12 +69,31 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
         setSelectedTemplate(selected);
     };
 
+    const fetchServices = async () => {
+        const servicesTokenData = await getServicesWithTokens();
+        const servicesData = await getServices();
+        setTokens(servicesTokenData);
+        const tokenProviders = servicesTokenData.map((token : any) => token.provider);
+        setServices(servicesData.filter((service : Service) => (!service.authRoute && !tokenProviders.includes(service.name)) ));
+    };
+
+    useEffect(() => {
+        fetchServices();
+    }, []);
+
     const finalizeSetup = () => {
 
         if (error?.includes(true)) {
             setIsError(true);
             return;
         }
+        if (tokens.find((token : any) => token.provider === provider) || services.find((service : Service) => service.provider === provider))
+            setIsErrorAuth(false);
+        else {
+            setIsErrorAuth(true);
+            return;
+        }
+
         setIsError(false);
 
         setCompleted(true);
@@ -128,7 +158,6 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                                         {config.type === 'radiobutton' && <TemplateRadio value={config.value} result={config.result} onChange={(newValue) => handleTemplateValueChange(key, newValue, "result", false)}/>}
                                         {config.type === 'number' && <TemplateNumber value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
                                         {config.type === 'search dropdown' && (<TemplateSearchDropdown value={config.value} result={config.result} onChange={(newValue: any, isError : boolean) => handleTemplateValueChange(key, newValue, "result", isError)}/>)}
-                                        {config.type === 'signup' && <TemplateSignup value={config.value} onChange={() => {}}/>}
                                     </div>
                                 ))}
                             </div>
@@ -139,6 +168,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                 return (
                     <div>
                         {isError && <p className="text-red-500 text-sm">Please fill all required fields</p>}
+                        {isErrorAuth && <p className="text-red-500 text-sm">Please Connect to {provider} in Services page</p>}
                         <button
                         className="w-full bg-customGreen text-customLightBlue px-4 py-2 rounded-md hover:bg-customDarkGreen"
                         onClick={() => finalizeSetup()}

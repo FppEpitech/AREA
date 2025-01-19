@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { Oauth2Log } from "../../services/OAuth2/oauth2";
 
 interface TemplateProps {
     value: string | number | { [key: number]: { value: string } };
@@ -18,23 +17,6 @@ const handleInputChange =
     stringProps.onChange(newValue, isError);
     setInputValue(newValue);
 };
-
-// Signup template
-export function TemplateSignup(signupProps: TemplateProps) {
-
-    const route = signupProps.value.toString();
-
-    return (
-        <div>
-            <button
-                className="bg-customLightGreen text-white px-3 py-2 rounded-md"
-                onClick={() => Oauth2Log(route)}
-            >
-                Signup
-            </button>
-        </div>
-    );
-}
 
 // String template
 export function TemplateString( stringProps : TemplateProps) {

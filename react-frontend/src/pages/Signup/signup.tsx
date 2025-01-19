@@ -4,6 +4,8 @@ import githubLogo from '../../assets/login/Github.svg'
 import { useState } from "react";
 import { AuthSignUp } from '../../services/auth/auth'
 import { useNavigate } from "react-router-dom";
+import '../Login/mockup.css';
+import screenshot from '../../assets/login/website_screenshot.png';
 
 export default function Signup() {
 
@@ -33,7 +35,7 @@ export default function Signup() {
 
                 {/* Top-Left Logo */}
                 <div className="absolute top-4 left-4">
-                    <img src={logo} alt="Plumpy Logo" className="w-[50px] h-[50px]" />
+                    <img src={logo} alt="Plumpy Logo" className="w-[50px] h-[50px]" onClick={() => navigate('/welcome')}/>
                 </div>
 
                 {/* Main Content */}
@@ -116,13 +118,6 @@ export default function Signup() {
                                 Sign in with Google
                             </button>
 
-                            <button
-                                type="button"
-                                className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                            >
-                                <img src={githubLogo} alt="Github Logo" className="w-6 h-6 mr-2" />
-                                Sign in with Github
-                            </button>
                         </div>
 
                         <div>
@@ -142,8 +137,12 @@ export default function Signup() {
             </div>
 
             {/* Right Section */}
-            <div className="bg-customLightGreen flex items-center justify-center hidden lg:flex">
-                <h1 className="text-white text-4xl font-bold">Welcome!</h1>
+            <div className="bg-customLightGreen border-l flex items-center justify-center hidden lg:flex relative overflow-hidden">
+                <img
+                    src={screenshot}
+                    alt="Mockup"
+                    className="absolute mockup"
+                />
             </div>
         </div>
     );

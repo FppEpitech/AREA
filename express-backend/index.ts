@@ -1,6 +1,6 @@
 import express, { Response, Request } from 'express';
 import dotenv from 'dotenv';
-import { updateCronJob, checkCronResultJob } from './cron/UpdateCron';
+import { updateCronJob, checkCronResultJob } from './cron/updateCron';
 import cors from 'cors';
 import plumsRouter from './routes/plums';
 import * as path from 'path';
@@ -13,6 +13,7 @@ import swaggerDocs from './docs/swagger';
 import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
 import samplePlumsRouter from "./routes/samplePlums";
+import tokenRouter from './routes/token';
 
 const swaggerUi = require("swagger-ui-express");
 
@@ -27,6 +28,7 @@ const PORT = process.env.PORT || 8081;
 app.use(express.json());
 app.use(cors());
 
+app.use('/token', tokenRouter);
 app.use('/plums', plumsRouter);
 app.use('/actions', actionRouter);
 app.use('/triggers', triggerRouter);
