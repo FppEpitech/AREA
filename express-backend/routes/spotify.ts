@@ -17,9 +17,7 @@ const router = express.Router();
  */
 router.get('/authentification', authenticateToken, (req, res) => {
 
-    const protocol = req.protocol;
-    const host = req.get('host');
-    const serverUrl = `${protocol}://${host}`;
+    const serverUrl = (process.env.PROD) ?  process.env.BACK_URL_PROD : process.env.BACK_URL_DEV;
     const SPOTIFY_REDIRECT_URI = `${serverUrl}/spotify/callback`;
 
     const userId = (req as any).middlewareId;
