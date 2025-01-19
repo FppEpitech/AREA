@@ -8,39 +8,25 @@ import plus from '../../assets/icons/plus.svg'
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../services/auth/auth';
 import service from '../../assets/icons/service.svg'
+import { deleteAccount } from '../../services/auth/auth';
+import Modal from '../Modal/modal';
 
 function SettingButton() {
-
-    const navigate = useNavigate();
-
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false); // To control modal visibility
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     const toggleDropdown = () => {
         setIsDropdownOpen((prev) => !prev);
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsDropdownOpen(false);
-            }
-        };
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                setIsDropdownOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        document.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
+    const handleDeleteAccount = (password: string) => {
+        if (password) {
+            deleteAccount(navigate, password, (error: string) => alert(error));
+            setIsModalOpen(false); // Close modal after account deletion
+        }
+    };
 
     return (
         <div className="relative" ref={dropdownRef}>
@@ -53,7 +39,7 @@ function SettingButton() {
                 type="button"
             >
                 <img
-                    id='dropdownDividerButton'
+                    id="dropdownDividerButton"
                     src={setting}
                     alt="setting"
                     className="w-8 h-8"
@@ -61,7 +47,7 @@ function SettingButton() {
             </button>
             <div
                 id="dropdownDivider"
-                style={{left: '-100px'}}
+                style={{ left: '-100px' }}
                 className={`absolute z-10 ${isDropdownOpen ? 'block' : 'hidden'} bg-white dark:bg-customDarkGreen divide-y divide-gray-100 dark:divide-gray-600 rounded-lg shadow w-44`}
             >
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
@@ -73,8 +59,25 @@ function SettingButton() {
                             Logout
                         </button>
                     </li>
+                    <li>
+                        <button
+                            className="w-full text-left block px-4 py-2 hover:bg-red-500 dark:text-white dark:hover:bg-red-700 dark:hover:text-white"
+                            onClick={() => setIsModalOpen(true)} // Open the modal on button click
+                        >
+                            Delete Account
+                        </button>
+                    </li>
                 </ul>
             </div>
+
+            {/* Modal for confirming account deletion */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)} // Close the modal when Cancel is clicked
+                onConfirm={handleDeleteAccount} // Pass the entered password to the onConfirm handler
+                title="Confirm Account Deletion"
+                message="Are you sure you want to delete your account? This action cannot be undone."
+            />
         </div>
     );
 }

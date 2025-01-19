@@ -60,6 +60,33 @@ export function logout(navigate: (path: string) => void) {
     navigate('/welcome');
 }
 
-/*export function deleteAccount(navigate: (path: string) => void) {
-    axios.delete(`${process.env.REACT_APP_API_URL}/account/delete`, {
-        headers: {*/
+export async function deleteAccount(navigate: (path: string) => void, password: string, setError: (error: string) => void) {
+    const token = localStorage.getItem('access_token');
+
+    if (!token) {
+        setError('User not logged in');
+        navigate('/login');
+        return;
+    }
+
+    try {
+        const response = await axios.delete(
+            `${process.env.REACT_APP_API_URL}/account/deleteSelf`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                data: {
+                    password: password,
+                },
+            }
+        );
+        logout(navigate);
+    } catch (error: any) {
+        if (error.response && error.response.status === 409) {
+            setError('Invalid credentials or user not found');
+        } else {
+            setError('An error occurred, please try again');
+        }
+    }
+}
