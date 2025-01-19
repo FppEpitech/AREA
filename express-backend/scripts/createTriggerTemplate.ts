@@ -417,6 +417,10 @@ async function worldTimeTriggerTemplate() {
                 type: 'cron',
                 trigFunc: 'isWorldTime',
                 valueTemplate: {
+                    time: {
+                        value: '* * * * *',
+                        type: 'CRON expression',
+                    },
                     year: {
                         value: 2025,
                         type: 'number',
