@@ -21,7 +21,7 @@ services:
       - ./react-frontend:/app
       - ./shared:/shared
     env_file:
-      - ./react-frontend/.env
+      - ./react-frontend/.env2
     command: |
       sh -c "npm install &&
              npm run build &&
