@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import './mockup.css';
 import screenshot from '../../assets/login/website_screenshot.png';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import axios from 'axios';
 
 import { initializeApp } from 'firebase/app';
 
@@ -20,7 +21,7 @@ const firebaseConfig = {
     measurementId: "G-J2W8XSSDES"
 };
 
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 export default function Login() {
 
@@ -35,12 +36,31 @@ export default function Login() {
         await AuthLogin({email, password}, navigate, setError);
     };
 
-    const googleLog = () => {
-        console.log("i")
-        FirebaseAuthentication.signInWithGoogle().then((user) => {
-            console.log(user);
-        });
-    }
+        const googleLog = async () => {
+            try {
+                const result = await FirebaseAuthentication.signInWithGoogle();
+                if (!result)
+                    return;
+                const idToken = await FirebaseAuthentication.getIdToken();
+
+                if (!idToken) {
+                    console.error("No ID token received");
+                    return;
+                }
+
+                const response = await axios.post('http://localhost:8080/account/loginGoogle', {
+                    idToken: idToken
+                });
+
+                if (response.data.token) {
+                    localStorage.setItem('access_token', response.data.token);
+                    localStorage.setItem("token_date", Date.now().toString());
+                    navigate('/explore');
+                }
+            } catch (error) {
+                console.error("Google login error:", error);
+            }
+        };
 
     return (
 
@@ -116,8 +136,8 @@ export default function Login() {
                             <button
                                 type="button"
                                 className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                            >
-                                <img src={googleLogo} alt="Google Logo" className="w-6 h-6 mr-2" onClick={googleLog}/>
+                                onClick={googleLog} >
+                                <img src={googleLogo} alt="Google Logo" className="w-6 h-6 mr-2" />
                                 Sign in with Google
                             </button>
 
