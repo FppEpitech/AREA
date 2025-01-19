@@ -6,6 +6,21 @@ import { AuthLogin } from '../../services/auth/auth';
 import { useNavigate } from 'react-router-dom';
 import './mockup.css';
 import screenshot from '../../assets/login/website_screenshot.png';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+
+import { initializeApp } from 'firebase/app';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDkao3nTKOWFQZPRc7S69BT2UQKTeD-vqI",
+    authDomain: "plumpy-f4ec9.firebaseapp.com",
+    projectId: "plumpy-f4ec9",
+    storageBucket: "plumpy-f4ec9.firebasestorage.app",
+    messagingSenderId: "918802512532",
+    appId: "1:918802512532:web:b2cd5ba9f7ab736d449281",
+    measurementId: "G-J2W8XSSDES"
+};
+
+const app = initializeApp(firebaseConfig);
 
 export default function Login() {
 
@@ -19,6 +34,13 @@ export default function Login() {
 
         await AuthLogin({email, password}, navigate, setError);
     };
+
+    const googleLog = () => {
+        console.log("i")
+        FirebaseAuthentication.signInWithGoogle().then((user) => {
+            console.log(user);
+        });
+    }
 
     return (
 
@@ -95,7 +117,7 @@ export default function Login() {
                                 type="button"
                                 className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                             >
-                                <img src={googleLogo} alt="Google Logo" className="w-6 h-6 mr-2" />
+                                <img src={googleLogo} alt="Google Logo" className="w-6 h-6 mr-2" onClick={googleLog}/>
                                 Sign in with Google
                             </button>
 
