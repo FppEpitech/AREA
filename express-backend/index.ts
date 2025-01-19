@@ -14,6 +14,7 @@ import servicesRouter from './routes/services';
 import initAllTemplates from './scripts/initTemplates';
 import tokenRouter from './routes/token';
 import { createSamplePlums } from './scripts/createSamplePlums';
+import sampleRouter from './routes/samplePlums';
 
 const swaggerUi = require("swagger-ui-express");
 
@@ -37,6 +38,7 @@ app.use('/spotify', spotifyRouter);
 app.use('/account', accountRouter);
 app.use('/about.json', aboutRouter);
 app.use('/services', servicesRouter);
+app.use('/sampleplums', sampleRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
