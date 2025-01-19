@@ -61,12 +61,7 @@ function encryptTokenSpotify(token: string): string {
  */
 router.get('/callback', async (req, res) : Promise<any> => {
     const { code, state } = req.query;
-    console.log("Code:", code);
-    console.log("State:", state);
-    const protocol = req.protocol;
-    const host = req.get('host');
-    const serverUrl = `${protocol}://${host}`;
-    console.log("ServerUrl:", serverUrl);
+    const serverUrl = (process.env.PROD) ?  process.env.BACK_URL_PROD : process.env.BACK_URL_DEV;
     const SPOTIFY_REDIRECT_URI = `${serverUrl}/spotify/callback`;
     console.log("Redirect URI:", SPOTIFY_REDIRECT_URI);
 
