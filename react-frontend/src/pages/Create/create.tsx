@@ -201,7 +201,7 @@ function CreatePage() {
                             </button>
                         )}
                         {(plumName !== "" && triggerCreate && actionCreate && !plum) && (
-                            <button className="mt-5 w-full hover:bg-gray-100 dark:hover:bg-customDarkGreen transition rounded-full border-2 border-customLightGreen dark:border-customGreen dark:hover:bg-customDarkGreen dark:hover:text-white px-10 py-2"
+                            <button className="mt-5 w-full hover:bg-gray-100 dark:hover:bg-customDarkGreen transition rounded-full border-2 dark:text-white border-customLightGreen dark:border-customGreen dark:hover:bg-customDarkGreen dark:hover:text-white px-10 py-2"
                                     onClick={() => createThePlum()}
                                     disabled={plumName === "" || !triggerCreate || !actionCreate}>
                                 <p className="flex justify-center text-xl font-inter">
@@ -236,7 +236,7 @@ function CreatePage() {
                 <div className="flex justify-center items-center h-screen">
                     <div className="text-center">
                         {isCreationFine && (
-                            <h1 className="text-3xl font-bold font-inter mb-5 text-white">
+                            <h1 className="text-3xl font-bold font-inter mb-5  text-black dark:text-white">
                                 Your Plums has been successfully created!
                             </h1>
                         )}

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export interface ValueTemplate {
     [key: string]: {
@@ -119,5 +119,22 @@ export const getProvidersActions = async (provider : string): Promise<Action[]> 
         return response.data;
     } catch (error) {
         return [];
+    }
+};
+
+export const updatePlumStatus = async (id: number, newStatus: boolean) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        const body = {
+            status: newStatus
+        }
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        await axios.put(`${process.env.REACT_APP_API_URL}/plums/${id}/status`, body, { headers: headers });
+        return true;
+    } catch(error) {
+        console.log(error);
+        return false;
     }
 };
