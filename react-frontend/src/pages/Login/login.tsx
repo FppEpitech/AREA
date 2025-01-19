@@ -6,6 +6,8 @@ import { AuthLogin } from '../../services/auth/auth';
 import { useNavigate } from 'react-router-dom';
 import './mockup.css';
 import screenshot from '../../assets/login/website_screenshot.png';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import axios from 'axios';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -17,6 +19,32 @@ export default function Login() {
         e.preventDefault();
         await AuthLogin({ email, password }, navigate, setError);
     };
+
+        const externalLog = async (type : string) => {
+            try {
+                let result;
+                if (type === "github") {
+                    result = await FirebaseAuthentication.signInWithGithub();
+                } else if (type === "google") {
+                    result = await FirebaseAuthentication.signInWithGoogle();
+                }
+                if (!result)
+                    return;
+                const idToken = await FirebaseAuthentication.getIdToken();
+                if (!idToken)
+                    return;
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/account/loginExternal`, {
+                    idToken: idToken
+                });
+                if (response.data.token) {
+                    localStorage.setItem('access_token', response.data.token);
+                    localStorage.setItem("token_date", Date.now().toString());
+                    navigate('/explore');
+                }
+            } catch (error) {
+                console.error("Google login error:", error);
+            }
+        };
 
     return (
         <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white dark:bg-customDarkBg">
@@ -84,16 +112,19 @@ export default function Login() {
                         <div className="flex space-x-6 mt-12">
                             <button
                                 type="button"
-                                className="flex items-center justify-center text-xs w-full py-2 bg-white dark:bg-customDarkLightGreen font-semibold rounded-[10px] border dark:border-customDarkBorder hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-customDarkGreen focus:ring-offset-2"
-                            >
+                                className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                onClick={() =>{
+                                    externalLog("google");
+                                }} >
                                 <img src={googleLogo} alt="Google Logo" className="w-6 h-6 mr-2" />
                                 Sign in with Google
                             </button>
-
                             <button
                                 type="button"
-                                className="flex items-center justify-center text-xs w-full py-2 bg-white dark:bg-customDarkLightGreen font-semibold rounded-[10px] border dark:border-customDarkBorder hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-customDarkGreen focus:ring-offset-2"
-                            >
+                                className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                onClick={() =>{
+                                    externalLog("github");
+                                }} >
                                 <img src={githubLogo} alt="Github Logo" className="w-6 h-6 mr-2" />
                                 Sign in with Github
                             </button>

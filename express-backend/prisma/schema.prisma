@@ -17,6 +17,7 @@ model User {
   userId         Int       @id @default(autoincrement())
   hashedPassword String
   mail           String    @unique
+  externalProvider Boolean @default(false)
   tokens         Token[]
   plums          Plum[]
   actions        Action[]
