@@ -9,20 +9,6 @@ import screenshot from '../../assets/login/website_screenshot.png';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import axios from 'axios';
 
-import { initializeApp } from 'firebase/app';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDkao3nTKOWFQZPRc7S69BT2UQKTeD-vqI",
-    authDomain: "plumpy-f4ec9.firebaseapp.com",
-    projectId: "plumpy-f4ec9",
-    storageBucket: "plumpy-f4ec9.firebasestorage.app",
-    messagingSenderId: "918802512532",
-    appId: "1:918802512532:web:b2cd5ba9f7ab736d449281",
-    measurementId: "G-J2W8XSSDES"
-};
-
-initializeApp(firebaseConfig);
-
 export default function Login() {
 
     const [email, setEmail] = useState('');
@@ -36,22 +22,22 @@ export default function Login() {
         await AuthLogin({email, password}, navigate, setError);
     };
 
-        const googleLog = async () => {
+        const externalLog = async (type : string) => {
             try {
-                const result = await FirebaseAuthentication.signInWithGoogle();
+                let result;
+                if (type === "github") {
+                    result = await FirebaseAuthentication.signInWithGithub();
+                } else if (type === "google") {
+                    result = await FirebaseAuthentication.signInWithGoogle();
+                }
                 if (!result)
                     return;
                 const idToken = await FirebaseAuthentication.getIdToken();
-
-                if (!idToken) {
-                    console.error("No ID token received");
+                if (!idToken)
                     return;
-                }
-
-                const response = await axios.post('http://localhost:8080/account/loginGoogle', {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/account/loginExternal`, {
                     idToken: idToken
                 });
-
                 if (response.data.token) {
                     localStorage.setItem('access_token', response.data.token);
                     localStorage.setItem("token_date", Date.now().toString());
@@ -136,11 +122,21 @@ export default function Login() {
                             <button
                                 type="button"
                                 className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                                onClick={googleLog} >
+                                onClick={() =>{
+                                    externalLog("google");
+                                }} >
                                 <img src={googleLogo} alt="Google Logo" className="w-6 h-6 mr-2" />
                                 Sign in with Google
                             </button>
-
+                            <button
+                                type="button"
+                                className="flex items-center justify-center text-xs w-full py-2 bg-white font-semibold rounded-[10px] border hover:shadow-custom focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                onClick={() =>{
+                                    externalLog("github");
+                                }} >
+                                <img src={githubLogo} alt="Github Logo" className="w-6 h-6 mr-2" />
+                                Sign in with Github
+                            </button>
                         </div>
 
                         <div>
