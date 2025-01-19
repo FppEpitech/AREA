@@ -103,7 +103,6 @@ async function checkCronResult() {
             if (!actionTemplate)
                 continue;
             const actionFunc = actionsMapFunction.get(actionTemplate?.actFunc);
-            cron.lastResult = false;
             if (actionFunc && action.actionValue)
                 await actionFunc(plumTrigger.userId,  JSON.stringify(action?.actionValue));
         }
