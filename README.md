@@ -7,9 +7,9 @@
 - [From Noware: Innovators Beyond Boundaries](#from-noware-innovators-beyond-boundaries)
     - [Alban PERALTA](#alban-peralta--visionary-of-digital-experiences)
     - [Mathieu ROBERT](#mathieu-robert--architect-of-order-amidst-chaos)
-    - [Axel FRADET](#axel-fradet--master-of-the-web)
-    - [Théophile Jérôme-Rocher](#théophile-jérôme-rocher--guardian-of-seamless-integration)
-    - [Aubane (New Recruit)](#aubane--the-architect-of-user-delight)
+    - [Axel FRADET](#axel-fradet--master-of-the-backend)
+    - [Théophile Jérôme-Rocher](#théophile-jérôme-rocher--warden-of-system-harmony)
+    - [Aubane Nourry](#aubane-nourry--the-architect-of-user-delight)
 - [Together, We Are From Noware](#together-we-are-from-noware)
 - [Plumpy: The Web Automation Platform](#plumpy-the-web-automation-platform)
     - [Overview](#overview)
@@ -18,7 +18,7 @@
         - [User-Friendly Interface](#user-friendly-interface)
         - [Customizable Triggers and Actions](#customizable-triggers-and-actions)
     - [Technical Details](#technical-details)
-        - [Tech Stack](#tech-stack)
+        - [Available services](#available-services)
 - [Documentation](#documentation)
 
 ---
