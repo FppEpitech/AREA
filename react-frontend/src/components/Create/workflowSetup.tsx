@@ -82,7 +82,6 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     }, []);
 
     const finalizeSetup = () => {
-
         if (error?.includes(true)) {
             setIsError(true);
             return;
@@ -95,7 +94,6 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
         }
 
         setIsError(false);
-
         setCompleted(true);
         setHide(true);
         if (stepNumber === 1) {
@@ -106,9 +104,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     };
 
     const handleTemplateValueChange = (key: string, newValue: any, type: string, isError: boolean) => {
-
         setError([key, isError]);
-
         if (templateValues && type === "value") {
             templateValues[key].value = newValue;
         } else if (templateValues && type === "result") {
@@ -122,18 +118,18 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                 return (
                     <div className="space-y-6">
                         <div>
-                            <label className="block text-sm font-semibold mb-1">App</label>
+                            <label className="block text-sm dark:text-white font-semibold mb-1">App</label>
                             <div className="flex items-center gap-2">
-                                <div className="flex items-center gap-1 bg-gray-100 px-3 py-2 rounded-md">
+                                <div className="flex items-center gap-1 dark:bg-customDarkBorder dark:text-white bg-gray-100 px-3 py-2 rounded-md">
                                     <img src={logo} alt="App Logo" className="w-5 h-5" />
                                     <span className="text-sm font-semibold">{provider}</span>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold mb-1">Type Event <span className="text-red-500">*</span></label>
+                            <label className="block text-sm dark:text-white font-semibold mb-1">Type Event <span className="text-red-500">*</span></label>
                             <select
-                                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-customGreen dark:bg-customDarkGreen dark:text-white dark:border-gray-600"
                                 onChange={handleSelectChange}
                                 value={selectedTemplate?.name}
                             >
@@ -149,10 +145,10 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                     <div>
                         {templateValues && (
                             <div className="space-y-4">
-                                <h4 className="text-lg font-semibold">Configure Trigger</h4>
+                                <h4 className="text-lg dark:text-white font-semibold">Configure Trigger</h4>
                                 {Object.entries(templateValues).map(([key, config]) => (
                                     <div key={key} className="space-y-1">
-                                        <label className="block text-sm font-semibold">{key}<span className="text-red-500">*</span></label>
+                                        <label className="block text-sm dark:text-white font-semibold">{key}<span className="text-red-500">*</span></label>
                                         {config.type === 'CRON expression' && <TemplateCron value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
                                         {config.type === 'string' && <TemplateString value={config.value} onChange={(newValue) => handleTemplateValueChange(key, newValue, "value", false)}/>}
                                         {config.type === 'radiobutton' && <TemplateRadio value={config.value} result={config.result} onChange={(newValue) => handleTemplateValueChange(key, newValue, "result", false)}/>}
@@ -170,8 +166,8 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                         {isError && <p className="text-red-500 text-sm">Please fill all required fields</p>}
                         {isErrorAuth && <p className="text-red-500 text-sm">Please Connect to {provider} in Services page</p>}
                         <button
-                        className="w-full bg-customGreen text-customLightBlue px-4 py-2 rounded-md hover:bg-customDarkGreen"
-                        onClick={() => finalizeSetup()}
+                            className="w-full bg-customGreen text-customLightBlue px-4 py-2 rounded-md hover:bg-customDarkGreen transition-all"
+                            onClick={() => finalizeSetup()}
                         >
                             Create
                         </button>
@@ -183,20 +179,20 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
     };
 
     return (
-        <div className="bg-white flex flex-col">
+        <div className="bg-white dark:bg-customDarkCard flex flex-col rounded-lg shadow-lg p-6">
             <div className="flex items-center justify-between py-3">
                 <div className="flex justify-start gap-2">
                     {completed && (
                         <img
-                        src={checkSvg}
-                        alt="dropDownSvg"
-                        className="w-8 h-8"
+                            src={checkSvg}
+                            alt="dropDownSvg"
+                            className="w-8 h-8"
                         />
                     )}
-                    <h3 className="text-lg font-semibold">{selectedTemplate?.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{selectedTemplate?.name}</h3>
                 </div>
                 <button
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-500"
                     onClick={() => setHide((prev) => !prev)}
                 >
                     <img
@@ -204,7 +200,6 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                         alt="dropDownSvg"
                         className="w-8 h-8"
                     />
-
                 </button>
             </div>
             {!hide && (
@@ -226,7 +221,7 @@ const WorkflowSetup: React.FC<WorkflowSetupProps> = ({ stepNumber, selectType, s
                     {activeTab !== 'start' && (
                         <div className="p-4 border-t">
                             <button
-                                className="w-full bg-gray-200 text-customGreen px-4 py-2 rounded-md hover:bg-gray-300"
+                                className="w-full bg-gray-200 text-customGreen dark:text-white dark:hover:bg-customDarkDarkGreen px-4 py-2 rounded-md hover:bg-gray-300 dark:bg-customDarkGreen dark:hover:bg-customDarkCard"
                                 onClick={() => {activeTab === 'setup' ? setActiveTab('configure') : setActiveTab('start')}}>
                                 {activeTab === 'setup' ? 'Next: Configure' : 'Next: Start'}
                             </button>

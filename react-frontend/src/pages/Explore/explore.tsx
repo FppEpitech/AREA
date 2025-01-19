@@ -45,6 +45,7 @@ function ServiceCard({ name, logo, color }: IService) {
             onClick={handleClick}
             style={{ backgroundColor: color }}
             className="flex items-center justify-center text-center text-white rounded-lg p-6 transition-transform hover:scale-105"
+            /*className="flex items-center justify-center text-center text-white h-64 rounded-lg p-6 transition-transform hover:scale-105 dark:bg-black"*/
         >
             <div>
                 <img
@@ -52,7 +53,7 @@ function ServiceCard({ name, logo, color }: IService) {
                     alt={name}
                     className="mx-auto w-20 h-20 object-contain mb-4"
                 />
-                <p className="text-xl font-bold">{name}</p>
+                <p className="text-xl font-bold text-white dark:text-white">{name}</p>
             </div>
         </button>
     );
@@ -70,7 +71,7 @@ function PlumCard({ name, isTrigger, valueTemplate, provider }: IPlumCard) {
     };
 
     return (
-        <div className="bg-white border-2 border-customLightGreen rounded-lg p-6 flex flex-col">
+        <div className="bg-white border-2 border-customLightGreen rounded-lg p-6 flex flex-col dark:bg-customDarkGreen dark:border-customDarkGreen dark:text-white">
             <div className="flex">
                 <img
                     src={isTrigger ? clockSvg : tvSvg}
@@ -84,15 +85,15 @@ function PlumCard({ name, isTrigger, valueTemplate, provider }: IPlumCard) {
             <p className="font-bold font-inter text-2xl mt-4">{name}</p>
             {valueTemplate ? (
                 <div className="mt-4 text-left w-full">
-                    <p className="text-base text-gray-600">
+                    <p className="text-base text-gray-600 dark:text-gray-300">
                         {Object.keys(valueTemplate).join(", ")}
                     </p>
                 </div>
             ) : (
-                <p className="text-sm text-gray-500">No fields available</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">No fields available</p>
             )}
             <button
-                className="mt-16 flex justify-center max-w-[160px] text-xl hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen"
+                className="mt-16 flex justify-center max-w-[160px] text-xl hover:bg-gray-100 hover:shadow-custom transition rounded-full border-2 border-customLightGreen dark:border-customGreen dark:hover:bg-customDarkGreen dark:hover:text-white"
                 type="button"
                 onClick={createPlum}
             >
@@ -189,7 +190,7 @@ export default function Explore() {
     });
 
     return (
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-white dark:bg-customDarkCard">
             <main className="w-full h-full">
                 <Navbar/>
                 <ExploreNavbar/>
@@ -200,7 +201,7 @@ export default function Explore() {
                             className={`text-xl font-semibold ${
                                 activeFilter === "All"
                                     ? "text-customGreen border-b-2 border-customGreen"
-                                    : "text-gray-500"
+                                    : "text-gray-500 dark:text-gray-300"
                             }`}
                             onClick={() => setActiveFilter("All")}
                         >
@@ -210,7 +211,7 @@ export default function Explore() {
                             className={`text-xl font-semibold ${
                                 activeFilter === "Services"
                                     ? "text-customGreen border-b-2 border-customGreen"
-                                    : "text-gray-500"
+                                    : "text-gray-500 dark:text-gray-300"
                             }`}
                             onClick={() => setActiveFilter("Services")}
                         >
@@ -220,7 +221,7 @@ export default function Explore() {
                             className={`text-xl font-semibold ${
                                 activeFilter === "Triggers & Actions"
                                     ? "text-customGreen border-b-2 border-customGreen"
-                                    : "text-gray-500"
+                                    : "text-gray-500 dark:text-gray-300"
                             }`}
                             onClick={() => setActiveFilter("Triggers & Actions")}
                         >
@@ -233,14 +234,14 @@ export default function Explore() {
                         <input
                             type="search"
                             placeholder="Search by name..."
-                            className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen"
+                            className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-customGreen dark:bg-black dark:text-white dark:border-gray-600"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>
 
-                <div className="flex-grow bg-customLightBlue relative min-h-screen">
+                <div className="flex-grow bg-customLightBlue dark:bg-customDarkDarkGreen relative min-h-screen">
                     <div className="container mx-auto p-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {filteredItems.map((item, index) =>

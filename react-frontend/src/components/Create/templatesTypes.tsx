@@ -19,17 +19,16 @@ const handleInputChange =
 };
 
 // String template
-export function TemplateString( stringProps : TemplateProps) {
-
+export function TemplateString(stringProps : TemplateProps) {
     const [inputValue, setInputValue] = useState(stringProps.value.toString());
 
     return (
         <div>
-        <input
+            <input
                 type='text'
                 defaultValue={inputValue}
-                onChange={(e) => {handleInputChange(setInputValue, stringProps, e.target.value);}}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                onChange={(e) => { handleInputChange(setInputValue, stringProps, e.target.value); }}
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300"
                 placeholder={`Enter a string`}
             />
         </div>
@@ -38,7 +37,6 @@ export function TemplateString( stringProps : TemplateProps) {
 
 // Number template
 export function TemplateNumber(numberProps: TemplateProps) {
-
     const [inputValue, setInputValue] = useState(numberProps.value.toString());
 
     return (
@@ -46,8 +44,8 @@ export function TemplateNumber(numberProps: TemplateProps) {
             <input
                 type="number"
                 defaultValue={inputValue}
-                onChange={(e) => {handleInputChange(setInputValue, numberProps, Number(e.target.value));}}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                onChange={(e) => { handleInputChange(setInputValue, numberProps, Number(e.target.value)); }}
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300"
                 placeholder="Enter a number"
                 step="any"
             />
@@ -72,10 +70,10 @@ export function TemplateRadio(radioProps: TemplateProps) {
                         type="radio"
                         name="template-radio"
                         checked={option.key === selectedValue}
-                        onChange={(e) => {setSelectedValue(option.key); handleInputChange(setSelectedValue, radioProps, option.key);}}
-                        className="form-radio h-4 w-4 text-blue-600"
+                        onChange={(e) => { setSelectedValue(option.key); handleInputChange(setSelectedValue, radioProps, option.key); }}
+                        className="form-radio h-4 w-4 text-blue-600 dark:text-blue-400"
                     />
-                    <span className="text-sm text-gray-700">{option.value}</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{option.value}</span>
                 </label>
             ))}
         </div>
@@ -137,41 +135,36 @@ export function TemplateSearchDropdown(searchDropdownProps: TemplateProps) {
             <input
                 type="text"
                 value={searchValue}
-                onChange={(e) => {setSearchValue(e.target.value); isCorrectValue(e.target.value); handleInputChange(setSelectedValue, searchDropdownProps, optionArray.find((option) => option.value.toLowerCase() === e.target.value.toLowerCase())?.key || optionArray[0].key, !optionArray.some((option) => option.value.toLowerCase() === e.target.value.toLowerCase()));}}
+                onChange={(e) => { setSearchValue(e.target.value); isCorrectValue(e.target.value); handleInputChange(setSelectedValue, searchDropdownProps, optionArray.find((option) => option.value.toLowerCase() === e.target.value.toLowerCase())?.key || optionArray[0].key, !optionArray.some((option) => option.value.toLowerCase() === e.target.value.toLowerCase())); }}
                 onFocus={() => setIsPanelVisible(true)}
-                className={`w-full border rounded-md px-3 py-2 text-sm ${
-                   (isCorrect) ? "border border-gray-300" : "border border-red-500"
-                }`}
+                className={`w-full border rounded-md px-3 py-2 text-sm ${ (isCorrect) ? "border-gray-300 dark:border-gray-600" : "border-red-500 dark:border-red-600" } bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300`}
                 placeholder="Search"
             />
 
             {/* Options Panel */}
             {isPanelVisible && (
                 <div
-                    className="w-full border border-gray-300 rounded-md bg-white shadow-md z-50 mt-1 overflow-auto max-h-48"
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-customDarkDarkGreen shadow-md z-50 mt-1 overflow-auto max-h-48"
                     style={{ top: "100%" }}
                 >
                     {filteredOptions.length > 0 ? (
                         filteredOptions.map((option) => (
                             <div
                                 key={option.key}
-                                onClick={() => {handleOptionClick(option.key); setSearchValue(option.value); isCorrectValue(option.value); handleInputChange(setSelectedValue, searchDropdownProps, option.key, false);}}
-                                className="px-3 py-2 cursor-pointer hover:bg-gray-100 text-sm"
+                                onClick={() => { handleOptionClick(option.key); setSearchValue(option.value); isCorrectValue(option.value); handleInputChange(setSelectedValue, searchDropdownProps, option.key, false); }}
+                                className="px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 text-sm"
                             >
                                 {option.value}
                             </div>
                         ))
                     ) : (
-                        <div className="px-3 py-2 text-sm text-gray-500">No results found</div>
+                        <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">No results found</div>
                     )}
                 </div>
             )}
         </div>
     );
 }
-
-
-
 
 const CRON_FREQUENCIES = ["year", "month", "week", "day", "hour", "minute(s)"];
 const MONTH = ["every month", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -262,17 +255,16 @@ export function TemplateCron(cronProps: TemplateProps) {
                 cron = "* * * * *";
         }
         handleInputChange(setCronValue, cronProps, cron);
-
     }, [minute, hour, dayOfWeek, dayOfMonth, month, frequency]);
 
     return (
         <div className="space-x-2 space-y-2">
-            <span>Every</span>
+            <span className="text-gray-700 dark:text-gray-300">Every</span>
 
             <select
                 value={frequency}
                 onChange={(e) => setFrequency(e.target.value)}
-                className="border rounded-md px-2 py-1"
+                className="border rounded-md px-2 py-1 bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300 dark:border-gray-600"
             >
                 {CRON_FREQUENCIES.map((freq) => (
                     <option key={freq} value={freq}>
@@ -283,11 +275,11 @@ export function TemplateCron(cronProps: TemplateProps) {
 
             {frequency === "year" && (
                 <>
-                    <span>in</span>
+                    <span className="text-gray-700 dark:text-gray-300">in</span>
                     <select
                         value={month}
                         onChange={(e) => setMonth(e.target.value)}
-                        className="border rounded-md px-2 py-1"
+                        className="border rounded-md px-2 py-1 bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300 dark:border-gray-600"
                     >
                         {MONTH.map((month) => (
                             <option key={month} value={month}>
@@ -300,11 +292,11 @@ export function TemplateCron(cronProps: TemplateProps) {
 
             {(frequency === "month" || frequency === "year") && (
                 <>
-                    <span>on</span>
+                    <span className="text-gray-700 dark:text-gray-300">on</span>
                     <select
                         value={dayOfMonth}
                         onChange={(e) => setDayOfMonth(e.target.value)}
-                        className="border rounded-md px-2 py-1"
+                        className="border rounded-md px-2 py-1 bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300 dark:border-gray-600"
                     >
                         {DAYS_OF_MONTH.map((day) => (
                             <option key={day} value={day}>
@@ -316,11 +308,11 @@ export function TemplateCron(cronProps: TemplateProps) {
             )}
 
             {(frequency === "month" || frequency === "year") && (
-                <span>and</span>
+                <span className="text-gray-700 dark:text-gray-300">and</span>
             )}
 
             {(frequency === "week") && (
-                <span>on</span>
+                <span className="text-gray-700 dark:text-gray-300">on</span>
             )}
 
             {(frequency === "week" || frequency === "month" || frequency === "year") && (
@@ -328,7 +320,7 @@ export function TemplateCron(cronProps: TemplateProps) {
                     <select
                         value={dayOfWeek}
                         onChange={(e) => setDayOfWeek(e.target.value)}
-                        className="border rounded-md px-2 py-1"
+                        className="border rounded-md px-2 py-1 bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300 dark:border-gray-600"
                     >
                         {DAYS_OF_WEEK.map((day) => (
                             <option key={day} value={day}>
@@ -341,11 +333,11 @@ export function TemplateCron(cronProps: TemplateProps) {
 
             {(frequency === "day" || frequency === "week" || frequency === "month" || frequency === "year") && (
                 <>
-                    <span>at</span>
+                    <span className="text-gray-700 dark:text-gray-300">at</span>
                     <select
                         value={hour}
                         onChange={(e) => setHour(e.target.value)}
-                        className="border rounded-md px-2 py-1"
+                        className="border rounded-md px-2 py-1 bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300 dark:border-gray-600"
                     >
                         {HOURS.map((h) => (
                             <option key={h} value={h}>
@@ -357,11 +349,11 @@ export function TemplateCron(cronProps: TemplateProps) {
             )}
 
             {(frequency === "hour") && (
-                <span>at</span>
+                <span className="text-gray-700 dark:text-gray-300">at</span>
             )}
 
             {(frequency === "day" || frequency === "week" || frequency === "month" || frequency === "year") && (
-                <span>:</span>
+                <span className="text-gray-700 dark:text-gray-300">:</span>
             )}
 
             {(frequency !== "minute(s)") && (
@@ -369,7 +361,7 @@ export function TemplateCron(cronProps: TemplateProps) {
                     <select
                         value={minute}
                         onChange={(e) => setMinute(e.target.value)}
-                        className="border rounded-md px-2 py-1"
+                        className="border rounded-md px-2 py-1 bg-white dark:bg-customDarkDarkGreen text-gray-700 dark:text-gray-300 dark:border-gray-600"
                     >
                         {MINUTES.map((m) => (
                             <option key={m} value={m}>
@@ -377,13 +369,13 @@ export function TemplateCron(cronProps: TemplateProps) {
                             </option>
                         ))}
                     </select>
-                    <span>minute(s)</span>
+                    <span className="text-gray-700 dark:text-gray-300">minute(s)</span>
                 </>
             )}
 
             <button
                 onClick={clearCron}
-                className="text-red-500 border border-red-500 rounded-md px-2 py-1"
+                className="text-red-500 dark:text-red-400 border border-red-500 dark:border-red-600 rounded-md px-2 py-1"
             >
                 Clear
             </button>
