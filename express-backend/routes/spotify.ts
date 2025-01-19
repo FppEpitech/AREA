@@ -63,11 +63,14 @@ function encryptTokenSpotify(token: string): string {
  */
 router.get('/callback', async (req, res) : Promise<any> => {
     const { code, state } = req.query;
+    console.log("Code:", code);
+    console.log("State:", state);
     const protocol = req.protocol;
     const host = req.get('host');
     const serverUrl = `${protocol}://${host}`;
     console.log("ServerUrl:", serverUrl);
     const SPOTIFY_REDIRECT_URI = `${serverUrl}/spotify/callback`;
+    console.log("Redirect URI:", SPOTIFY_REDIRECT_URI);
 
     const userAgent = req.get('User-Agent') || '';
     const isMobile = /mobile/i.test(userAgent);
@@ -101,11 +104,14 @@ router.get('/callback', async (req, res) : Promise<any> => {
       });
 
       const tokenData = await tokenResponse.json();
+      console.log("TokenData:", tokenData);
 
       if (tokenData.error)
         return res.status(400).json({error: tokenData.error});
 
       const { access_token, refresh_token } = tokenData;
+      console.log("Access Token:", access_token);
+        console.log("Refresh Token:", refresh_token);
 
       const encryptedAccessToken = encryptTokenSpotify(access_token);
 
@@ -118,9 +124,11 @@ router.get('/callback', async (req, res) : Promise<any> => {
           creationDate: new Date().toISOString(),
         },
       });
+      console.log("YAAAA");
       const redirectUrl = isMobile ? fallbackUrlMobile : fallbackUrlWeb;
       return res.redirect(301, redirectUrl);
     } catch (error) {
+      console.log("aieerezdezfezfhzerbfglrehzjbgreljhgb");
       console.error(error);
       const redirectUrl = isMobile ? fallbackUrlMobile : fallbackUrlWeb;
       return res.redirect(301, redirectUrl);
