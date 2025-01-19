@@ -44,7 +44,6 @@ export async function isWorldTime(userId: number, value_json: string, data: any)
         }
         const isMatching = doesMatchCron(cronValue, respYear, respMonth, respDay, respHour, respMinute);
 
-        console.log('isMatching:', isMatching);
         return isMatching;
     } catch (error) {
         console.error('Error while fetching world time data:', error);
