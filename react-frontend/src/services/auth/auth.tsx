@@ -59,3 +59,7 @@ export function logout(navigate: (path: string) => void) {
     localStorage.removeItem('token_date');
     navigate('/welcome');
 }
+
+/*export function deleteAccount(navigate: (path: string) => void) {
+    axios.delete(`${process.env.REACT_APP_API_URL}/account/delete`, {
+        headers: {*/

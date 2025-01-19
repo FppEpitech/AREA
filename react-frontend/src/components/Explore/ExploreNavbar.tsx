@@ -9,7 +9,7 @@ export default function ExploreNavbar() {
 
 return (
     <div className="flex flex-col items-center py-8 mt-24 mx-2">
-      <h1 className="text-4xl font-abrilFatface text-customGreen mb-6">Explore</h1>
+      <h1 className="text-4xl font-abrilFatface dark:text-white text-customGreen mb-6">Explore</h1>
     </div>
   );
 }
