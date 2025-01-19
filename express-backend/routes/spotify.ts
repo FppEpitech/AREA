@@ -66,6 +66,7 @@ router.get('/callback', async (req, res) : Promise<any> => {
     const protocol = req.protocol;
     const host = req.get('host');
     const serverUrl = `${protocol}://${host}`;
+    console.log("ServerUrl:", serverUrl);
     const SPOTIFY_REDIRECT_URI = `${serverUrl}/spotify/callback`;
 
     const userAgent = req.get('User-Agent') || '';
